@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.1] - 2026-05-27
+
+### Fixed
+
+- PHPStan configuration now covers the value parser walk offset inference reported by the PHP 8.3 code quality workflow.
+
 ## [1.4.0] - 2026-05-27
 
 ### Added
@@ -263,6 +269,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - No external runtime dependencies
 - Zero Node.js requirement
 
+[1.4.1]: https://github.com/dnnsjsk/tailwindphp/releases/tag/v1.4.1
 [1.4.0]: https://github.com/dnnsjsk/tailwindphp/releases/tag/v1.4.0
 [1.3.2]: https://github.com/dnnsjsk/tailwindphp/releases/tag/v1.3.2
 [1.3.0]: https://github.com/dnnsjsk/tailwindphp/releases/tag/v1.3.0

@@ -38,6 +38,7 @@ parameters:
         # value-parser.php walk() - offset tracking via bitwise NOT changes sign
         # PHPStan analyzes initial value (0) but loop modifies it
         - '#Comparison operation .* between 0 and 0#'
+        - '#Comparison operation .* between \*NEVER\* and int<0, max>#'
         - '#Result of && is always false#'
         - '#Unreachable statement - code above always terminates#'
         # Defensive type checking in ported code (may never match but kept for safety)
