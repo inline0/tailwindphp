@@ -10,7 +10,8 @@ import { compileCss, run } from './test-utils/run'
 
 test('position', async () => {
   expect(await run(['static', 'fixed', 'absolute', 'relative', 'sticky'])).toMatchInlineSnapshot(`
-    ".absolute {
+    "
+    .absolute {
       position: absolute;
     }
 
@@ -28,7 +29,8 @@ test('position', async () => {
 
     .sticky {
       position: sticky;
-    }"
+    }
+    "
   `)
   expect(
     await run([

@@ -11,7 +11,8 @@ import { compileCss, run } from './test-utils/run'
 test('select', async () => {
   expect(await run(['select-none', 'select-text', 'select-all', 'select-auto']))
     .toMatchInlineSnapshot(`
-      ".select-all {
+      "
+      .select-all {
         -webkit-user-select: all;
         user-select: all;
       }
@@ -29,7 +30,8 @@ test('select', async () => {
       .select-text {
         -webkit-user-select: text;
         user-select: text;
-      }"
+      }
+      "
     `)
   expect(
     await run([

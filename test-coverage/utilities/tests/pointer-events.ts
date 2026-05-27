@@ -10,13 +10,15 @@ import { compileCss, run } from './test-utils/run'
 
 test('pointer-events', async () => {
   expect(await run(['pointer-events-none', 'pointer-events-auto'])).toMatchInlineSnapshot(`
-    ".pointer-events-auto {
+    "
+    .pointer-events-auto {
       pointer-events: auto;
     }
 
     .pointer-events-none {
       pointer-events: none;
-    }"
+    }
+    "
   `)
   expect(
     await run([

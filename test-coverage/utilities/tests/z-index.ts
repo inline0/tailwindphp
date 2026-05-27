@@ -11,7 +11,8 @@ import { compileCss, run } from './test-utils/run'
 test('z-index', async () => {
   expect(await run(['z-auto', 'z-10', '-z-10', 'z-[123]', '-z-[var(--value)]']))
     .toMatchInlineSnapshot(`
-      ".-z-10 {
+      "
+      .-z-10 {
         z-index: calc(10 * -1);
       }
 
@@ -29,7 +30,8 @@ test('z-index', async () => {
 
       .z-auto {
         z-index: auto;
-      }"
+      }
+      "
     `)
   expect(
     await run([
@@ -57,13 +59,43 @@ test('z-index', async () => {
       ['z-auto'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --z-index-auto: 42;
     }
 
     .z-auto {
       z-index: var(--z-index-auto);
-    }"
+    }
+    "
   `)
+})
+
+test('zoom', async () => {
+  expect(
+    await compileCss(
+      css`
+        @tailwind utilities;
+      `,
+      ['zoom-50', 'zoom-100', 'zoom-[var(--zoom)]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    .zoom-50 {
+      zoom: 50%;
+    }
+
+    .zoom-100 {
+      zoom: 100%;
+    }
+
+    .zoom-\\[var\\(--zoom\\)\\] {
+      zoom: var(--zoom);
+    }
+    "
+  `)
+  expect(
+    await run(['zoom', '-zoom-50', 'zoom--50', 'zoom-1.5', 'zoom-unknown', 'zoom-50/foo']),
+  ).toEqual('')
 })
 

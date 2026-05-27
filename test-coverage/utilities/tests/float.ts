@@ -11,7 +11,8 @@ import { compileCss, run } from './test-utils/run'
 test('float', async () => {
   expect(await run(['float-start', 'float-end', 'float-right', 'float-left', 'float-none']))
     .toMatchInlineSnapshot(`
-      ".float-end {
+      "
+      .float-end {
         float: inline-end;
       }
 
@@ -29,7 +30,8 @@ test('float', async () => {
 
       .float-start {
         float: inline-start;
-      }"
+      }
+      "
     `)
   expect(
     await run([

@@ -18,7 +18,8 @@ test('opacity', async () => {
       'opacity-[var(--value)]',
     ]),
   ).toMatchInlineSnapshot(`
-    ".opacity-2\\.5 {
+    "
+    .opacity-2\\.5 {
       opacity: .025;
     }
 
@@ -36,7 +37,8 @@ test('opacity', async () => {
 
     .opacity-\\[var\\(--value\\)\\] {
       opacity: var(--value);
-    }"
+    }
+    "
   `)
   expect(
     await run([

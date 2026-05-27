@@ -10,7 +10,8 @@ import { compileCss, run } from './test-utils/run'
 
 test('scroll-snap-type', async () => {
   expect(await run(['snap-none', 'snap-x', 'snap-y', 'snap-both'])).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-scroll-snap-strictness: proximity;
@@ -38,7 +39,8 @@ test('scroll-snap-type', async () => {
       syntax: "*";
       inherits: false;
       initial-value: proximity;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -57,7 +59,8 @@ test('scroll-snap-type', async () => {
 test('scroll-snap-align', async () => {
   expect(await run(['snap-align-none', 'snap-start', 'snap-end', 'snap-center']))
     .toMatchInlineSnapshot(`
-      ".snap-align-none {
+      "
+      .snap-align-none {
         scroll-snap-align: none;
       }
 
@@ -71,7 +74,8 @@ test('scroll-snap-align', async () => {
 
       .snap-start {
         scroll-snap-align: start;
-      }"
+      }
+      "
     `)
   expect(
     await run([
@@ -89,13 +93,15 @@ test('scroll-snap-align', async () => {
 
 test('scroll-snap-stop', async () => {
   expect(await run(['snap-normal', 'snap-always'])).toMatchInlineSnapshot(`
-    ".snap-always {
+    "
+    .snap-always {
       scroll-snap-stop: always;
     }
 
     .snap-normal {
       scroll-snap-stop: normal;
-    }"
+    }
+    "
   `)
   expect(await run(['-snap-normal', '-snap-always', 'snap-normal/foo', 'snap-always/foo'])).toEqual(
     '',
@@ -114,7 +120,8 @@ test('scroll-m', async () => {
       ['scroll-m-4', 'scroll-m-[4px]', '-scroll-m-4', '-scroll-m-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -132,7 +139,8 @@ test('scroll-m', async () => {
 
     .scroll-m-\\[4px\\] {
       scroll-margin: 4px;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -157,7 +165,8 @@ test('scroll-mx', async () => {
       ['scroll-mx-4', 'scroll-mx-[4px]', '-scroll-mx-4', '-scroll-mx-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -175,7 +184,8 @@ test('scroll-mx', async () => {
 
     .scroll-mx-\\[4px\\] {
       scroll-margin-inline: 4px;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -200,7 +210,8 @@ test('scroll-my', async () => {
       ['scroll-my-4', 'scroll-my-[4px]', '-scroll-my-4', '-scroll-my-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -218,7 +229,8 @@ test('scroll-my', async () => {
 
     .scroll-my-\\[4px\\] {
       scroll-margin-block: 4px;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -243,7 +255,8 @@ test('scroll-ms', async () => {
       ['scroll-ms-4', 'scroll-ms-[4px]', '-scroll-ms-4', '-scroll-ms-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -261,7 +274,8 @@ test('scroll-ms', async () => {
 
     .scroll-ms-\\[4px\\] {
       scroll-margin-inline-start: 4px;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -286,7 +300,8 @@ test('scroll-me', async () => {
       ['scroll-me-4', 'scroll-me-[4px]', '-scroll-me-4', '-scroll-me-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -304,7 +319,8 @@ test('scroll-me', async () => {
 
     .scroll-me-\\[4px\\] {
       scroll-margin-inline-end: 4px;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -329,7 +345,8 @@ test('scroll-mbs', async () => {
       ['scroll-mbs-4', 'scroll-mbs-[4px]', '-scroll-mbs-4', '-scroll-mbs-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -347,7 +364,8 @@ test('scroll-mbs', async () => {
 
     .scroll-mbs-\\[4px\\] {
       scroll-margin-block-start: 4px;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -372,7 +390,8 @@ test('scroll-mbe', async () => {
       ['scroll-mbe-4', 'scroll-mbe-[4px]', '-scroll-mbe-4', '-scroll-mbe-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -390,7 +409,8 @@ test('scroll-mbe', async () => {
 
     .scroll-mbe-\\[4px\\] {
       scroll-margin-block-end: 4px;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -415,7 +435,8 @@ test('scroll-mt', async () => {
       ['scroll-mt-4', 'scroll-mt-[4px]', '-scroll-mt-4', '-scroll-mt-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -433,7 +454,8 @@ test('scroll-mt', async () => {
 
     .scroll-mt-\\[4px\\] {
       scroll-margin-top: 4px;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -458,7 +480,8 @@ test('scroll-mr', async () => {
       ['scroll-mr-4', 'scroll-mr-[4px]', '-scroll-mr-4', '-scroll-mr-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -476,7 +499,8 @@ test('scroll-mr', async () => {
 
     .scroll-mr-\\[4px\\] {
       scroll-margin-right: 4px;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -501,7 +525,8 @@ test('scroll-mb', async () => {
       ['scroll-mb-4', 'scroll-mb-[4px]', '-scroll-mb-4', '-scroll-mb-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -519,7 +544,8 @@ test('scroll-mb', async () => {
 
     .scroll-mb-\\[4px\\] {
       scroll-margin-bottom: 4px;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -544,7 +570,8 @@ test('scroll-ml', async () => {
       ['scroll-ml-4', 'scroll-ml-[4px]', '-scroll-ml-4', '-scroll-ml-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -562,7 +589,8 @@ test('scroll-ml', async () => {
 
     .scroll-ml-\\[4px\\] {
       scroll-margin-left: 4px;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -587,7 +615,8 @@ test('scroll-p', async () => {
       ['scroll-p-4', 'scroll-p-[4px]', '-scroll-p-4', '-scroll-p-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -597,7 +626,8 @@ test('scroll-p', async () => {
 
     .scroll-p-\\[4px\\] {
       scroll-padding: 4px;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -622,7 +652,8 @@ test('scroll-px', async () => {
       ['scroll-px-4', 'scroll-px-[4px]', '-scroll-px-4', '-scroll-px-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -632,7 +663,8 @@ test('scroll-px', async () => {
 
     .scroll-px-\\[4px\\] {
       scroll-padding-inline: 4px;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -657,7 +689,8 @@ test('scroll-py', async () => {
       ['scroll-py-4', 'scroll-py-[4px]', '-scroll-py-4', '-scroll-py-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -667,7 +700,8 @@ test('scroll-py', async () => {
 
     .scroll-py-\\[4px\\] {
       scroll-padding-block: 4px;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -692,7 +726,8 @@ test('scroll-ps', async () => {
       ['scroll-ps-4', 'scroll-ps-[4px]', '-scroll-ps-4', '-scroll-ps-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -702,7 +737,8 @@ test('scroll-ps', async () => {
 
     .scroll-ps-\\[4px\\] {
       scroll-padding-inline-start: 4px;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -727,7 +763,8 @@ test('scroll-pe', async () => {
       ['scroll-pe-4', 'scroll-pe-[4px]', '-scroll-pe-4', '-scroll-pe-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -737,7 +774,8 @@ test('scroll-pe', async () => {
 
     .scroll-pe-\\[4px\\] {
       scroll-padding-inline-end: 4px;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -762,7 +800,8 @@ test('scroll-pbs', async () => {
       ['scroll-pbs-4', 'scroll-pbs-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -772,7 +811,8 @@ test('scroll-pbs', async () => {
 
     .scroll-pbs-\\[4px\\] {
       scroll-padding-block-start: 4px;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -797,7 +837,8 @@ test('scroll-pbe', async () => {
       ['scroll-pbe-4', 'scroll-pbe-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -807,7 +848,8 @@ test('scroll-pbe', async () => {
 
     .scroll-pbe-\\[4px\\] {
       scroll-padding-block-end: 4px;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -832,7 +874,8 @@ test('scroll-pt', async () => {
       ['scroll-pt-4', 'scroll-pt-[4px]', '-scroll-pt-4', '-scroll-pt-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -842,7 +885,8 @@ test('scroll-pt', async () => {
 
     .scroll-pt-\\[4px\\] {
       scroll-padding-top: 4px;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -867,7 +911,8 @@ test('scroll-pr', async () => {
       ['scroll-pr-4', 'scroll-pr-[4px]', '-scroll-pr-4', '-scroll-pr-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -877,7 +922,8 @@ test('scroll-pr', async () => {
 
     .scroll-pr-\\[4px\\] {
       scroll-padding-right: 4px;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -902,7 +948,8 @@ test('scroll-pb', async () => {
       ['scroll-pb-4', 'scroll-pb-[4px]', '-scroll-pb-4', '-scroll-pb-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -912,7 +959,8 @@ test('scroll-pb', async () => {
 
     .scroll-pb-\\[4px\\] {
       scroll-padding-bottom: 4px;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -922,56 +970,6 @@ test('scroll-pb', async () => {
       '-scroll-pb-4/foo',
       '-scroll-pb-[var(--value)]/foo',
     ]),
-  ).toEqual('')
-})
-
-test('scroll-pl', async () => {
-  expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-        }
-        @tailwind utilities;
-      `,
-      ['scroll-pl-4', 'scroll-pl-[4px]', '-scroll-pl-4', '-scroll-pl-[var(--value)]'],
-    ),
-  ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --spacing-4: 1rem;
-    }
-
-    .scroll-pl-4 {
-      scroll-padding-left: var(--spacing-4);
-    }
-
-    .scroll-pl-\\[4px\\] {
-      scroll-padding-left: 4px;
-    }"
-  `)
-  expect(
-    await run([
-      'scroll-pl',
-      'scroll-pl-4/foo',
-      'scroll-pl-[4px]/foo',
-      '-scroll-pl-4/foo',
-      '-scroll-pl-[var(--value)]/foo',
-    ]),
-  ).toEqual('')
-})
-
-test('scroll-behavior', async () => {
-  expect(await run(['scroll-auto', 'scroll-smooth'])).toMatchInlineSnapshot(`
-    ".scroll-auto {
-      scroll-behavior: auto;
-    }
-
-    .scroll-smooth {
-      scroll-behavior: smooth;
-    }"
-  `)
-  expect(
-    await run(['scroll', '-scroll-auto', '-scroll-smooth', 'scroll-auto/foo', 'scroll-smooth/foo']),
   ).toEqual('')
 })
 

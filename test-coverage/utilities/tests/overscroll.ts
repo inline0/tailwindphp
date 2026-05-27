@@ -11,7 +11,8 @@ import { compileCss, run } from './test-utils/run'
 test('overscroll', async () => {
   expect(await run(['overscroll-auto', 'overscroll-contain', 'overscroll-none']))
     .toMatchInlineSnapshot(`
-      ".overscroll-auto {
+      "
+      .overscroll-auto {
         overscroll-behavior: auto;
       }
 
@@ -21,7 +22,8 @@ test('overscroll', async () => {
 
       .overscroll-none {
         overscroll-behavior: none;
-      }"
+      }
+      "
     `)
   expect(
     await run([
@@ -39,7 +41,8 @@ test('overscroll', async () => {
 test('overscroll-x', async () => {
   expect(await run(['overscroll-x-auto', 'overscroll-x-contain', 'overscroll-x-none']))
     .toMatchInlineSnapshot(`
-      ".overscroll-x-auto {
+      "
+      .overscroll-x-auto {
         overscroll-behavior-x: auto;
       }
 
@@ -49,7 +52,8 @@ test('overscroll-x', async () => {
 
       .overscroll-x-none {
         overscroll-behavior-x: none;
-      }"
+      }
+      "
     `)
   expect(
     await run([
@@ -67,7 +71,8 @@ test('overscroll-x', async () => {
 test('overscroll-y', async () => {
   expect(await run(['overscroll-y-auto', 'overscroll-y-contain', 'overscroll-y-none']))
     .toMatchInlineSnapshot(`
-      ".overscroll-y-auto {
+      "
+      .overscroll-y-auto {
         overscroll-behavior-y: auto;
       }
 
@@ -77,7 +82,8 @@ test('overscroll-y', async () => {
 
       .overscroll-y-none {
         overscroll-behavior-y: none;
-      }"
+      }
+      "
     `)
   expect(
     await run([

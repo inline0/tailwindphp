@@ -10,13 +10,15 @@ import { compileCss, run } from './test-utils/run'
 
 test('appearance', async () => {
   expect(await run(['appearance-none', 'appearance-auto'])).toMatchInlineSnapshot(`
-    ".appearance-auto {
+    "
+    .appearance-auto {
       appearance: auto;
     }
 
     .appearance-none {
       appearance: none;
-    }"
+    }
+    "
   `)
   expect(
     await run([

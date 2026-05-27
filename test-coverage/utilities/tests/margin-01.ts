@@ -20,7 +20,8 @@ test('margin', async () => {
       ['m-auto', 'm-4', 'm-[4px]', '-m-4', '-m-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -42,7 +43,8 @@ test('margin', async () => {
 
     .m-auto {
       margin: auto;
-    }"
+    }
+    "
   `)
   expect(
     await run(['m', 'm-auto/foo', 'm-4/foo', 'm-[4px]/foo', '-m-4/foo', '-m-[var(--value)]/foo']),
@@ -74,7 +76,8 @@ test('mx', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
     }
@@ -121,7 +124,8 @@ test('mx', async () => {
 
     .mx-big {
       margin-inline: var(--spacing-big);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -160,7 +164,8 @@ test('my', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
     }
@@ -207,7 +212,8 @@ test('my', async () => {
 
     .my-big {
       margin-block: var(--spacing-big);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -246,7 +252,8 @@ test('mt', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
     }
@@ -293,7 +300,8 @@ test('mt', async () => {
 
     .mt-big {
       margin-top: var(--spacing-big);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -332,7 +340,8 @@ test('ms', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
     }
@@ -379,7 +388,8 @@ test('ms', async () => {
 
     .ms-big {
       margin-inline-start: var(--spacing-big);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -418,7 +428,8 @@ test('me', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
     }
@@ -465,7 +476,8 @@ test('me', async () => {
 
     .me-big {
       margin-inline-end: var(--spacing-big);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -504,7 +516,8 @@ test('mbs', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
     }
@@ -551,7 +564,8 @@ test('mbs', async () => {
 
     .mbs-big {
       margin-block-start: var(--spacing-big);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -590,7 +604,8 @@ test('mbe', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
     }
@@ -637,7 +652,8 @@ test('mbe', async () => {
 
     .mbe-big {
       margin-block-end: var(--spacing-big);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -676,7 +692,8 @@ test('mr', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
     }
@@ -723,7 +740,8 @@ test('mr', async () => {
 
     .mr-big {
       margin-right: var(--spacing-big);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -762,7 +780,8 @@ test('mb', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
     }
@@ -809,7 +828,8 @@ test('mb', async () => {
 
     .mb-big {
       margin-bottom: var(--spacing-big);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -848,7 +868,8 @@ test('ml', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
     }
@@ -895,7 +916,8 @@ test('ml', async () => {
 
     .ml-big {
       margin-left: var(--spacing-big);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -905,74 +927,6 @@ test('ml', async () => {
       'ml-[4px]/foo',
       '-ml-4/foo',
       '-ml-[var(--value)]/foo',
-    ]),
-  ).toEqual('')
-})
-
-test('margin sort order', async () => {
-  expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-        }
-        @tailwind utilities;
-      `,
-      ['mb-4', 'me-4', 'mx-4', 'ml-4', 'ms-4', 'm-4', 'mr-4', 'mt-4', 'my-4'],
-    ),
-  ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --spacing-4: 1rem;
-    }
-
-    .m-4 {
-      margin: var(--spacing-4);
-    }
-
-    .mx-4 {
-      margin-inline: var(--spacing-4);
-    }
-
-    .my-4 {
-      margin-block: var(--spacing-4);
-    }
-
-    .ms-4 {
-      margin-inline-start: var(--spacing-4);
-    }
-
-    .me-4 {
-      margin-inline-end: var(--spacing-4);
-    }
-
-    .mt-4 {
-      margin-top: var(--spacing-4);
-    }
-
-    .mr-4 {
-      margin-right: var(--spacing-4);
-    }
-
-    .mb-4 {
-      margin-bottom: var(--spacing-4);
-    }
-
-    .ml-4 {
-      margin-left: var(--spacing-4);
-    }"
-  `)
-  expect(
-    await run([
-      'm',
-      'mb-4/foo',
-      'me-4/foo',
-      'mx-4/foo',
-      'ml-4/foo',
-      'ms-4/foo',
-      'm-4/foo',
-      'mr-4/foo',
-      'mt-4/foo',
-      'my-4/foo',
     ]),
   ).toEqual('')
 })

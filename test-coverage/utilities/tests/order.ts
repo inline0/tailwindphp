@@ -20,7 +20,8 @@ test('order', async () => {
       'order-none',
     ]),
   ).toMatchInlineSnapshot(`
-    ".-order-4 {
+    "
+    .-order-4 {
       order: calc(4 * -1);
     }
 
@@ -46,7 +47,8 @@ test('order', async () => {
 
     .order-none {
       order: 0;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -78,13 +80,15 @@ test('order', async () => {
       ['order-first'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --order-first: 1;
     }
 
     .order-first {
       order: var(--order-first);
-    }"
+    }
+    "
   `)
 
   expect(
@@ -98,13 +102,15 @@ test('order', async () => {
       ['order-last'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --order-last: -1;
     }
 
     .order-last {
       order: var(--order-last);
-    }"
+    }
+    "
   `)
 })
 

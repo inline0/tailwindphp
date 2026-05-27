@@ -59,7 +59,8 @@ test('cursor', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --cursor-custom: url("/my-cursor.png");
     }
 
@@ -213,7 +214,8 @@ test('cursor', async () => {
 
     .cursor-zoom-out {
       cursor: zoom-out;
-    }"
+    }
+    "
   `)
   expect(
     await run([

@@ -409,6 +409,28 @@ function registerTransformsUtilities(UtilityBuilder $builder): void
         ['transform', 'none'],
     ]);
 
+    // ==================================================
+    // Zoom
+    // ==================================================
+
+    $builder->functionalUtility('zoom', [
+        'themeKeys' => [],
+        'handleBareValue' => function ($value) {
+            if (isset($value['fraction'])) {
+                return null;
+            }
+
+            if (!isPositiveInteger($value['value'])) {
+                return null;
+            }
+
+            return "{$value['value']}%";
+        },
+        'handle' => function ($value) {
+            return [decl('zoom', $value)];
+        },
+    ]);
+
     // Transform Style (3D)
     $builder->staticUtility('transform-flat', [['transform-style', 'flat']]);
     $builder->staticUtility('transform-3d', [['transform-style', 'preserve-3d']]);

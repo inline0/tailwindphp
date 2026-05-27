@@ -10,13 +10,15 @@ import { compileCss, run } from './test-utils/run'
 
 test('border-collapse', async () => {
   expect(await run(['border-collapse', 'border-separate'])).toMatchInlineSnapshot(`
-    ".border-collapse {
+    "
+    .border-collapse {
       border-collapse: collapse;
     }
 
     .border-separate {
       border-collapse: separate;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -40,7 +42,8 @@ test('border-spacing', async () => {
       ['border-spacing-1', 'border-spacing-[123px]'],
     ),
   ).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-border-spacing-x: 0;
@@ -75,7 +78,8 @@ test('border-spacing', async () => {
       syntax: "<length>";
       inherits: false;
       initial-value: 0;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -100,7 +104,8 @@ test('border-spacing-x', async () => {
       ['border-spacing-x-1', 'border-spacing-x-[123px]'],
     ),
   ).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-border-spacing-x: 0;
@@ -133,7 +138,8 @@ test('border-spacing-x', async () => {
       syntax: "<length>";
       inherits: false;
       initial-value: 0;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -158,7 +164,8 @@ test('border-spacing-y', async () => {
       ['border-spacing-y-1', 'border-spacing-y-[123px]'],
     ),
   ).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-border-spacing-x: 0;
@@ -191,7 +198,8 @@ test('border-spacing-y', async () => {
       syntax: "<length>";
       inherits: false;
       initial-value: 0;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -217,7 +225,8 @@ test('rounded', async () => {
       ['rounded', 'rounded-full', 'rounded-none', 'rounded-sm', 'rounded-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --radius-sm: .125rem;
       --radius: .25rem;
     }
@@ -240,7 +249,8 @@ test('rounded', async () => {
 
     .rounded-sm {
       border-radius: var(--radius-sm);
-    }"
+    }
+    "
   `)
   expect(
     await compileCss(
@@ -253,13 +263,15 @@ test('rounded', async () => {
       ['rounded-full'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --radius-full: 99999px;
     }
 
     .rounded-full {
       border-radius: var(--radius-full);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -292,7 +304,8 @@ test('rounded-s', async () => {
       ['rounded-s', 'rounded-s-full', 'rounded-s-none', 'rounded-s-sm', 'rounded-s-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
       --radius-sm: .125rem;
@@ -322,7 +335,8 @@ test('rounded-s', async () => {
     .rounded-s-sm {
       border-start-start-radius: var(--radius-sm);
       border-end-start-radius: var(--radius-sm);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -355,7 +369,8 @@ test('rounded-e', async () => {
       ['rounded-e', 'rounded-e-full', 'rounded-e-none', 'rounded-e-sm', 'rounded-e-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
       --radius-sm: .125rem;
@@ -385,7 +400,8 @@ test('rounded-e', async () => {
     .rounded-e-sm {
       border-start-end-radius: var(--radius-sm);
       border-end-end-radius: var(--radius-sm);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -418,7 +434,8 @@ test('rounded-t', async () => {
       ['rounded-t', 'rounded-t-full', 'rounded-t-none', 'rounded-t-sm', 'rounded-t-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
       --radius-sm: .125rem;
@@ -448,7 +465,8 @@ test('rounded-t', async () => {
     .rounded-t-sm {
       border-top-left-radius: var(--radius-sm);
       border-top-right-radius: var(--radius-sm);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -481,7 +499,8 @@ test('rounded-r', async () => {
       ['rounded-r', 'rounded-r-full', 'rounded-r-none', 'rounded-r-sm', 'rounded-r-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
       --radius-sm: .125rem;
@@ -511,7 +530,8 @@ test('rounded-r', async () => {
     .rounded-r-sm {
       border-top-right-radius: var(--radius-sm);
       border-bottom-right-radius: var(--radius-sm);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -544,7 +564,8 @@ test('rounded-b', async () => {
       ['rounded-b', 'rounded-b-full', 'rounded-b-none', 'rounded-b-sm', 'rounded-b-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
       --radius-sm: .125rem;
@@ -574,7 +595,8 @@ test('rounded-b', async () => {
     .rounded-b-sm {
       border-bottom-right-radius: var(--radius-sm);
       border-bottom-left-radius: var(--radius-sm);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -607,7 +629,8 @@ test('rounded-l', async () => {
       ['rounded-l', 'rounded-l-full', 'rounded-l-none', 'rounded-l-sm', 'rounded-l-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
       --radius-sm: .125rem;
@@ -637,7 +660,8 @@ test('rounded-l', async () => {
     .rounded-l-sm {
       border-top-left-radius: var(--radius-sm);
       border-bottom-left-radius: var(--radius-sm);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -670,7 +694,8 @@ test('rounded-ss', async () => {
       ['rounded-ss', 'rounded-ss-full', 'rounded-ss-none', 'rounded-ss-sm', 'rounded-ss-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
       --radius-sm: .125rem;
@@ -695,7 +720,8 @@ test('rounded-ss', async () => {
 
     .rounded-ss-sm {
       border-start-start-radius: var(--radius-sm);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -728,7 +754,8 @@ test('rounded-se', async () => {
       ['rounded-se', 'rounded-se-full', 'rounded-se-none', 'rounded-se-sm', 'rounded-se-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
       --radius-sm: .125rem;
@@ -753,7 +780,8 @@ test('rounded-se', async () => {
 
     .rounded-se-sm {
       border-start-end-radius: var(--radius-sm);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -786,7 +814,8 @@ test('rounded-ee', async () => {
       ['rounded-ee', 'rounded-ee-full', 'rounded-ee-none', 'rounded-ee-sm', 'rounded-ee-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
       --radius-sm: .125rem;
@@ -811,7 +840,8 @@ test('rounded-ee', async () => {
 
     .rounded-ee-sm {
       border-end-end-radius: var(--radius-sm);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -844,7 +874,8 @@ test('rounded-es', async () => {
       ['rounded-es', 'rounded-es-full', 'rounded-es-none', 'rounded-es-sm', 'rounded-es-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
       --radius-sm: .125rem;
@@ -869,7 +900,8 @@ test('rounded-es', async () => {
 
     .rounded-es-sm {
       border-end-start-radius: var(--radius-sm);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -902,7 +934,8 @@ test('rounded-tl', async () => {
       ['rounded-tl', 'rounded-tl-full', 'rounded-tl-none', 'rounded-tl-sm', 'rounded-tl-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
       --radius-sm: .125rem;
@@ -927,7 +960,8 @@ test('rounded-tl', async () => {
 
     .rounded-tl-sm {
       border-top-left-radius: var(--radius-sm);
-    }"
+    }
+    "
   `)
   expect(
     await run([

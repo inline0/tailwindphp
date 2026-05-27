@@ -32,7 +32,8 @@ test('inset', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-shadow: 0 0 #0000;
@@ -172,7 +173,8 @@ test('inset', async () => {
       syntax: "*";
       inherits: false;
       initial-value: 0 0 #0000;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -214,7 +216,8 @@ test('inset-x', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
       --inset-shadowned: 1940px;
     }
@@ -249,7 +252,8 @@ test('inset-x', async () => {
 
     .inset-x-shadowned {
       inset-inline: var(--inset-shadowned);
-    }"
+    }
+    "
   `)
   expect(
     await compileCss(
@@ -301,7 +305,8 @@ test('inset-y', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
       --inset-shadowned: 1940px;
     }
@@ -336,7 +341,8 @@ test('inset-y', async () => {
 
     .inset-y-shadowned {
       inset-block: var(--inset-shadowned);
-    }"
+    }
+    "
   `)
   expect(
     await compileCss(
@@ -388,7 +394,8 @@ test('inset-s', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
       --inset-shadowned: 1940px;
     }
@@ -423,7 +430,8 @@ test('inset-s', async () => {
 
     .inset-s-shadowned {
       inset-inline-start: var(--inset-shadowned);
-    }"
+    }
+    "
   `)
   expect(
     await compileCss(
@@ -475,7 +483,8 @@ test('inset-e', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
       --inset-shadowned: 1940px;
     }
@@ -510,7 +519,8 @@ test('inset-e', async () => {
 
     .inset-e-shadowned {
       inset-inline-end: var(--inset-shadowned);
-    }"
+    }
+    "
   `)
   expect(
     await compileCss(
@@ -562,7 +572,8 @@ test('inset-bs', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
       --inset-shadowned: 1940px;
     }
@@ -597,7 +608,8 @@ test('inset-bs', async () => {
 
     .inset-bs-shadowned {
       inset-block-start: var(--inset-shadowned);
-    }"
+    }
+    "
   `)
   expect(
     await compileCss(
@@ -649,7 +661,8 @@ test('inset-be', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
       --inset-shadowned: 1940px;
     }
@@ -684,7 +697,8 @@ test('inset-be', async () => {
 
     .inset-be-shadowned {
       inset-block-end: var(--inset-shadowned);
-    }"
+    }
+    "
   `)
   expect(
     await compileCss(
@@ -737,7 +751,8 @@ test('top', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
       --inset-shadowned: 1940px;
     }
@@ -772,7 +787,8 @@ test('top', async () => {
 
     .top-shadowned {
       top: var(--inset-shadowned);
-    }"
+    }
+    "
   `)
   expect(
     await compileCss(
@@ -824,7 +840,8 @@ test('right', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
       --inset-shadowned: 1940px;
     }
@@ -859,7 +876,8 @@ test('right', async () => {
 
     .right-shadowned {
       right: var(--inset-shadowned);
-    }"
+    }
+    "
   `)
   expect(
     await compileCss(
@@ -884,93 +902,6 @@ test('right', async () => {
         'right-4/foo',
         '-right-4/foo',
         'right-[4px]/foo',
-      ],
-    ),
-  ).toEqual('')
-})
-
-test('bottom', async () => {
-  expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --inset-shadowned: 1940px;
-        }
-        @tailwind utilities;
-      `,
-      [
-        'bottom-shadowned',
-        'bottom-auto',
-        '-bottom-full',
-        'bottom-full',
-        'bottom-3/4',
-        'bottom-4',
-        '-bottom-4',
-        'bottom-[4px]',
-      ],
-    ),
-  ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --spacing-4: 1rem;
-      --inset-shadowned: 1940px;
-    }
-
-    .-bottom-4 {
-      bottom: calc(var(--spacing-4) * -1);
-    }
-
-    .-bottom-full {
-      bottom: -100%;
-    }
-
-    .bottom-3\\/4 {
-      bottom: 75%;
-    }
-
-    .bottom-4 {
-      bottom: var(--spacing-4);
-    }
-
-    .bottom-\\[4px\\] {
-      bottom: 4px;
-    }
-
-    .bottom-auto {
-      bottom: auto;
-    }
-
-    .bottom-full {
-      bottom: 100%;
-    }
-
-    .bottom-shadowned {
-      bottom: var(--inset-shadowned);
-    }"
-  `)
-  expect(
-    await compileCss(
-      css`
-        @theme reference {
-          --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-        }
-        @tailwind utilities;
-      `,
-      [
-        'bottom-shadow-sm',
-        'bottom',
-        'bottom--1',
-        'bottom--1/2',
-        'bottom--1/-2',
-        'bottom-1/-2',
-        'bottom-auto/foo',
-        '-bottom-full/foo',
-        'bottom-full/foo',
-        'bottom-3/4/foo',
-        'bottom-4/foo',
-        '-bottom-4/foo',
-        'bottom-[4px]/foo',
       ],
     ),
   ).toEqual('')

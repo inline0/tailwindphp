@@ -21,7 +21,8 @@ test('break-before', async () => {
       'break-before-column',
     ]),
   ).toMatchInlineSnapshot(`
-    ".break-before-all {
+    "
+    .break-before-all {
       break-before: all;
     }
 
@@ -51,7 +52,8 @@ test('break-before', async () => {
 
     .break-before-right {
       break-before: right;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -85,7 +87,8 @@ test('break-inside', async () => {
       'break-inside-avoid-column',
     ]),
   ).toMatchInlineSnapshot(`
-    ".break-inside-auto {
+    "
+    .break-inside-auto {
       break-inside: auto;
     }
 
@@ -99,7 +102,8 @@ test('break-inside', async () => {
 
     .break-inside-avoid-page {
       break-inside: avoid-page;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -129,7 +133,8 @@ test('break-after', async () => {
       'break-after-column',
     ]),
   ).toMatchInlineSnapshot(`
-    ".break-after-all {
+    "
+    .break-after-all {
       break-after: all;
     }
 
@@ -159,7 +164,8 @@ test('break-after', async () => {
 
     .break-after-right {
       break-after: right;
-    }"
+    }
+    "
   `)
   expect(
     await run([

@@ -10,11 +10,13 @@ import { compileCss, run } from './test-utils/run'
 
 test('truncate', async () => {
   expect(await run(['truncate'])).toMatchInlineSnapshot(`
-    ".truncate {
+    "
+    .truncate {
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
-    }"
+    }
+    "
   `)
   expect(await run(['-truncate', 'truncate/foo'])).toEqual('')
 })

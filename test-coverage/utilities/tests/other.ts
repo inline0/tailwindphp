@@ -10,7 +10,8 @@ import { compileCss, run } from './test-utils/run'
 
 test('visibility', async () => {
   expect(await run(['visible', 'invisible', 'collapse'])).toMatchInlineSnapshot(`
-    ".collapse {
+    "
+    .collapse {
       visibility: collapse;
     }
 
@@ -20,7 +21,8 @@ test('visibility', async () => {
 
     .visible {
       visibility: visible;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -36,13 +38,15 @@ test('visibility', async () => {
 
 test('field-sizing', async () => {
   expect(await run(['field-sizing-content', 'field-sizing-fixed'])).toMatchInlineSnapshot(`
-    ".field-sizing-content {
+    "
+    .field-sizing-content {
       field-sizing: content;
     }
 
     .field-sizing-fixed {
       field-sizing: fixed;
-    }"
+    }
+    "
   `)
   expect(
     await run(['field-sizing-[other]', '-field-sizing-content', '-field-sizing-fixed']),
@@ -51,7 +55,8 @@ test('field-sizing', async () => {
 
 test('--tw-scroll-snap-strictness', async () => {
   expect(await run(['snap-mandatory', 'snap-proximity'])).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-scroll-snap-strictness: proximity;
@@ -71,22 +76,58 @@ test('--tw-scroll-snap-strictness', async () => {
       syntax: "*";
       inherits: false;
       initial-value: proximity;
-    }"
+    }
+    "
   `)
   expect(
     await run(['-snap-mandatory', '-snap-proximity', 'snap-mandatory/foo', 'snap-proximity/foo']),
   ).toEqual('')
 })
 
+test('tab', async () => {
+  expect(await run(['tab-2', 'tab-8', 'tab-[12px]', 'tab-[3]'])).toMatchInlineSnapshot(`
+    "
+    .tab-2 {
+      tab-size: 2;
+    }
+
+    .tab-8 {
+      tab-size: 8;
+    }
+
+    .tab-\\[3\\] {
+      tab-size: 3;
+    }
+
+    .tab-\\[12px\\] {
+      tab-size: 12px;
+    }
+    "
+  `)
+  expect(
+    await run([
+      'tab',
+      '-tab-2',
+      'tab-2.5',
+      'tab-1/2',
+      'tab-unknown',
+      'tab-2/foo',
+      'tab-[12px]/foo',
+    ]),
+  ).toEqual('')
+})
+
 test('indent', async () => {
   expect(await run(['indent-[4px]', '-indent-[4px]'])).toMatchInlineSnapshot(`
-    ".-indent-\\[4px\\] {
+    "
+    .-indent-\\[4px\\] {
       text-indent: -4px;
     }
 
     .indent-\\[4px\\] {
       text-indent: 4px;
-    }"
+    }
+    "
   `)
   expect(await run(['indent', 'indent-[4px]/foo', '-indent-[4px]/foo'])).toEqual('')
 })
@@ -149,7 +190,8 @@ test('decoration', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --color-red-500: #ef4444;
       --text-decoration-color-blue-500: #3b82f6;
     }
@@ -398,7 +440,8 @@ test('decoration', async () => {
 
     .decoration-from-font {
       text-decoration-thickness: from-font;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -469,7 +512,8 @@ test('contain', async () => {
       'contain-[unset]',
     ]),
   ).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-contain-size: initial;
@@ -482,27 +526,27 @@ test('contain', async () => {
 
     .contain-inline-size {
       --tw-contain-size: inline-size;
-      contain: var(--tw-contain-size,  ) var(--tw-contain-layout,  ) var(--tw-contain-paint,  ) var(--tw-contain-style,  );
+      contain: var(--tw-contain-size, ) var(--tw-contain-layout, ) var(--tw-contain-paint, ) var(--tw-contain-style, );
     }
 
     .contain-layout {
       --tw-contain-layout: layout;
-      contain: var(--tw-contain-size,  ) var(--tw-contain-layout,  ) var(--tw-contain-paint,  ) var(--tw-contain-style,  );
+      contain: var(--tw-contain-size, ) var(--tw-contain-layout, ) var(--tw-contain-paint, ) var(--tw-contain-style, );
     }
 
     .contain-paint {
       --tw-contain-paint: paint;
-      contain: var(--tw-contain-size,  ) var(--tw-contain-layout,  ) var(--tw-contain-paint,  ) var(--tw-contain-style,  );
+      contain: var(--tw-contain-size, ) var(--tw-contain-layout, ) var(--tw-contain-paint, ) var(--tw-contain-style, );
     }
 
     .contain-size {
       --tw-contain-size: size;
-      contain: var(--tw-contain-size,  ) var(--tw-contain-layout,  ) var(--tw-contain-paint,  ) var(--tw-contain-style,  );
+      contain: var(--tw-contain-size, ) var(--tw-contain-layout, ) var(--tw-contain-paint, ) var(--tw-contain-style, );
     }
 
     .contain-style {
       --tw-contain-style: style;
-      contain: var(--tw-contain-size,  ) var(--tw-contain-layout,  ) var(--tw-contain-paint,  ) var(--tw-contain-style,  );
+      contain: var(--tw-contain-size, ) var(--tw-contain-layout, ) var(--tw-contain-paint, ) var(--tw-contain-style, );
     }
 
     .contain-\\[unset\\] {
@@ -539,7 +583,8 @@ test('contain', async () => {
     @property --tw-contain-style {
       syntax: "*";
       inherits: false
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -568,7 +613,8 @@ test('content', async () => {
       ['content-slash', 'content-["hello_world"]'],
     ),
   ).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-content: "";
@@ -594,7 +640,8 @@ test('content', async () => {
       syntax: "*";
       inherits: false;
       initial-value: "";
-    }"
+    }
+    "
   `)
   expect(await run(['content', '-content-["hello_world"]', 'content-["hello_world"]/foo'])).toEqual(
     '',
@@ -620,7 +667,8 @@ test('underline-offset', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ".-underline-offset-4 {
+    "
+    .-underline-offset-4 {
       text-underline-offset: calc(4px * -1);
     }
 
@@ -646,7 +694,8 @@ test('underline-offset', async () => {
 
     .underline-offset-auto {
       text-underline-offset: auto;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -675,13 +724,15 @@ test('underline-offset', async () => {
       ['underline-offset-auto'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --text-underline-offset-auto: 4px;
     }
 
     .underline-offset-auto {
       text-underline-offset: var(--text-underline-offset-auto);
-    }"
+    }
+    "
   `)
 })
 
@@ -696,7 +747,8 @@ test('@container', async () => {
       '@container-size/sidebar',
     ]),
   ).toMatchInlineSnapshot(`
-    ".\\@container-normal\\/sidebar {
+    "
+    .\\@container-normal\\/sidebar {
       container: sidebar;
     }
 
@@ -718,7 +770,8 @@ test('@container', async () => {
 
     .\\@container-size {
       container-type: size;
-    }"
+    }
+    "
   `)
   expect(
     await run([

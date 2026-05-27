@@ -40,7 +40,8 @@ test('accent', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --color-red-500: #ef4444;
       --accent-color-blue-500: #3b82f6;
     }
@@ -157,7 +158,8 @@ test('accent', async () => {
 
     .accent-transparent {
       accent-color: #0000;
-    }"
+    }
+    "
   `)
   expect(
     await run([

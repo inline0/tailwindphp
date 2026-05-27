@@ -20,7 +20,8 @@ test('animate', async () => {
       ['animate-spin', 'animate-none', 'animate-[bounce_1s_infinite]', 'animate-not-found'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --animate-spin: spin 1s linear infinite;
     }
 
@@ -34,7 +35,8 @@ test('animate', async () => {
 
     .animate-spin {
       animation: var(--animate-spin);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -61,13 +63,15 @@ test('animate', async () => {
       ['animate-none'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --animate-none: bounce 1s infinite;
     }
 
     .animate-none {
       animation: var(--animate-none);
-    }"
+    }
+    "
   `)
 })
 

@@ -20,7 +20,8 @@ test('flex', async () => {
       'flex-[123]',
     ]),
   ).toMatchInlineSnapshot(`
-    ".flex-1 {
+    "
+    .flex-1 {
       flex: 1;
     }
 
@@ -46,7 +47,8 @@ test('flex', async () => {
 
     .flex-none {
       flex: none;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -73,7 +75,8 @@ test('flex', async () => {
 
 test('flex-shrink', async () => {
   expect(await run(['shrink', 'shrink-0', 'shrink-[123]'])).toMatchInlineSnapshot(`
-    ".shrink {
+    "
+    .shrink {
       flex-shrink: 1;
     }
 
@@ -83,7 +86,8 @@ test('flex-shrink', async () => {
 
     .shrink-\\[123\\] {
       flex-shrink: 123;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -102,7 +106,8 @@ test('flex-shrink', async () => {
 
 test('flex-grow', async () => {
   expect(await run(['grow', 'grow-0', 'grow-[123]'])).toMatchInlineSnapshot(`
-    ".grow {
+    "
+    .grow {
       flex-grow: 1;
     }
 
@@ -112,7 +117,8 @@ test('flex-grow', async () => {
 
     .grow-\\[123\\] {
       flex-grow: 123;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -141,7 +147,8 @@ test('flex-basis', async () => {
       ['basis-auto', 'basis-full', 'basis-xl', 'basis-11/12', 'basis-[123px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --container-xl: 36rem;
     }
 
@@ -163,7 +170,8 @@ test('flex-basis', async () => {
 
     .basis-xl {
       flex-basis: var(--container-xl);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -186,7 +194,8 @@ test('flex-basis', async () => {
 test('flex-direction', async () => {
   expect(await run(['flex-row', 'flex-row-reverse', 'flex-col', 'flex-col-reverse']))
     .toMatchInlineSnapshot(`
-      ".flex-col {
+      "
+      .flex-col {
         flex-direction: column;
       }
 
@@ -200,7 +209,8 @@ test('flex-direction', async () => {
 
       .flex-row-reverse {
         flex-direction: row-reverse;
-      }"
+      }
+      "
     `)
   expect(
     await run([
@@ -218,7 +228,8 @@ test('flex-direction', async () => {
 
 test('flex-wrap', async () => {
   expect(await run(['flex-wrap', 'flex-wrap-reverse', 'flex-nowrap'])).toMatchInlineSnapshot(`
-    ".flex-nowrap {
+    "
+    .flex-nowrap {
       flex-wrap: nowrap;
     }
 
@@ -228,7 +239,8 @@ test('flex-wrap', async () => {
 
     .flex-wrap-reverse {
       flex-wrap: wrap-reverse;
-    }"
+    }
+    "
   `)
   expect(
     await run([

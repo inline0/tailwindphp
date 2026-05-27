@@ -197,6 +197,47 @@ function registerInteractivityUtilities(UtilityBuilder $builder): void
     $builder->staticUtility('scroll-smooth', [['scroll-behavior', 'smooth']]);
 
     // ==================================================
+    // Scrollbar
+    // ==================================================
+
+    $builder->staticUtility('scrollbar-auto', [['scrollbar-width', 'auto']]);
+    $builder->staticUtility('scrollbar-thin', [['scrollbar-width', 'thin']]);
+    $builder->staticUtility('scrollbar-none', [['scrollbar-width', 'none']]);
+
+    $scrollbarColorProperties = function () {
+        return atRoot([
+            property('--tw-scrollbar-thumb', '#0000', '<color>'),
+            property('--tw-scrollbar-track', '#0000', '<color>'),
+        ]);
+    };
+
+    $builder->colorUtility('scrollbar-thumb', [
+        'themeKeys' => ['--color'],
+        'handle' => function ($value) use ($scrollbarColorProperties) {
+            return [
+                $scrollbarColorProperties(),
+                decl('--tw-scrollbar-thumb', $value),
+                decl('scrollbar-color', 'var(--tw-scrollbar-thumb) var(--tw-scrollbar-track)'),
+            ];
+        },
+    ]);
+
+    $builder->colorUtility('scrollbar-track', [
+        'themeKeys' => ['--color'],
+        'handle' => function ($value) use ($scrollbarColorProperties) {
+            return [
+                $scrollbarColorProperties(),
+                decl('--tw-scrollbar-track', $value),
+                decl('scrollbar-color', 'var(--tw-scrollbar-thumb) var(--tw-scrollbar-track)'),
+            ];
+        },
+    ]);
+
+    $builder->staticUtility('scrollbar-gutter-auto', [['scrollbar-gutter', 'auto']]);
+    $builder->staticUtility('scrollbar-gutter-stable', [['scrollbar-gutter', 'stable']]);
+    $builder->staticUtility('scrollbar-gutter-both', [['scrollbar-gutter', 'stable both-edges']]);
+
+    // ==================================================
     // Overscroll Behavior
     // ==================================================
 

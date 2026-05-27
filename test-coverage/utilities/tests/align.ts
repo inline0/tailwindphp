@@ -24,7 +24,8 @@ test('align-content', async () => {
       'content-stretch',
     ]),
   ).toMatchInlineSnapshot(`
-    ".content-around {
+    "
+    .content-around {
       align-content: space-around;
     }
 
@@ -66,7 +67,8 @@ test('align-content', async () => {
 
     .content-stretch {
       align-content: stretch;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -106,7 +108,8 @@ test('items', async () => {
       'items-stretch',
     ]),
   ).toMatchInlineSnapshot(`
-    ".items-baseline {
+    "
+    .items-baseline {
       align-items: baseline;
     }
 
@@ -136,7 +139,8 @@ test('items', async () => {
 
     .items-stretch {
       align-items: stretch;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -172,7 +176,8 @@ test('justify', async () => {
       'justify-stretch',
     ]),
   ).toMatchInlineSnapshot(`
-    ".justify-around {
+    "
+    .justify-around {
       justify-content: space-around;
     }
 
@@ -210,7 +215,8 @@ test('justify', async () => {
 
     .justify-stretch {
       justify-content: stretch;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -246,7 +252,8 @@ test('justify-items', async () => {
       'justify-items-stretch',
     ]),
   ).toMatchInlineSnapshot(`
-    ".justify-items-center {
+    "
+    .justify-items-center {
       justify-items: center;
     }
 
@@ -268,7 +275,8 @@ test('justify-items', async () => {
 
     .justify-items-stretch {
       justify-items: stretch;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -299,7 +307,8 @@ test('self', async () => {
       'self-baseline-last',
     ]),
   ).toMatchInlineSnapshot(`
-    ".self-auto {
+    "
+    .self-auto {
       align-self: auto;
     }
 
@@ -333,7 +342,8 @@ test('self', async () => {
 
     .self-stretch {
       align-self: stretch;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -367,7 +377,8 @@ test('justify-self', async () => {
       'justify-self-baseline',
     ]),
   ).toMatchInlineSnapshot(`
-    ".justify-self-auto {
+    "
+    .justify-self-auto {
       justify-self: auto;
     }
 
@@ -393,7 +404,8 @@ test('justify-self', async () => {
 
     .justify-self-stretch {
       justify-self: stretch;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -429,7 +441,8 @@ test('align', async () => {
       'align-[var(--value)]',
     ]),
   ).toMatchInlineSnapshot(`
-    ".align-\\[var\\(--value\\)\\] {
+    "
+    .align-\\[var\\(--value\\)\\] {
       vertical-align: var(--value);
     }
 
@@ -463,7 +476,8 @@ test('align', async () => {
 
     .align-top {
       vertical-align: top;
-    }"
+    }
+    "
   `)
   expect(
     await run([

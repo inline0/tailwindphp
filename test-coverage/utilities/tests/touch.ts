@@ -10,7 +10,8 @@ import { compileCss, run } from './test-utils/run'
 
 test('touch-action', async () => {
   expect(await run(['touch-auto', 'touch-none', 'touch-manipulation'])).toMatchInlineSnapshot(`
-    ".touch-auto {
+    "
+    .touch-auto {
       touch-action: auto;
     }
 
@@ -20,7 +21,8 @@ test('touch-action', async () => {
 
     .touch-none {
       touch-action: none;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -45,7 +47,8 @@ test('touch-pan', async () => {
       'touch-pan-down',
     ]),
   ).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-pan-x: initial;
@@ -57,32 +60,32 @@ test('touch-pan', async () => {
 
     .touch-pan-left {
       --tw-pan-x: pan-left;
-      touch-action: var(--tw-pan-x,  ) var(--tw-pan-y,  ) var(--tw-pinch-zoom,  );
+      touch-action: var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, );
     }
 
     .touch-pan-right {
       --tw-pan-x: pan-right;
-      touch-action: var(--tw-pan-x,  ) var(--tw-pan-y,  ) var(--tw-pinch-zoom,  );
+      touch-action: var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, );
     }
 
     .touch-pan-x {
       --tw-pan-x: pan-x;
-      touch-action: var(--tw-pan-x,  ) var(--tw-pan-y,  ) var(--tw-pinch-zoom,  );
+      touch-action: var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, );
     }
 
     .touch-pan-down {
       --tw-pan-y: pan-down;
-      touch-action: var(--tw-pan-x,  ) var(--tw-pan-y,  ) var(--tw-pinch-zoom,  );
+      touch-action: var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, );
     }
 
     .touch-pan-up {
       --tw-pan-y: pan-up;
-      touch-action: var(--tw-pan-x,  ) var(--tw-pan-y,  ) var(--tw-pinch-zoom,  );
+      touch-action: var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, );
     }
 
     .touch-pan-y {
       --tw-pan-y: pan-y;
-      touch-action: var(--tw-pan-x,  ) var(--tw-pan-y,  ) var(--tw-pinch-zoom,  );
+      touch-action: var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, );
     }
 
     @property --tw-pan-x {
@@ -98,7 +101,8 @@ test('touch-pan', async () => {
     @property --tw-pinch-zoom {
       syntax: "*";
       inherits: false
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -120,7 +124,8 @@ test('touch-pan', async () => {
 
 test('touch-pinch-zoom', async () => {
   expect(await run(['touch-pinch-zoom'])).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-pan-x: initial;
@@ -132,7 +137,7 @@ test('touch-pinch-zoom', async () => {
 
     .touch-pinch-zoom {
       --tw-pinch-zoom: pinch-zoom;
-      touch-action: var(--tw-pan-x,  ) var(--tw-pan-y,  ) var(--tw-pinch-zoom,  );
+      touch-action: var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, );
     }
 
     @property --tw-pan-x {
@@ -148,7 +153,8 @@ test('touch-pinch-zoom', async () => {
     @property --tw-pinch-zoom {
       syntax: "*";
       inherits: false
-    }"
+    }
+    "
   `)
   expect(await run(['-touch-pinch-zoom', 'touch-pinch-zoom/foo'])).toEqual('')
 })

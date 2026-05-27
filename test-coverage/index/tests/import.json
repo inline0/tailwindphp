@@ -6,7 +6,7 @@
             "bg-tomato"
         ],
         "css": "@import 'tailwindcss' theme(static);",
-        "expected": "\":root, :host {\n        --color-tomato: #e10c04;\n        --color-potato: #ac855b;\n        --color-primary: var(--primary);\n      }\n\n      .bg-tomato {\n        background-color: var(--color-tomato);\n      }\""
+        "expected": "\"\n      :root, :host {\n        --color-tomato: #e10c04;\n        --color-potato: #ac855b;\n        --color-primary: var(--primary);\n      }\n\n      .bg-tomato {\n        background-color: var(--color-tomato);\n      }\n      \""
     },
     {
         "name": "`@import ",
@@ -15,6 +15,6 @@
             "bg-tomato"
         ],
         "css": "@import 'tailwindcss' theme(inline);",
-        "expected": "\".bg-tomato {\n        background-color: #e10c04;\n      }\""
+        "expected": "\"\n      .bg-tomato {\n        background-color: #e10c04;\n      }\n      \""
     }
 ]

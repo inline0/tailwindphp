@@ -10,13 +10,15 @@ import { compileCss, run } from './test-utils/run'
 
 test('isolation', async () => {
   expect(await run(['isolate', 'isolation-auto'])).toMatchInlineSnapshot(`
-    ".isolate {
+    "
+    .isolate {
       isolation: isolate;
     }
 
     .isolation-auto {
       isolation: auto;
-    }"
+    }
+    "
   `)
   expect(await run(['-isolate', '-isolation-auto', 'isolate/foo', 'isolation-auto/foo'])).toEqual(
     '',

@@ -11,7 +11,8 @@ import { compileCss, run } from './test-utils/run'
 test('text-wrap', async () => {
   expect(await run(['text-wrap', 'text-nowrap', 'text-balance', 'text-pretty']))
     .toMatchInlineSnapshot(`
-      ".text-balance {
+      "
+      .text-balance {
         text-wrap: balance;
       }
 
@@ -25,7 +26,8 @@ test('text-wrap', async () => {
 
       .text-wrap {
         text-wrap: wrap;
-      }"
+      }
+      "
     `)
   expect(
     await run([

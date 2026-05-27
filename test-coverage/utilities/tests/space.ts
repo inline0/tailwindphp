@@ -20,7 +20,8 @@ test('space-x', async () => {
       ['space-x-4', 'space-x-[4px]', '-space-x-4'],
     ),
   ).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-space-x-reverse: 0;
@@ -54,7 +55,8 @@ test('space-x', async () => {
       syntax: "*";
       inherits: false;
       initial-value: 0;
-    }"
+    }
+    "
   `)
   expect(await run(['space-x', 'space-x-4/foo', 'space-x-[4px]/foo', '-space-x-4/foo'])).toEqual('')
 })
@@ -71,7 +73,8 @@ test('space-y', async () => {
       ['space-y-4', 'space-y-[4px]', '-space-y-4'],
     ),
   ).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-space-y-reverse: 0;
@@ -105,14 +108,16 @@ test('space-y', async () => {
       syntax: "*";
       inherits: false;
       initial-value: 0;
-    }"
+    }
+    "
   `)
   expect(await run(['space-y', 'space-y-4/foo', 'space-y-[4px]/foo', '-space-y-4/foo'])).toEqual('')
 })
 
 test('space-x-reverse', async () => {
   expect(await run(['space-x-reverse'])).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-space-x-reverse: 0;
@@ -128,14 +133,16 @@ test('space-x-reverse', async () => {
       syntax: "*";
       inherits: false;
       initial-value: 0;
-    }"
+    }
+    "
   `)
   expect(await run(['-space-x-reverse', 'space-x-reverse/foo'])).toEqual('')
 })
 
 test('space-y-reverse', async () => {
   expect(await run(['space-y-reverse'])).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-space-y-reverse: 0;
@@ -151,7 +158,8 @@ test('space-y-reverse', async () => {
       syntax: "*";
       inherits: false;
       initial-value: 0;
-    }"
+    }
+    "
   `)
   expect(await run(['-space-y-reverse', 'space-y-reverse/foo'])).toEqual('')
 })

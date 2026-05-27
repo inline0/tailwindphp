@@ -8,7 +8,7 @@
             "ml-[theme(--spacing-1_5,theme(--spacing-2_5,_1rem)))]"
         ],
         "css": "@theme {\n            --spacing-1_5: 1.5rem;\n            --spacing-2_5: 2.5rem;\n          }\n          @tailwind utilities;",
-        "expected": "\":root, :host {\n        --spacing-1_5: 1.5rem;\n        --spacing-2_5: 2.5rem;\n      }\n\n      .ml-\\\\[theme\\\\(--spacing-1_5\\\\,theme\\\\(--spacing-2_5\\\\,_1rem\\\\)\\\\)\\\\)\\\\] {\n        margin-left: 1.5rem;\n      }\n\n      .ml-\\\\[var\\\\(--spacing-1_5\\\\,_var\\\\(--spacing-2_5\\\\,_1rem\\\\)\\\\)\\\\] {\n        margin-left: var(--spacing-1_5, var(--spacing-2_5, 1rem));\n      }\n\n      .bg-\\\\[no-repeat_url\\\\(\\\\.\\\\\/my_file\\\\.jpg\\\\)\\\\] {\n        background-color: no-repeat url(\".\/my_file.jpg\");\n      }\""
+        "expected": "\"\n      :root, :host {\n        --spacing-1_5: 1.5rem;\n        --spacing-2_5: 2.5rem;\n      }\n\n      .ml-\\\\[theme\\\\(--spacing-1_5\\\\,theme\\\\(--spacing-2_5\\\\,_1rem\\\\)\\\\)\\\\)\\\\] {\n        margin-left: 1.5rem;\n      }\n\n      .ml-\\\\[var\\\\(--spacing-1_5\\\\,_var\\\\(--spacing-2_5\\\\,_1rem\\\\)\\\\)\\\\] {\n        margin-left: var(--spacing-1_5, var(--spacing-2_5, 1rem));\n      }\n\n      .bg-\\\\[no-repeat_url\\\\(\\\\.\\\\\/my_file\\\\.jpg\\\\)\\\\] {\n        background-color: no-repeat url(\".\/my_file.jpg\");\n      }\n      \""
     },
     {
         "name": "should generate arbitrary properties",
@@ -17,7 +17,7 @@
             "[color:red]"
         ],
         "css": null,
-        "expected": "\".\\\\[color\\\\:red\\\\] {\n        color: red;\n      }\""
+        "expected": "\"\n      .\\\\[color\\\\:red\\\\] {\n        color: red;\n      }\n      \""
     },
     {
         "name": "should generate arbitrary properties with modifiers",
@@ -26,16 +26,7 @@
             "[color:red]\/50"
         ],
         "css": null,
-        "expected": "\".\\\\[color\\\\:red\\\\]\\\\\/50 {\n        color: oklab(62.7955% .224 .125 \/ .5);\n      }\""
-    },
-    {
-        "name": "should not generate arbitrary properties with invalid modifiers",
-        "type": "run",
-        "classes": [
-            "[color:red]\/not-a-percentage"
-        ],
-        "css": null,
-        "expected": "\"\""
+        "expected": "\"\n      .\\\\[color\\\\:red\\\\]\\\\\/50 {\n        color: oklab(62.7955% .224 .125 \/ .5);\n      }\n      \""
     },
     {
         "name": "should generate arbitrary properties with variables and with modifiers",
@@ -44,7 +35,7 @@
             "[color:var(--my-color)]\/50"
         ],
         "css": null,
-        "expected": "\".\\\\[color\\\\:var\\\\(--my-color\\\\)\\\\]\\\\\/50 {\n        color: var(--my-color);\n      }\n\n      @supports (color: color-mix(in lab, red, red)) {\n        .\\\\[color\\\\:var\\\\(--my-color\\\\)\\\\]\\\\\/50 {\n          color: color-mix(in oklab, var(--my-color) 50%, transparent);\n        }\n      }\""
+        "expected": "\"\n      .\\\\[color\\\\:var\\\\(--my-color\\\\)\\\\]\\\\\/50 {\n        color: var(--my-color);\n      }\n\n      @supports (color: color-mix(in lab, red, red)) {\n        .\\\\[color\\\\:var\\\\(--my-color\\\\)\\\\]\\\\\/50 {\n          color: color-mix(in oklab, var(--my-color) 50%, transparent);\n        }\n      }\n      \""
     },
     {
         "name": "should generate arbitrary variants",
@@ -53,7 +44,7 @@
             "[&_p]:flex"
         ],
         "css": null,
-        "expected": "\".\\\\[\\\\&_p\\\\]\\\\:flex p {\n        display: flex;\n      }\""
+        "expected": "\"\n      .\\\\[\\\\&_p\\\\]\\\\:flex p {\n        display: flex;\n      }\n      \""
     },
     {
         "name": "should generate arbitrary at-rule variants",
@@ -62,7 +53,7 @@
             "[@media(width>=123px)]:flex"
         ],
         "css": null,
-        "expected": "\"@media (min-width: 123px) {\n        .\\\\[\\\\@media\\\\(width\\\\>\\\\=123px\\\\)\\\\]\\\\:flex {\n          display: flex;\n        }\n      }\""
+        "expected": "\"\n      @media (min-width: 123px) {\n        .\\\\[\\\\@media\\\\(width\\\\>\\\\=123px\\\\)\\\\]\\\\:flex {\n          display: flex;\n        }\n      }\n      \""
     },
     {
         "name": "should stack arbitrary variants and simple variants",
@@ -71,7 +62,7 @@
             "[&_p]:hover:flex"
         ],
         "css": null,
-        "expected": "\"@media (hover: hover) {\n        .\\\\[\\\\&_p\\\\]\\\\:hover\\\\:flex p:hover {\n          display: flex;\n        }\n      }\""
+        "expected": "\"\n      @media (hover: hover) {\n        .\\\\[\\\\&_p\\\\]\\\\:hover\\\\:flex p:hover {\n          display: flex;\n        }\n      }\n      \""
     },
     {
         "name": "should stack multiple arbitrary variants",
@@ -80,7 +71,7 @@
             "[&_p]:[@media(width>=123px)]:flex"
         ],
         "css": null,
-        "expected": "\"@media (min-width: 123px) {\n        .\\\\[\\\\&_p\\\\]\\\\:\\\\[\\\\@media\\\\(width\\\\>\\\\=123px\\\\)\\\\]\\\\:flex p {\n          display: flex;\n        }\n      }\""
+        "expected": "\"\n      @media (min-width: 123px) {\n        .\\\\[\\\\&_p\\\\]\\\\:\\\\[\\\\@media\\\\(width\\\\>\\\\=123px\\\\)\\\\]\\\\:flex p {\n          display: flex;\n        }\n      }\n      \""
     },
     {
         "name": "should generate an important arbitrary property utility",
@@ -89,6 +80,6 @@
             "[color:red]!"
         ],
         "css": null,
-        "expected": "\".\\\\[color\\\\:red\\\\]\\\\! {\n        color: red !important;\n      }\""
+        "expected": "\"\n      .\\\\[color\\\\:red\\\\]\\\\! {\n        color: red !important;\n      }\n      \""
     }
 ]

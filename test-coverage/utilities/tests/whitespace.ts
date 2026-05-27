@@ -19,7 +19,8 @@ test('whitespace', async () => {
       'whitespace-break-spaces',
     ]),
   ).toMatchInlineSnapshot(`
-    ".whitespace-break-spaces {
+    "
+    .whitespace-break-spaces {
       white-space: break-spaces;
     }
 
@@ -41,7 +42,8 @@ test('whitespace', async () => {
 
     .whitespace-pre-wrap {
       white-space: pre-wrap;
-    }"
+    }
+    "
   `)
   expect(
     await run([

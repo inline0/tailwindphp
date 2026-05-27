@@ -2111,6 +2111,8 @@ function extractCandidates(string $html): array
     foreach ([REGEX_CLASS_ATTR, REGEX_CLASSNAME_ATTR] as $pattern) {
         if (preg_match_all($pattern, $html, $matches)) {
             foreach ($matches[1] as $classAttr) {
+                $classAttr = html_entity_decode($classAttr, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
                 foreach (preg_split(REGEX_WHITESPACE, $classAttr) as $class) {
                     $class = trim($class);
                     if ($class !== '') {

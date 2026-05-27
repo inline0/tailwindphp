@@ -10,7 +10,8 @@ import { compileCss, run } from './test-utils/run'
 
 test('hyphens', async () => {
   expect(await run(['hyphens-none', 'hyphens-manual', 'hyphens-auto'])).toMatchInlineSnapshot(`
-    ".hyphens-auto {
+    "
+    .hyphens-auto {
       -webkit-hyphens: auto;
       hyphens: auto;
     }
@@ -23,7 +24,8 @@ test('hyphens', async () => {
     .hyphens-none {
       -webkit-hyphens: none;
       hyphens: none;
-    }"
+    }
+    "
   `)
   expect(
     await run([

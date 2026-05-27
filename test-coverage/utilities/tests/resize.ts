@@ -10,7 +10,8 @@ import { compileCss, run } from './test-utils/run'
 
 test('resize', async () => {
   expect(await run(['resize-none', 'resize', 'resize-x', 'resize-y'])).toMatchInlineSnapshot(`
-    ".resize {
+    "
+    .resize {
       resize: both;
     }
 
@@ -24,7 +25,8 @@ test('resize', async () => {
 
     .resize-y {
       resize: vertical;
-    }"
+    }
+    "
   `)
   expect(
     await run([

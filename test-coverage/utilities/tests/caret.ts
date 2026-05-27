@@ -40,7 +40,8 @@ test('caret', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --color-red-500: #ef4444;
       --caret-color-blue-500: #3b82f6;
     }
@@ -157,7 +158,8 @@ test('caret', async () => {
 
     .caret-transparent {
       caret-color: #0000;
-    }"
+    }
+    "
   `)
   expect(
     await run([

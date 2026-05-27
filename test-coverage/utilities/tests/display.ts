@@ -34,7 +34,8 @@ test('display', async () => {
       'hidden',
     ]),
   ).toMatchInlineSnapshot(`
-    ".block {
+    "
+    .block {
       display: block;
     }
 
@@ -116,7 +117,8 @@ test('display', async () => {
 
     .table-row-group {
       display: table-row-group;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -193,7 +195,8 @@ test('inline-size', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
       --container-xl: 36rem;
     }
@@ -248,7 +251,8 @@ test('inline-size', async () => {
 
     .inline-xl {
       inline-size: var(--container-xl);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -302,7 +306,8 @@ test('block-size', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -356,7 +361,8 @@ test('block-size', async () => {
 
     .block-svh {
       block-size: 100svh;
-    }"
+    }
+    "
   `)
   expect(
     await run([

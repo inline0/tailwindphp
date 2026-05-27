@@ -11,13 +11,15 @@ import { compileCss, run } from './test-utils/run'
 test('forced-color-adjust', async () => {
   expect(await run(['forced-color-adjust-none', 'forced-color-adjust-auto']))
     .toMatchInlineSnapshot(`
-      ".forced-color-adjust-auto {
+      "
+      .forced-color-adjust-auto {
         forced-color-adjust: auto;
       }
 
       .forced-color-adjust-none {
         forced-color-adjust: none;
-      }"
+      }
+      "
     `)
   expect(
     await run([

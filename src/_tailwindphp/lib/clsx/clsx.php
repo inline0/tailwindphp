@@ -30,7 +30,7 @@ function clsx(mixed ...$args): string
     $result = '';
 
     foreach ($args as $arg) {
-        if (!$arg) {
+        if (!isTruthy($arg)) {
             continue;
         }
 
@@ -76,7 +76,7 @@ function toValue(mixed $mix): string
     if ($mix === [] || array_keys($mix) === range(0, count($mix) - 1)) {
         // Sequential array - process each element recursively
         foreach ($mix as $item) {
-            if ($item) {
+            if (isTruthy($item)) {
                 $value = toValue($item);
                 if ($value !== '') {
                     $result .= ($result !== '' ? ' ' : '') . $value;
@@ -117,6 +117,11 @@ function isTruthy(mixed $value): bool
     // NaN is falsy in JS
     if (is_float($value) && is_nan($value)) {
         return false;
+    }
+
+    // All non-empty strings are truthy in JS, including "0".
+    if (is_string($value)) {
+        return $value !== '';
     }
 
     // Empty arrays are truthy in JS but falsy in PHP

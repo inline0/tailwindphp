@@ -11,7 +11,8 @@ import { compileCss, run } from './test-utils/run'
 test('word-break', async () => {
   expect(await run(['break-normal', 'break-words', 'break-all', 'break-keep']))
     .toMatchInlineSnapshot(`
-      ".break-normal {
+      "
+      .break-normal {
         overflow-wrap: normal;
         word-break: normal;
       }
@@ -26,7 +27,8 @@ test('word-break', async () => {
 
       .break-keep {
         word-break: keep-all;
-      }"
+      }
+      "
     `)
   expect(
     await run([

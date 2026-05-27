@@ -29,7 +29,8 @@ test('columns', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --container-3xs: 16rem;
       --container-7xl: 80rem;
     }
@@ -60,7 +61,8 @@ test('columns', async () => {
 
     .columns-auto {
       columns: auto;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -91,13 +93,15 @@ test('columns', async () => {
       ['columns-auto'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --columns-auto: 3;
     }
 
     .columns-auto {
       columns: var(--columns-auto);
-    }"
+    }
+    "
   `)
 })
 

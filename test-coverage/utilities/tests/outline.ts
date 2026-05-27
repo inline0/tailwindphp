@@ -69,7 +69,8 @@ test('outline', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-outline-style: solid;
@@ -313,7 +314,8 @@ test('outline', async () => {
       syntax: "*";
       inherits: false;
       initial-value: solid;
-    }"
+    }
+    "
   `)
   expect(
     await compileCss(
@@ -326,7 +328,8 @@ test('outline', async () => {
       ['outline'],
     ),
   ).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-outline-style: solid;
@@ -343,7 +346,8 @@ test('outline', async () => {
       syntax: "*";
       inherits: false;
       initial-value: solid;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -395,7 +399,8 @@ test('outline-offset', async () => {
       '-outline-offset-[var(--value)]',
     ]),
   ).toMatchInlineSnapshot(`
-    ".-outline-offset-4 {
+    "
+    .-outline-offset-4 {
       outline-offset: calc(4px * -1);
     }
 
@@ -409,7 +414,8 @@ test('outline-offset', async () => {
 
     .outline-offset-\\[var\\(--value\\)\\] {
       outline-offset: var(--value);
-    }"
+    }
+    "
   `)
   expect(
     await run([

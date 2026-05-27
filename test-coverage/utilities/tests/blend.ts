@@ -29,7 +29,8 @@ test('bg-blend', async () => {
       'bg-blend-luminosity',
     ]),
   ).toMatchInlineSnapshot(`
-    ".bg-blend-color {
+    "
+    .bg-blend-color {
       background-blend-mode: color;
     }
 
@@ -91,7 +92,8 @@ test('bg-blend', async () => {
 
     .bg-blend-soft-light {
       background-blend-mode: soft-light;
-    }"
+    }
+    "
   `)
   expect(
     await run([

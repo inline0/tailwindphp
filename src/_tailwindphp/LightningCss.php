@@ -416,31 +416,13 @@ class LightningCss
     /**
      * Normalize transform function spacing.
      *
-     * lightningcss removes spaces between consecutive transform functions:
-     * "scaleZ(2) rotateY(45deg)" -> "scaleZ(2)rotateY(45deg)"
-     *
-     * Only applies to values without var() calls, as those need spaces preserved.
-     *
      * @param string $value The CSS value
      * @param string $property The CSS property name
      * @return string Normalized value
      */
     public static function normalizeTransformFunctions(string $value, string $property = ''): string
     {
-        // Only apply to transform property
-        if ($property !== 'transform') {
-            return $value;
-        }
-
-        // Don't apply to values with CSS variables - they need spaces preserved
-        // e.g., "var(--tw-rotate-x, ) var(--tw-rotate-y, )"
-        if (str_contains($value, 'var(')) {
-            return $value;
-        }
-
-        // Remove spaces between consecutive transform functions
-        // Match ") " followed by a function name and "("
-        return preg_replace('/\)\s+([a-zA-Z]+\()/', ')$1', $value);
+        return $value;
     }
 
     /**

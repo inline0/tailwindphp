@@ -8,6 +8,76 @@
 import { expect, test } from 'vitest'
 import { compileCss, run } from './test-utils/run'
 
+test('margin sort order', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
+      ['mb-4', 'me-4', 'mx-4', 'ml-4', 'ms-4', 'm-4', 'mr-4', 'mt-4', 'my-4'],
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    :root, :host {
+      --spacing-4: 1rem;
+    }
+
+    .m-4 {
+      margin: var(--spacing-4);
+    }
+
+    .mx-4 {
+      margin-inline: var(--spacing-4);
+    }
+
+    .my-4 {
+      margin-block: var(--spacing-4);
+    }
+
+    .ms-4 {
+      margin-inline-start: var(--spacing-4);
+    }
+
+    .me-4 {
+      margin-inline-end: var(--spacing-4);
+    }
+
+    .mt-4 {
+      margin-top: var(--spacing-4);
+    }
+
+    .mr-4 {
+      margin-right: var(--spacing-4);
+    }
+
+    .mb-4 {
+      margin-bottom: var(--spacing-4);
+    }
+
+    .ml-4 {
+      margin-left: var(--spacing-4);
+    }
+    "
+  `)
+  expect(
+    await run([
+      'm',
+      'mb-4/foo',
+      'me-4/foo',
+      'mx-4/foo',
+      'ml-4/foo',
+      'ms-4/foo',
+      'm-4/foo',
+      'mr-4/foo',
+      'mt-4/foo',
+      'my-4/foo',
+    ]),
+  ).toEqual('')
+})
+
 test('min-width', async () => {
   expect(
     await compileCss(
@@ -30,7 +100,8 @@ test('min-width', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
       --container-xl: 36rem;
     }
@@ -65,7 +136,8 @@ test('min-width', async () => {
 
     .min-w-xl {
       min-width: var(--container-xl);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -97,7 +169,8 @@ test('max-width', async () => {
       ['max-w-none', 'max-w-full', 'max-w-max', 'max-w-fit', 'max-w-4', 'max-w-xl', 'max-w-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
       --container-xl: 36rem;
     }
@@ -128,7 +201,8 @@ test('max-width', async () => {
 
     .max-w-xl {
       max-width: var(--container-xl);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -173,7 +247,8 @@ test('min-height', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -223,7 +298,8 @@ test('min-height', async () => {
 
     .min-h-svh {
       min-height: 100svh;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -271,7 +347,8 @@ test('max-height', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -321,7 +398,8 @@ test('max-height', async () => {
 
     .max-h-svh {
       max-height: 100svh;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -367,7 +445,8 @@ test('min-inline-size', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
       --container-xl: 36rem;
     }
@@ -402,7 +481,8 @@ test('min-inline-size', async () => {
 
     .min-inline-xl {
       min-inline-size: var(--container-xl);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -442,7 +522,8 @@ test('max-inline-size', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
       --container-xl: 36rem;
     }
@@ -473,7 +554,8 @@ test('max-inline-size', async () => {
 
     .max-inline-xl {
       max-inline-size: var(--container-xl);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -518,7 +600,8 @@ test('min-block-size', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -568,7 +651,8 @@ test('min-block-size', async () => {
 
     .min-block-svh {
       min-block-size: 100svh;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -616,7 +700,8 @@ test('max-block-size', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -666,7 +751,8 @@ test('max-block-size', async () => {
 
     .max-block-svh {
       max-block-size: 100svh;
-    }"
+    }
+    "
   `)
   expect(
     await run([

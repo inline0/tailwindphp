@@ -61,7 +61,8 @@ test('stroke', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --color-red-500: #ef4444;
       --stroke-blue-500: #3b82f6;
     }
@@ -270,7 +271,8 @@ test('stroke', async () => {
 
     .stroke-\\[length\\:var\\(--my-width\\)\\], .stroke-\\[number\\:var\\(--my-width\\)\\], .stroke-\\[percentage\\:var\\(--my-width\\)\\] {
       stroke-width: var(--my-width);
-    }"
+    }
+    "
   `)
   expect(
     await run([

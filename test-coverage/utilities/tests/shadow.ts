@@ -62,7 +62,8 @@ test('shadow', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-shadow: 0 0 #0000;
@@ -456,7 +457,8 @@ test('shadow', async () => {
       syntax: "*";
       inherits: false;
       initial-value: 0 0 #0000;
-    }"
+    }
+    "
   `)
   expect(
     await run([

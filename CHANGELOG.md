@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-05-27
+
+### Added
+
+#### TailwindCSS 4.3 Alignment
+- Updated internal TailwindCSS reference from v4.2.1 to v4.3.0
+- Added native scrollbar utilities: `scrollbar-auto`, `scrollbar-thin`, `scrollbar-none`, `scrollbar-thumb-*`, `scrollbar-track-*`, and `scrollbar-gutter-*`
+- Added `zoom-*` utilities with percentage bare values and arbitrary values
+- Added `tab-*` utilities for `tab-size`
+
+### Changed
+
+- Re-extracted all test data from TailwindCSS v4.3.0 reference
+- Test suite expanded to 4,074 tests (+25 from v1.3.0)
+- Arbitrary transform values now preserve spaces between transform functions to match TailwindCSS v4.3 output
+
+### Fixed
+
+- `clsx()` now avoids PHP 8.5 boolean coercion warnings for `NAN` and treats non-empty strings such as `"0"` with JavaScript truthiness.
+- Encoded ampersands in HTML class attributes are decoded before candidate extraction so arbitrary selector classes such as `[&_svg:not([class*=size-])]:size-4` compile when rendered as `[&amp;_svg:not([class*=size-])]:size-4`.
+
 ## [1.3.2] - 2026-04-24
 
 ### Fixed
@@ -242,6 +263,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - No external runtime dependencies
 - Zero Node.js requirement
 
+[1.4.0]: https://github.com/dnnsjsk/tailwindphp/releases/tag/v1.4.0
+[1.3.2]: https://github.com/dnnsjsk/tailwindphp/releases/tag/v1.3.2
 [1.3.0]: https://github.com/dnnsjsk/tailwindphp/releases/tag/v1.3.0
 [1.2.4]: https://github.com/dnnsjsk/tailwindphp/releases/tag/v1.2.4
 [1.2.3]: https://github.com/dnnsjsk/tailwindphp/releases/tag/v1.2.3

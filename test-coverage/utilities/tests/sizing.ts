@@ -29,7 +29,8 @@ test('size', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -71,7 +72,8 @@ test('size', async () => {
     .size-min {
       width: min-content;
       height: min-content;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -122,7 +124,8 @@ test('width', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
       --width-xl: 36rem;
     }
@@ -177,7 +180,8 @@ test('width', async () => {
 
     .w-xl {
       width: var(--width-xl);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -232,7 +236,8 @@ test('height', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing-4: 1rem;
     }
 
@@ -286,7 +291,8 @@ test('height', async () => {
 
     .h-svh {
       height: 100svh;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -325,7 +331,8 @@ test('will-change', async () => {
       'will-change-[var(--value)]',
     ]),
   ).toMatchInlineSnapshot(`
-    ".will-change-\\[var\\(--value\\)\\] {
+    "
+    .will-change-\\[var\\(--value\\)\\] {
       will-change: var(--value);
     }
 
@@ -343,7 +350,8 @@ test('will-change', async () => {
 
     .will-change-transform {
       will-change: transform;
-    }"
+    }
+    "
   `)
   expect(
     await run([

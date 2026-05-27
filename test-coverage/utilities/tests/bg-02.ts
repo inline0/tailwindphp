@@ -20,7 +20,8 @@ test('bg-position', async () => {
       ['bg-position-[120px]', 'bg-position-[120px_120px]', 'bg-position-[var(--some-var)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ".bg-position-\\[120px\\] {
+    "
+    .bg-position-\\[120px\\] {
       background-position: 120px;
     }
 
@@ -30,7 +31,8 @@ test('bg-position', async () => {
 
     .bg-position-\\[var\\(--some-var\\)\\] {
       background-position: var(--some-var);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -59,7 +61,8 @@ test('bg-size', async () => {
       ['bg-size-[120px]', 'bg-size-[120px_120px]', 'bg-size-[var(--some-var)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ".bg-size-\\[120px\\] {
+    "
+    .bg-size-\\[120px\\] {
       background-size: 120px;
     }
 
@@ -69,7 +72,8 @@ test('bg-size', async () => {
 
     .bg-size-\\[var\\(--some-var\\)\\] {
       background-size: var(--some-var);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -89,7 +93,8 @@ test('bg-size', async () => {
 test('bg-clip', async () => {
   expect(await run(['bg-clip-border', 'bg-clip-padding', 'bg-clip-content', 'bg-clip-text']))
     .toMatchInlineSnapshot(`
-      ".bg-clip-border {
+      "
+      .bg-clip-border {
         background-clip: border-box;
       }
 
@@ -104,7 +109,8 @@ test('bg-clip', async () => {
       .bg-clip-text {
         -webkit-background-clip: text;
         background-clip: text;
-      }"
+      }
+      "
     `)
   expect(
     await run([
@@ -124,7 +130,8 @@ test('bg-clip', async () => {
 test('bg-origin', async () => {
   expect(await run(['bg-origin-border', 'bg-origin-padding', 'bg-origin-content']))
     .toMatchInlineSnapshot(`
-      ".bg-origin-border {
+      "
+      .bg-origin-border {
         background-origin: border-box;
       }
 
@@ -134,7 +141,8 @@ test('bg-origin', async () => {
 
       .bg-origin-padding {
         background-origin: padding-box;
-      }"
+      }
+      "
     `)
   expect(
     await run([

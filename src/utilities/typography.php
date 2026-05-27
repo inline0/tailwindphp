@@ -420,6 +420,25 @@ function registerTypographyUtilities(UtilityBuilder $builder): void
     $builder->staticUtility('whitespace-pre-wrap', [['white-space', 'pre-wrap']]);
     $builder->staticUtility('whitespace-break-spaces', [['white-space', 'break-spaces']]);
 
+    // Tab Size
+    $builder->functionalUtility('tab', [
+        'themeKeys' => [],
+        'handleBareValue' => function ($value) {
+            if (isset($value['fraction'])) {
+                return null;
+            }
+
+            if (!isPositiveInteger($value['value'])) {
+                return null;
+            }
+
+            return $value['value'];
+        },
+        'handle' => function ($value) {
+            return [decl('tab-size', $value)];
+        },
+    ]);
+
     // Word Break
     $builder->staticUtility('break-normal', [['overflow-wrap', 'normal'], ['word-break', 'normal']]);
     $builder->staticUtility('break-words', [['overflow-wrap', 'break-word']]);

@@ -222,10 +222,10 @@ class LightningCss extends TestCase
     // ==================================================
 
     #[Test]
-    public function normalize_transform_removes_spaces_between_functions(): void
+    public function normalize_transform_preserves_spaces_between_functions(): void
     {
         $this->assertSame(
-            'scaleZ(2)rotateY(45deg)',
+            'scaleZ(2) rotateY(45deg)',
             LightningCssOptimizer::normalizeTransformFunctions('scaleZ(2) rotateY(45deg)', 'transform'),
         );
     }

@@ -34,7 +34,8 @@ test('transition', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --default-transition-timing-function: ease;
       --default-transition-duration: .1s;
       --transition-property-opacity: opacity;
@@ -84,7 +85,8 @@ test('transition', async () => {
 
     .transition-none {
       transition-property: none;
-    }"
+    }
+    "
   `)
 
   expect(
@@ -99,7 +101,8 @@ test('transition', async () => {
       ['transition', 'transition-all', 'transition-colors'],
     ),
   ).toMatchInlineSnapshot(`
-    ".transition {
+    "
+    .transition {
       transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter, display, content-visibility, overlay, pointer-events;
       transition-timing-function: var(--tw-ease, ease);
       transition-duration: var(--tw-duration, .1s);
@@ -115,7 +118,8 @@ test('transition', async () => {
       transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
       transition-timing-function: var(--tw-ease, ease);
       transition-duration: var(--tw-duration, .1s);
-    }"
+    }
+    "
   `)
 
   expect(
@@ -126,11 +130,13 @@ test('transition', async () => {
       ['transition-all'],
     ),
   ).toMatchInlineSnapshot(`
-    ".transition-all {
+    "
+    .transition-all {
       transition-property: all;
       transition-timing-function: var(--tw-ease, ease);
       transition-duration: var(--tw-duration, 0s);
-    }"
+    }
+    "
   `)
 
   expect(
@@ -162,7 +168,8 @@ test('transition', async () => {
       ['transition-colors'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --transition-property-colors: transform;
     }
 
@@ -170,19 +177,22 @@ test('transition', async () => {
       transition-property: var(--transition-property-colors);
       transition-timing-function: var(--tw-ease, ease);
       transition-duration: var(--tw-duration, 0s);
-    }"
+    }
+    "
   `)
 })
 
 test('transition-behavior', async () => {
   expect(await run(['transition-discrete', 'transition-normal'])).toMatchInlineSnapshot(`
-    ".transition-discrete {
+    "
+    .transition-discrete {
       transition-behavior: allow-discrete;
     }
 
     .transition-normal {
       transition-behavior: normal;
-    }"
+    }
+    "
   `)
 
   expect(await run(['-transition-discrete', '-transition-normal'])).toEqual('')
@@ -190,7 +200,8 @@ test('transition-behavior', async () => {
 
 test('delay', async () => {
   expect(await run(['delay-123', 'delay-200', 'delay-[300ms]'])).toMatchInlineSnapshot(`
-    ".delay-123 {
+    "
+    .delay-123 {
       transition-delay: .123s;
     }
 
@@ -200,7 +211,8 @@ test('delay', async () => {
 
     .delay-\\[300ms\\] {
       transition-delay: .3s;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -218,7 +230,8 @@ test('delay', async () => {
 
 test('duration', async () => {
   expect(await run(['duration-123', 'duration-200', 'duration-[300ms]'])).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-duration: initial;
@@ -244,7 +257,8 @@ test('duration', async () => {
     @property --tw-duration {
       syntax: "*";
       inherits: false
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -272,7 +286,8 @@ test('ease', async () => {
       ['ease-in', 'ease-out', 'ease-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-ease: initial;
@@ -303,7 +318,8 @@ test('ease', async () => {
     @property --tw-ease {
       syntax: "*";
       inherits: false
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -327,7 +343,8 @@ test('ease', async () => {
       ['ease-linear'],
     ),
   ).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-ease: initial;
@@ -347,7 +364,8 @@ test('ease', async () => {
     @property --tw-ease {
       syntax: "*";
       inherits: false
-    }"
+    }
+    "
   `)
 })
 

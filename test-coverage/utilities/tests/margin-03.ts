@@ -76,7 +76,8 @@ test('mask', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ".mask-\\[image\\:var\\(--some-var\\)\\] {
+    "
+    .mask-\\[image\\:var\\(--some-var\\)\\] {
       -webkit-mask-image: var(--some-var);
       -webkit-mask-image: var(--some-var);
       mask-image: var(--some-var);
@@ -271,7 +272,8 @@ test('mask', async () => {
     .mask-repeat-y {
       -webkit-mask-repeat: repeat-y;
       mask-repeat: repeat-y;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -372,7 +374,8 @@ test('mask', async () => {
       ['mask-current/half', 'mask-current/custom', '[color:red]/half'],
     ),
   ).toMatchInlineSnapshot(`
-    ".\\[color\\:red\\]\\/half {
+    "
+    .\\[color\\:red\\]\\/half {
       color: color-mix(in srgb, red .5, transparent);
     }
 
@@ -380,7 +383,8 @@ test('mask', async () => {
       .\\[color\\:red\\]\\/half {
         color: color-mix(in oklab, red var(--opacity-half, .5), transparent);
       }
-    }"
+    }
+    "
   `)
 })
 
@@ -396,7 +400,8 @@ test('mask-position', async () => {
       ['mask-position-[120px]', 'mask-position-[120px_120px]', 'mask-position-[var(--some-var)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ".mask-position-\\[120px\\] {
+    "
+    .mask-position-\\[120px\\] {
       -webkit-mask-position: 120px;
       mask-position: 120px;
     }
@@ -410,7 +415,8 @@ test('mask-position', async () => {
       -webkit-mask-position: var(--some-var);
       -webkit-mask-position: var(--some-var);
       mask-position: var(--some-var);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -439,7 +445,8 @@ test('mask-size', async () => {
       ['mask-size-[120px]', 'mask-size-[120px_120px]', 'mask-size-[var(--some-var)]'],
     ),
   ).toMatchInlineSnapshot(`
-    ".mask-size-\\[120px\\] {
+    "
+    .mask-size-\\[120px\\] {
       -webkit-mask-size: 120px;
       mask-size: 120px;
     }
@@ -453,7 +460,8 @@ test('mask-size', async () => {
       -webkit-mask-size: var(--some-var);
       -webkit-mask-size: var(--some-var);
       mask-size: var(--some-var);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -493,7 +501,8 @@ test('mask-t-from', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-mask-linear: linear-gradient(#fff, #fff);
@@ -687,7 +696,8 @@ test('mask-t-from', async () => {
       syntax: "*";
       inherits: false;
       initial-value: transparent;
-    }"
+    }
+    "
   `)
   expect(
     await compileCss(
@@ -719,267 +729,6 @@ test('mask-t-from', async () => {
         '-mask-t-from-(--my-var)',
         '-mask-t-from-(color:--my-var)',
         '-mask-t-from-(length:--my-var)',
-
-        'mask-l-from-[-25%]',
-        'mask-l-from-[25%]/foo',
-        'mask-l-from-[-25%]/foo',
-        '-mask-l-from-[-25%]',
-        '-mask-l-from-[25%]/foo',
-        '-mask-l-from-[-25%]/foo',
-      ],
-    ),
-  ).toEqual('')
-})
-
-test('mask-t-to', async () => {
-  expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
-      [
-        'mask-t-to-0',
-        'mask-t-to-1.5',
-        'mask-t-to-2',
-        'mask-t-to-0%',
-        'mask-t-to-2%',
-        'mask-t-to-[0px]',
-        'mask-t-to-[0%]',
-        'mask-t-to-(--my-var)',
-        'mask-t-to-(color:--my-var)',
-        'mask-t-to-(length:--my-var)',
-      ],
-    ),
-  ).toMatchInlineSnapshot(`
-    "@layer properties {
-      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-        *, :before, :after, ::backdrop {
-          --tw-mask-linear: linear-gradient(#fff, #fff);
-          --tw-mask-radial: linear-gradient(#fff, #fff);
-          --tw-mask-conic: linear-gradient(#fff, #fff);
-          --tw-mask-left: linear-gradient(#fff, #fff);
-          --tw-mask-right: linear-gradient(#fff, #fff);
-          --tw-mask-bottom: linear-gradient(#fff, #fff);
-          --tw-mask-top: linear-gradient(#fff, #fff);
-          --tw-mask-top-from-position: 0%;
-          --tw-mask-top-to-position: 100%;
-          --tw-mask-top-from-color: black;
-          --tw-mask-top-to-color: transparent;
-        }
-      }
-    }
-
-    :root, :host {
-      --spacing: .25rem;
-    }
-
-    .mask-t-to-\\(color\\:--my-var\\) {
-      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      --tw-mask-linear: var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top);
-      --tw-mask-top: linear-gradient(to top, var(--tw-mask-top-from-color) var(--tw-mask-top-from-position), var(--tw-mask-top-to-color) var(--tw-mask-top-to-position));
-      --tw-mask-top-to-color: var(--my-var);
-      -webkit-mask-composite: source-in;
-      -webkit-mask-composite: source-in;
-      mask-composite: intersect;
-    }
-
-    .mask-t-to-\\(--my-var\\), .mask-t-to-\\(length\\:--my-var\\) {
-      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      --tw-mask-linear: var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top);
-      --tw-mask-top: linear-gradient(to top, var(--tw-mask-top-from-color) var(--tw-mask-top-from-position), var(--tw-mask-top-to-color) var(--tw-mask-top-to-position));
-      --tw-mask-top-to-position: var(--my-var);
-      -webkit-mask-composite: source-in;
-      -webkit-mask-composite: source-in;
-      mask-composite: intersect;
-    }
-
-    .mask-t-to-0 {
-      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      --tw-mask-linear: var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top);
-      --tw-mask-top: linear-gradient(to top, var(--tw-mask-top-from-color) var(--tw-mask-top-from-position), var(--tw-mask-top-to-color) var(--tw-mask-top-to-position));
-      --tw-mask-top-to-position: calc(var(--spacing) * 0);
-      -webkit-mask-composite: source-in;
-      -webkit-mask-composite: source-in;
-      mask-composite: intersect;
-    }
-
-    .mask-t-to-0\\% {
-      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      --tw-mask-linear: var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top);
-      --tw-mask-top: linear-gradient(to top, var(--tw-mask-top-from-color) var(--tw-mask-top-from-position), var(--tw-mask-top-to-color) var(--tw-mask-top-to-position));
-      --tw-mask-top-to-position: 0%;
-      -webkit-mask-composite: source-in;
-      -webkit-mask-composite: source-in;
-      mask-composite: intersect;
-    }
-
-    .mask-t-to-1\\.5 {
-      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      --tw-mask-linear: var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top);
-      --tw-mask-top: linear-gradient(to top, var(--tw-mask-top-from-color) var(--tw-mask-top-from-position), var(--tw-mask-top-to-color) var(--tw-mask-top-to-position));
-      --tw-mask-top-to-position: calc(var(--spacing) * 1.5);
-      -webkit-mask-composite: source-in;
-      -webkit-mask-composite: source-in;
-      mask-composite: intersect;
-    }
-
-    .mask-t-to-2 {
-      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      --tw-mask-linear: var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top);
-      --tw-mask-top: linear-gradient(to top, var(--tw-mask-top-from-color) var(--tw-mask-top-from-position), var(--tw-mask-top-to-color) var(--tw-mask-top-to-position));
-      --tw-mask-top-to-position: calc(var(--spacing) * 2);
-      -webkit-mask-composite: source-in;
-      -webkit-mask-composite: source-in;
-      mask-composite: intersect;
-    }
-
-    .mask-t-to-2\\% {
-      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      --tw-mask-linear: var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top);
-      --tw-mask-top: linear-gradient(to top, var(--tw-mask-top-from-color) var(--tw-mask-top-from-position), var(--tw-mask-top-to-color) var(--tw-mask-top-to-position));
-      --tw-mask-top-to-position: 2%;
-      -webkit-mask-composite: source-in;
-      -webkit-mask-composite: source-in;
-      mask-composite: intersect;
-    }
-
-    .mask-t-to-\\[0\\%\\] {
-      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      --tw-mask-linear: var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top);
-      --tw-mask-top: linear-gradient(to top, var(--tw-mask-top-from-color) var(--tw-mask-top-from-position), var(--tw-mask-top-to-color) var(--tw-mask-top-to-position));
-      --tw-mask-top-to-position: 0%;
-      -webkit-mask-composite: source-in;
-      -webkit-mask-composite: source-in;
-      mask-composite: intersect;
-    }
-
-    .mask-t-to-\\[0px\\] {
-      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
-      --tw-mask-linear: var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top);
-      --tw-mask-top: linear-gradient(to top, var(--tw-mask-top-from-color) var(--tw-mask-top-from-position), var(--tw-mask-top-to-color) var(--tw-mask-top-to-position));
-      --tw-mask-top-to-position: 0px;
-      -webkit-mask-composite: source-in;
-      -webkit-mask-composite: source-in;
-      mask-composite: intersect;
-    }
-
-    @property --tw-mask-linear {
-      syntax: "*";
-      inherits: false;
-      initial-value: linear-gradient(#fff, #fff);
-    }
-
-    @property --tw-mask-radial {
-      syntax: "*";
-      inherits: false;
-      initial-value: linear-gradient(#fff, #fff);
-    }
-
-    @property --tw-mask-conic {
-      syntax: "*";
-      inherits: false;
-      initial-value: linear-gradient(#fff, #fff);
-    }
-
-    @property --tw-mask-left {
-      syntax: "*";
-      inherits: false;
-      initial-value: linear-gradient(#fff, #fff);
-    }
-
-    @property --tw-mask-right {
-      syntax: "*";
-      inherits: false;
-      initial-value: linear-gradient(#fff, #fff);
-    }
-
-    @property --tw-mask-bottom {
-      syntax: "*";
-      inherits: false;
-      initial-value: linear-gradient(#fff, #fff);
-    }
-
-    @property --tw-mask-top {
-      syntax: "*";
-      inherits: false;
-      initial-value: linear-gradient(#fff, #fff);
-    }
-
-    @property --tw-mask-top-from-position {
-      syntax: "*";
-      inherits: false;
-      initial-value: 0%;
-    }
-
-    @property --tw-mask-top-to-position {
-      syntax: "*";
-      inherits: false;
-      initial-value: 100%;
-    }
-
-    @property --tw-mask-top-from-color {
-      syntax: "*";
-      inherits: false;
-      initial-value: black;
-    }
-
-    @property --tw-mask-top-to-color {
-      syntax: "*";
-      inherits: false;
-      initial-value: transparent;
-    }"
-  `)
-  expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
-      [
-        'mask-t-to',
-        'mask-t-to-2.8175',
-        'mask-t-to--1.5',
-        'mask-t-to--2',
-
-        'mask-t-to-2.5%',
-        'mask-t-to--5%',
-        'mask-t-to-unknown',
-        'mask-t-to-unknown%',
-
-        '-mask-t-to-0',
-        '-mask-t-to-1.5',
-        '-mask-t-to-2',
-        '-mask-t-to-0%',
-        '-mask-t-to-2%',
-        '-mask-t-to-[0px]',
-        '-mask-t-to-[0%]',
-
-        '-mask-t-to-(--my-var)',
-        '-mask-t-to-(color:--my-var)',
-        '-mask-t-to-(length:--my-var)',
 
         'mask-l-from-[-25%]',
         'mask-l-from-[25%]/foo',

@@ -161,7 +161,8 @@ test('bg', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --color-red-500: #ef4444;
       --background-color-blue-500: #3b82f6;
     }
@@ -976,7 +977,8 @@ test('bg', async () => {
 
     .bg-repeat-y {
       background-repeat: repeat-y;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -1085,7 +1087,8 @@ test('bg', async () => {
       ['bg-current/half', 'bg-current/custom', '[color:red]/half'],
     ),
   ).toMatchInlineSnapshot(`
-    ".bg-current\\/custom {
+    "
+    .bg-current\\/custom {
       background-color: currentColor;
     }
 
@@ -1113,7 +1116,8 @@ test('bg', async () => {
       .\\[color\\:red\\]\\/half {
         color: color-mix(in oklab, red var(--opacity-half, .5), transparent);
       }
-    }"
+    }
+    "
   `)
 })
 

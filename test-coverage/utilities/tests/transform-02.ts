@@ -8,9 +8,10 @@
 import { expect, test } from 'vitest'
 import { compileCss, run } from './test-utils/run'
 
-test('skew-x', async () => {
-  expect(await run(['skew-x-6', '-skew-x-6', 'skew-x-[123deg]'])).toMatchInlineSnapshot(`
-    "@layer properties {
+test('skew', async () => {
+  expect(await run(['skew-6', '-skew-6', 'skew-[123deg]'])).toMatchInlineSnapshot(`
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-rotate-x: initial;
@@ -22,19 +23,22 @@ test('skew-x', async () => {
       }
     }
 
-    .-skew-x-6 {
+    .-skew-6 {
       --tw-skew-x: skewX(calc(6deg * -1));
-      transform: var(--tw-rotate-x,  ) var(--tw-rotate-y,  ) var(--tw-rotate-z,  ) var(--tw-skew-x,  ) var(--tw-skew-y,  );
+      --tw-skew-y: skewY(calc(6deg * -1));
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
     }
 
-    .skew-x-6 {
+    .skew-6 {
       --tw-skew-x: skewX(6deg);
-      transform: var(--tw-rotate-x,  ) var(--tw-rotate-y,  ) var(--tw-rotate-z,  ) var(--tw-skew-x,  ) var(--tw-skew-y,  );
+      --tw-skew-y: skewY(6deg);
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
     }
 
-    .skew-x-\\[123deg\\] {
+    .skew-\\[123deg\\] {
       --tw-skew-x: skewX(123deg);
-      transform: var(--tw-rotate-x,  ) var(--tw-rotate-y,  ) var(--tw-rotate-z,  ) var(--tw-skew-x,  ) var(--tw-skew-y,  );
+      --tw-skew-y: skewY(123deg);
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
     }
 
     @property --tw-rotate-x {
@@ -60,7 +64,76 @@ test('skew-x', async () => {
     @property --tw-skew-y {
       syntax: "*";
       inherits: false
-    }"
+    }
+    "
+  `)
+  expect(
+    await run([
+      'skew',
+      'skew--1',
+      'skew-unknown',
+      'skew-6/foo',
+      '-skew-6/foo',
+      'skew-[123deg]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('skew-x', async () => {
+  expect(await run(['skew-x-6', '-skew-x-6', 'skew-x-[123deg]'])).toMatchInlineSnapshot(`
+    "
+    @layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        *, :before, :after, ::backdrop {
+          --tw-rotate-x: initial;
+          --tw-rotate-y: initial;
+          --tw-rotate-z: initial;
+          --tw-skew-x: initial;
+          --tw-skew-y: initial;
+        }
+      }
+    }
+
+    .-skew-x-6 {
+      --tw-skew-x: skewX(calc(6deg * -1));
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
+    }
+
+    .skew-x-6 {
+      --tw-skew-x: skewX(6deg);
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
+    }
+
+    .skew-x-\\[123deg\\] {
+      --tw-skew-x: skewX(123deg);
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
+    }
+
+    @property --tw-rotate-x {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-rotate-y {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-rotate-z {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-skew-x {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-skew-y {
+      syntax: "*";
+      inherits: false
+    }
+    "
   `)
   expect(
     await run([
@@ -76,7 +149,8 @@ test('skew-x', async () => {
 
 test('skew-y', async () => {
   expect(await run(['skew-y-6', '-skew-y-6', 'skew-y-[123deg]'])).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-rotate-x: initial;
@@ -90,17 +164,17 @@ test('skew-y', async () => {
 
     .-skew-y-6 {
       --tw-skew-y: skewY(calc(6deg * -1));
-      transform: var(--tw-rotate-x,  ) var(--tw-rotate-y,  ) var(--tw-rotate-z,  ) var(--tw-skew-x,  ) var(--tw-skew-y,  );
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
     }
 
     .skew-y-6 {
       --tw-skew-y: skewY(6deg);
-      transform: var(--tw-rotate-x,  ) var(--tw-rotate-y,  ) var(--tw-rotate-z,  ) var(--tw-skew-x,  ) var(--tw-skew-y,  );
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
     }
 
     .skew-y-\\[123deg\\] {
       --tw-skew-y: skewY(123deg);
-      transform: var(--tw-rotate-x,  ) var(--tw-rotate-y,  ) var(--tw-rotate-z,  ) var(--tw-skew-x,  ) var(--tw-skew-y,  );
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
     }
 
     @property --tw-rotate-x {
@@ -126,7 +200,8 @@ test('skew-y', async () => {
     @property --tw-skew-y {
       syntax: "*";
       inherits: false
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -143,7 +218,8 @@ test('skew-y', async () => {
 test('scale', async () => {
   expect(await run(['scale-50', '-scale-50', 'scale-[2]', 'scale-[2_1.5_3]']))
     .toMatchInlineSnapshot(`
-      "@layer properties {
+      "
+      @layer properties {
         @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-scale-x: 1;
@@ -191,7 +267,8 @@ test('scale', async () => {
         syntax: "*";
         inherits: false;
         initial-value: 1;
-      }"
+      }
+      "
     `)
   expect(
     await run([
@@ -209,7 +286,8 @@ test('scale', async () => {
 
 test('scale-3d', async () => {
   expect(await run(['scale-3d'])).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-scale-x: 1;
@@ -239,14 +317,16 @@ test('scale-3d', async () => {
       syntax: "*";
       inherits: false;
       initial-value: 1;
-    }"
+    }
+    "
   `)
   expect(await run(['-scale-3d', 'scale-3d/foo'])).toEqual('')
 })
 
 test('scale-x', async () => {
   expect(await run(['scale-x-50', '-scale-x-50', 'scale-x-[2]'])).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-scale-x: 1;
@@ -287,10 +367,12 @@ test('scale-x', async () => {
       syntax: "*";
       inherits: false;
       initial-value: 1;
-    }"
+    }
+    "
   `)
   expect(await run(['scale-200', 'scale-x-400'])).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-scale-x: 1;
@@ -328,7 +410,8 @@ test('scale-x', async () => {
       syntax: "*";
       inherits: false;
       initial-value: 1;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -347,7 +430,8 @@ test('scale-x', async () => {
 
 test('scale-y', async () => {
   expect(await run(['scale-y-50', '-scale-y-50', 'scale-y-[2]'])).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-scale-x: 1;
@@ -388,7 +472,8 @@ test('scale-y', async () => {
       syntax: "*";
       inherits: false;
       initial-value: 1;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -405,7 +490,8 @@ test('scale-y', async () => {
 
 test('scale-z', async () => {
   expect(await run(['scale-z-50', '-scale-z-50', 'scale-z-[123deg]'])).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-scale-x: 1;
@@ -446,7 +532,8 @@ test('scale-z', async () => {
       syntax: "*";
       inherits: false;
       initial-value: 1;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -470,7 +557,8 @@ test('transform', async () => {
       'transform-[scaleZ(2)_rotateY(45deg)]',
     ]),
   ).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-rotate-x: initial;
@@ -483,19 +571,19 @@ test('transform', async () => {
     }
 
     .transform {
-      transform: var(--tw-rotate-x,  ) var(--tw-rotate-y,  ) var(--tw-rotate-z,  ) var(--tw-skew-x,  ) var(--tw-skew-y,  );
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
     }
 
     .transform-\\[scaleZ\\(2\\)_rotateY\\(45deg\\)\\] {
-      transform: scaleZ(2)rotateY(45deg);
+      transform: scaleZ(2) rotateY(45deg);
     }
 
     .transform-cpu {
-      transform: var(--tw-rotate-x,  ) var(--tw-rotate-y,  ) var(--tw-rotate-z,  ) var(--tw-skew-x,  ) var(--tw-skew-y,  );
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
     }
 
     .transform-gpu {
-      transform: translateZ(0) var(--tw-rotate-x,  ) var(--tw-rotate-y,  ) var(--tw-rotate-z,  ) var(--tw-skew-x,  ) var(--tw-skew-y,  );
+      transform: translateZ(0) var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
     }
 
     .transform-none {
@@ -525,7 +613,8 @@ test('transform', async () => {
     @property --tw-skew-y {
       syntax: "*";
       inherits: false
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -540,7 +629,8 @@ test('transform', async () => {
       'backface-hidden',
     ]),
   ).toMatchInlineSnapshot(`
-    ".backface-hidden {
+    "
+    .backface-hidden {
       backface-visibility: hidden;
     }
 
@@ -574,7 +664,8 @@ test('transform', async () => {
 
     .transform-view {
       transform-box: view-box;
-    }"
+    }
+    "
   `)
   expect(
     await run([

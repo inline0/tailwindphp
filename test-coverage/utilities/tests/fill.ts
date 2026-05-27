@@ -40,7 +40,8 @@ test('fill', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --color-red-500: #ef4444;
       --fill-blue-500: #3b82f6;
     }
@@ -157,7 +158,8 @@ test('fill', async () => {
 
     .fill-transparent {
       fill: #0000;
-    }"
+    }
+    "
   `)
   expect(
     await run([

@@ -24,7 +24,8 @@ test('perspective-origin', async () => {
       'perspective-origin-[var(--value)]',
     ]),
   ).toMatchInlineSnapshot(`
-    ".perspective-origin-\\[50px_100px\\] {
+    "
+    .perspective-origin-\\[50px_100px\\] {
       perspective-origin: 50px 100px;
     }
 
@@ -66,7 +67,8 @@ test('perspective-origin', async () => {
 
     .perspective-origin-top-right {
       perspective-origin: 100% 0;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -97,14 +99,16 @@ test('perspective-origin', async () => {
       ['perspective-origin-top'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --perspective-origin-top: 10px 20px;
     }
 
     .perspective-origin-top {
       perspective-origin: var(--perspective-origin-top);
       perspective: var(--perspective-origin-top);
-    }"
+    }
+    "
   `)
 })
 
@@ -121,7 +125,8 @@ test('perspective', async () => {
       ['perspective-normal', 'perspective-dramatic', 'perspective-none', 'perspective-[456px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --perspective-dramatic: 100px;
       --perspective-normal: 500px;
     }
@@ -140,7 +145,8 @@ test('perspective', async () => {
 
     .perspective-normal {
       perspective: var(--perspective-normal);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -166,13 +172,15 @@ test('perspective', async () => {
       ['perspective-none'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --perspective-none: 400px;
     }
 
     .perspective-none {
       perspective: var(--perspective-none);
-    }"
+    }
+    "
   `)
 })
 
@@ -189,7 +197,8 @@ test('p', async () => {
       ['p-1', 'p-4', 'p-99', 'p-big', 'p-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
     }
@@ -212,7 +221,8 @@ test('p', async () => {
 
     .p-big {
       padding: var(--spacing-big);
-    }"
+    }
+    "
   `)
   expect(await run(['p', '-p-4', '-p-[4px]', 'p-4/foo', 'p-[4px]/foo'])).toEqual('')
 })
@@ -230,7 +240,8 @@ test('px', async () => {
       ['px-1', 'px-99', 'px-2.5', 'px-big', 'px-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
     }
@@ -253,7 +264,8 @@ test('px', async () => {
 
     .px-big {
       padding-inline: var(--spacing-big);
-    }"
+    }
+    "
   `)
   expect(await run(['px', '-px-4', '-px-[4px]', 'px-4/foo', 'px-[4px]/foo'])).toEqual('')
 })
@@ -271,7 +283,8 @@ test('py', async () => {
       ['py-1', 'py-4', 'py-99', 'py-big', 'py-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
     }
@@ -294,7 +307,8 @@ test('py', async () => {
 
     .py-big {
       padding-block: var(--spacing-big);
-    }"
+    }
+    "
   `)
   expect(await run(['py', '-py-4', '-py-[4px]', 'py-4/foo', 'py-[4px]/foo'])).toEqual('')
 })
@@ -312,7 +326,8 @@ test('pt', async () => {
       ['pt-1', 'pt-4', 'pt-99', 'pt-big', 'pt-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
     }
@@ -335,7 +350,8 @@ test('pt', async () => {
 
     .pt-big {
       padding-top: var(--spacing-big);
-    }"
+    }
+    "
   `)
   expect(await run(['pt', '-pt-4', '-pt-[4px]', 'pt-4/foo', 'pt-[4px]/foo'])).toEqual('')
 })
@@ -353,7 +369,8 @@ test('ps', async () => {
       ['ps-1', 'ps-4', 'ps-99', 'ps-big', 'ps-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
     }
@@ -376,7 +393,8 @@ test('ps', async () => {
 
     .ps-big {
       padding-inline-start: var(--spacing-big);
-    }"
+    }
+    "
   `)
   expect(await run(['ps', '-ps-4', '-ps-[4px]', 'ps-4/foo', 'ps-[4px]/foo'])).toEqual('')
 })
@@ -394,7 +412,8 @@ test('pe', async () => {
       ['pe-1', 'pe-4', 'pe-99', 'pe-big', 'pe-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
     }
@@ -417,7 +436,8 @@ test('pe', async () => {
 
     .pe-big {
       padding-inline-end: var(--spacing-big);
-    }"
+    }
+    "
   `)
   expect(await run(['pe', '-pe-4', '-pe-[4px]', 'pe-4/foo', 'pe-[4px]/foo'])).toEqual('')
 })
@@ -435,7 +455,8 @@ test('pbs', async () => {
       ['pbs-1', 'pbs-4', 'pbs-99', 'pbs-big', 'pbs-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
     }
@@ -458,7 +479,8 @@ test('pbs', async () => {
 
     .pbs-big {
       padding-block-start: var(--spacing-big);
-    }"
+    }
+    "
   `)
   expect(await run(['pbs', '-pbs-4', '-pbs-[4px]', 'pbs-4/foo', 'pbs-[4px]/foo'])).toEqual('')
 })
@@ -476,7 +498,8 @@ test('pbe', async () => {
       ['pbe-1', 'pbe-4', 'pbe-99', 'pbe-big', 'pbe-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
     }
@@ -499,7 +522,8 @@ test('pbe', async () => {
 
     .pbe-big {
       padding-block-end: var(--spacing-big);
-    }"
+    }
+    "
   `)
   expect(await run(['pbe', '-pbe-4', '-pbe-[4px]', 'pbe-4/foo', 'pbe-[4px]/foo'])).toEqual('')
 })
@@ -517,7 +541,8 @@ test('pr', async () => {
       ['pr-1', 'pr-4', 'pr-99', 'pr-big', 'pr-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
     }
@@ -540,7 +565,8 @@ test('pr', async () => {
 
     .pr-big {
       padding-right: var(--spacing-big);
-    }"
+    }
+    "
   `)
   expect(await run(['pr', '-pr-4', '-pr-[4px]', 'pr-4/foo', 'pr-[4px]/foo'])).toEqual('')
 })
@@ -558,7 +584,8 @@ test('pb', async () => {
       ['pb-1', 'pb-4', 'pb-99', 'pb-big', 'pb-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
     }
@@ -581,7 +608,8 @@ test('pb', async () => {
 
     .pb-big {
       padding-bottom: var(--spacing-big);
-    }"
+    }
+    "
   `)
   expect(await run(['pb', '-pb-4', '-pb-[4px]', 'pb-4/foo', 'pb-[4px]/foo'])).toEqual('')
 })
@@ -599,7 +627,8 @@ test('pl', async () => {
       ['pl-1', 'pl-4', 'pl-99', 'pl-big', 'pl-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
     }
@@ -622,7 +651,8 @@ test('pl', async () => {
 
     .pl-big {
       padding-left: var(--spacing-big);
-    }"
+    }
+    "
   `)
   expect(await run(['pl', '-pl-4', '-pl-[4px]', 'pl-4/foo', 'pl-[4px]/foo'])).toEqual('')
 })
@@ -657,7 +687,8 @@ test('placeholder', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --color-red-500: #ef4444;
     }
 
@@ -769,7 +800,8 @@ test('placeholder', async () => {
 
     .placeholder-transparent::placeholder {
       color: #0000;
-    }"
+    }
+    "
   `)
   expect(
     await run([

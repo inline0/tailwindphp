@@ -23,7 +23,8 @@ test('rounded-tr', async () => {
       ['rounded-tr', 'rounded-tr-full', 'rounded-tr-none', 'rounded-tr-sm', 'rounded-tr-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
       --radius-sm: .125rem;
@@ -48,7 +49,8 @@ test('rounded-tr', async () => {
 
     .rounded-tr-sm {
       border-top-right-radius: var(--radius-sm);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -81,7 +83,8 @@ test('rounded-br', async () => {
       ['rounded-br', 'rounded-br-full', 'rounded-br-none', 'rounded-br-sm', 'rounded-br-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
       --radius-sm: .125rem;
@@ -106,7 +109,8 @@ test('rounded-br', async () => {
 
     .rounded-br-sm {
       border-bottom-right-radius: var(--radius-sm);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -139,7 +143,8 @@ test('rounded-bl', async () => {
       ['rounded-bl', 'rounded-bl-full', 'rounded-bl-none', 'rounded-bl-sm', 'rounded-bl-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
       --radius-sm: .125rem;
@@ -164,7 +169,8 @@ test('rounded-bl', async () => {
 
     .rounded-bl-sm {
       border-bottom-left-radius: var(--radius-sm);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -193,7 +199,8 @@ test('border-style', async () => {
       'border-none',
     ]),
   ).toMatchInlineSnapshot(`
-    ".border-dashed {
+    "
+    .border-dashed {
       --tw-border-style: dashed;
       border-style: dashed;
     }
@@ -221,7 +228,8 @@ test('border-style', async () => {
     .border-solid {
       --tw-border-style: solid;
       border-style: solid;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -253,7 +261,8 @@ test('border with custom default border width', async () => {
       ['border'],
     ),
   ).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-border-style: solid;
@@ -270,7 +279,8 @@ test('border with custom default border width', async () => {
       syntax: "*";
       inherits: false;
       initial-value: solid;
-    }"
+    }
+    "
   `)
   expect(await run(['-border', 'border/foo'])).toEqual('')
 })

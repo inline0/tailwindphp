@@ -10,7 +10,8 @@ import { compileCss, run } from './test-utils/run'
 
 test('box-decoration', async () => {
   expect(await run(['box-decoration-slice', 'box-decoration-clone'])).toMatchInlineSnapshot(`
-    ".box-decoration-clone {
+    "
+    .box-decoration-clone {
       -webkit-box-decoration-break: clone;
       box-decoration-break: clone;
     }
@@ -18,7 +19,8 @@ test('box-decoration', async () => {
     .box-decoration-slice {
       -webkit-box-decoration-break: slice;
       box-decoration-break: slice;
-    }"
+    }
+    "
   `)
   expect(
     await run([

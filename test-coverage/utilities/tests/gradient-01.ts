@@ -53,7 +53,8 @@ test('from', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-gradient-position: initial;
@@ -354,7 +355,8 @@ test('from', async () => {
       syntax: "<length-percentage>";
       inherits: false;
       initial-value: 100%;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -436,7 +438,8 @@ test('via', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-gradient-position: initial;
@@ -757,7 +760,8 @@ test('via', async () => {
       syntax: "<length-percentage>";
       inherits: false;
       initial-value: 100%;
-    }"
+    }
+    "
   `)
   expect(
     await run([

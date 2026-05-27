@@ -4,14 +4,14 @@
         "type": "output",
         "inputCss": "@theme {\n          --spacing: 0.25rem;\n        }\n\n        .foo {\n          margin: --spacing(4);\n        }",
         "classes": [],
-        "expected": "\":root, :host {\n        --spacing: .25rem;\n      }\n\n      .foo {\n        margin: calc(var(--spacing) * 4);\n      }\""
+        "expected": "\"\n      :root, :host {\n        --spacing: .25rem;\n      }\n\n      .foo {\n        margin: calc(var(--spacing) * 4);\n      }\n      \""
     },
     {
         "name": "--spacing(\u2026) with inline `@theme` value",
         "type": "output",
         "inputCss": "@theme inline {\n          --spacing: 0.25rem;\n        }\n\n        .foo {\n          margin: --spacing(4);\n        }",
         "classes": [],
-        "expected": "\".foo {\n        margin: 1rem;\n      }\""
+        "expected": "\"\n      .foo {\n        margin: 1rem;\n      }\n      \""
     },
     {
         "name": "--spacing(\u2026) relies on `--spacing` to be defined",

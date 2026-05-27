@@ -77,7 +77,8 @@ test('text', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --spacing: .25rem;
       --color-red-500: #ef4444;
       --text-color-blue-500: #3b82f6;
@@ -345,7 +346,8 @@ test('text', async () => {
 
     .text-transparent {
       color: #0000;
-    }"
+    }
+    "
   `)
   expect(
     await compileCss(
@@ -436,7 +438,8 @@ test('text-shadow', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-text-shadow-color: initial;
@@ -722,7 +725,8 @@ test('text-shadow', async () => {
       syntax: "<percentage>";
       inherits: false;
       initial-value: 100%;
-    }"
+    }
+    "
   `)
   expect(
     await run([

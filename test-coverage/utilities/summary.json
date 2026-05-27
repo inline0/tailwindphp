@@ -1,11 +1,11 @@
 {
     "sourceFile": "tailwindcss\/packages\/tailwindcss\/src\/utilities.test.ts",
-    "sourceLines": 29976,
-    "totalTests": 284,
+    "sourceLines": 31299,
+    "totalTests": 290,
     "categories": {
         "accessibility": {
             "tests": 2,
-            "lines": 31,
+            "lines": 35,
             "files": 1,
             "testNames": [
                 "sr-only",
@@ -14,20 +14,21 @@
         },
         "pointer-events": {
             "tests": 1,
-            "lines": 19,
+            "lines": 21,
             "files": 1,
             "testNames": [
                 "pointer-events"
             ]
         },
         "other": {
-            "tests": 9,
-            "lines": 715,
+            "tests": 10,
+            "lines": 767,
             "files": 1,
             "testNames": [
                 "visibility",
                 "field-sizing",
                 "--tw-scroll-snap-strictness",
+                "tab",
                 "indent",
                 "decoration",
                 "contain",
@@ -38,7 +39,7 @@
         },
         "position": {
             "tests": 1,
-            "lines": 37,
+            "lines": 39,
             "files": 1,
             "testNames": [
                 "position"
@@ -46,8 +47,8 @@
         },
         "inset": {
             "tests": 13,
-            "lines": 1918,
-            "files": 2,
+            "lines": 1951,
+            "files": 3,
             "testNames": [
                 "inset",
                 "inset-x",
@@ -66,23 +67,24 @@
         },
         "isolation": {
             "tests": 1,
-            "lines": 14,
+            "lines": 16,
             "files": 1,
             "testNames": [
                 "isolation"
             ]
         },
         "z-index": {
-            "tests": 1,
-            "lines": 58,
+            "tests": 2,
+            "lines": 89,
             "files": 1,
             "testNames": [
-                "z-index"
+                "z-index",
+                "zoom"
             ]
         },
         "order": {
             "tests": 1,
-            "lines": 99,
+            "lines": 105,
             "files": 1,
             "testNames": [
                 "order"
@@ -90,7 +92,7 @@
         },
         "grid": {
             "tests": 12,
-            "lines": 822,
+            "lines": 873,
             "files": 1,
             "testNames": [
                 "col",
@@ -109,7 +111,7 @@
         },
         "float": {
             "tests": 1,
-            "lines": 39,
+            "lines": 41,
             "files": 1,
             "testNames": [
                 "float"
@@ -117,7 +119,7 @@
         },
         "clear": {
             "tests": 1,
-            "lines": 53,
+            "lines": 55,
             "files": 1,
             "testNames": [
                 "clear"
@@ -125,8 +127,8 @@
         },
         "margin": {
             "tests": 48,
-            "lines": 7626,
-            "files": 9,
+            "lines": 7724,
+            "files": 10,
             "testNames": [
                 "margin",
                 "mx",
@@ -180,7 +182,7 @@
         },
         "box-sizing": {
             "tests": 1,
-            "lines": 14,
+            "lines": 16,
             "files": 1,
             "testNames": [
                 "box-sizing"
@@ -188,7 +190,7 @@
         },
         "text": {
             "tests": 18,
-            "lines": 1518,
+            "lines": 1562,
             "files": 2,
             "testNames": [
                 "line-clamp",
@@ -213,7 +215,7 @@
         },
         "display": {
             "tests": 3,
-            "lines": 373,
+            "lines": 379,
             "files": 1,
             "testNames": [
                 "display",
@@ -223,7 +225,7 @@
         },
         "aspect-ratio": {
             "tests": 1,
-            "lines": 49,
+            "lines": 51,
             "files": 1,
             "testNames": [
                 "aspect-ratio"
@@ -231,7 +233,7 @@
         },
         "sizing": {
             "tests": 4,
-            "lines": 350,
+            "lines": 358,
             "files": 1,
             "testNames": [
                 "size",
@@ -242,7 +244,7 @@
         },
         "flex": {
             "tests": 6,
-            "lines": 228,
+            "lines": 240,
             "files": 1,
             "testNames": [
                 "flex",
@@ -255,7 +257,7 @@
         },
         "table": {
             "tests": 2,
-            "lines": 28,
+            "lines": 32,
             "files": 1,
             "testNames": [
                 "table-layout",
@@ -264,7 +266,7 @@
         },
         "border": {
             "tests": 21,
-            "lines": 1183,
+            "lines": 1227,
             "files": 2,
             "testNames": [
                 "border-collapse",
@@ -292,7 +294,7 @@
         },
         "transform": {
             "tests": 19,
-            "lines": 1533,
+            "lines": 1581,
             "files": 2,
             "testNames": [
                 "origin",
@@ -318,7 +320,7 @@
         },
         "padding": {
             "tests": 14,
-            "lines": 770,
+            "lines": 802,
             "files": 1,
             "testNames": [
                 "perspective-origin",
@@ -339,7 +341,7 @@
         },
         "cursor": {
             "tests": 1,
-            "lines": 289,
+            "lines": 291,
             "files": 1,
             "testNames": [
                 "cursor"
@@ -347,7 +349,7 @@
         },
         "touch": {
             "tests": 3,
-            "lines": 142,
+            "lines": 148,
             "files": 1,
             "testNames": [
                 "touch-action",
@@ -357,7 +359,7 @@
         },
         "select": {
             "tests": 1,
-            "lines": 36,
+            "lines": 38,
             "files": 1,
             "testNames": [
                 "select"
@@ -365,16 +367,16 @@
         },
         "resize": {
             "tests": 1,
-            "lines": 31,
+            "lines": 33,
             "files": 1,
             "testNames": [
                 "resize"
             ]
         },
         "scroll": {
-            "tests": 26,
-            "lines": 941,
-            "files": 1,
+            "tests": 30,
+            "lines": 1282,
+            "files": 2,
             "testNames": [
                 "scroll-snap-type",
                 "scroll-snap-align",
@@ -401,12 +403,16 @@
                 "scroll-pr",
                 "scroll-pb",
                 "scroll-pl",
-                "scroll-behavior"
+                "scroll-behavior",
+                "scrollbar-width",
+                "scrollbar-gutter",
+                "scrollbar-thumb",
+                "scrollbar-track"
             ]
         },
         "appearance": {
             "tests": 1,
-            "lines": 20,
+            "lines": 22,
             "files": 1,
             "testNames": [
                 "appearance"
@@ -414,7 +420,7 @@
         },
         "columns": {
             "tests": 1,
-            "lines": 92,
+            "lines": 96,
             "files": 1,
             "testNames": [
                 "columns"
@@ -422,7 +428,7 @@
         },
         "break": {
             "tests": 3,
-            "lines": 173,
+            "lines": 179,
             "files": 1,
             "testNames": [
                 "break-before",
@@ -432,7 +438,7 @@
         },
         "place": {
             "tests": 3,
-            "lines": 189,
+            "lines": 195,
             "files": 1,
             "testNames": [
                 "place-content",
@@ -442,7 +448,7 @@
         },
         "align": {
             "tests": 7,
-            "lines": 477,
+            "lines": 491,
             "files": 1,
             "testNames": [
                 "align-content",
@@ -456,7 +462,7 @@
         },
         "gap": {
             "tests": 3,
-            "lines": 82,
+            "lines": 88,
             "files": 1,
             "testNames": [
                 "gap",
@@ -466,7 +472,7 @@
         },
         "space": {
             "tests": 4,
-            "lines": 144,
+            "lines": 152,
             "files": 1,
             "testNames": [
                 "space-x",
@@ -477,7 +483,7 @@
         },
         "divide": {
             "tests": 8,
-            "lines": 507,
+            "lines": 523,
             "files": 1,
             "testNames": [
                 "divide-x",
@@ -492,7 +498,7 @@
         },
         "accent": {
             "tests": 1,
-            "lines": 187,
+            "lines": 189,
             "files": 1,
             "testNames": [
                 "accent"
@@ -500,7 +506,7 @@
         },
         "caret": {
             "tests": 1,
-            "lines": 185,
+            "lines": 187,
             "files": 1,
             "testNames": [
                 "caret"
@@ -508,7 +514,7 @@
         },
         "overflow": {
             "tests": 4,
-            "lines": 163,
+            "lines": 171,
             "files": 1,
             "testNames": [
                 "overflow",
@@ -519,7 +525,7 @@
         },
         "overscroll": {
             "tests": 3,
-            "lines": 81,
+            "lines": 87,
             "files": 1,
             "testNames": [
                 "overscroll",
@@ -529,7 +535,7 @@
         },
         "truncate": {
             "tests": 1,
-            "lines": 10,
+            "lines": 12,
             "files": 1,
             "testNames": [
                 "truncate"
@@ -537,7 +543,7 @@
         },
         "hyphens": {
             "tests": 1,
-            "lines": 29,
+            "lines": 31,
             "files": 1,
             "testNames": [
                 "hyphens"
@@ -545,7 +551,7 @@
         },
         "whitespace": {
             "tests": 1,
-            "lines": 53,
+            "lines": 55,
             "files": 1,
             "testNames": [
                 "whitespace"
@@ -553,7 +559,7 @@
         },
         "text-wrap": {
             "tests": 1,
-            "lines": 32,
+            "lines": 34,
             "files": 1,
             "testNames": [
                 "text-wrap"
@@ -561,7 +567,7 @@
         },
         "word-break": {
             "tests": 1,
-            "lines": 33,
+            "lines": 35,
             "files": 1,
             "testNames": [
                 "word-break"
@@ -569,7 +575,7 @@
         },
         "bg": {
             "tests": 5,
-            "lines": 1245,
+            "lines": 1257,
             "files": 2,
             "testNames": [
                 "bg",
@@ -581,7 +587,7 @@
         },
         "gradient": {
             "tests": 3,
-            "lines": 1162,
+            "lines": 1168,
             "files": 2,
             "testNames": [
                 "from",
@@ -591,7 +597,7 @@
         },
         "box-decoration": {
             "tests": 1,
-            "lines": 23,
+            "lines": 25,
             "files": 1,
             "testNames": [
                 "box-decoration"
@@ -599,7 +605,7 @@
         },
         "blend": {
             "tests": 1,
-            "lines": 123,
+            "lines": 125,
             "files": 1,
             "testNames": [
                 "bg-blend"
@@ -607,7 +613,7 @@
         },
         "fill": {
             "tests": 1,
-            "lines": 172,
+            "lines": 174,
             "files": 1,
             "testNames": [
                 "fill"
@@ -615,7 +621,7 @@
         },
         "stroke": {
             "tests": 1,
-            "lines": 291,
+            "lines": 293,
             "files": 1,
             "testNames": [
                 "stroke"
@@ -623,7 +629,7 @@
         },
         "object": {
             "tests": 1,
-            "lines": 157,
+            "lines": 161,
             "files": 1,
             "testNames": [
                 "object"
@@ -631,7 +637,7 @@
         },
         "animation": {
             "tests": 1,
-            "lines": 62,
+            "lines": 66,
             "files": 1,
             "testNames": [
                 "animate"
@@ -639,7 +645,7 @@
         },
         "filter": {
             "tests": 1,
-            "lines": 535,
+            "lines": 539,
             "files": 1,
             "testNames": [
                 "filter"
@@ -647,7 +653,7 @@
         },
         "backdrop": {
             "tests": 1,
-            "lines": 462,
+            "lines": 466,
             "files": 1,
             "testNames": [
                 "backdrop-filter"
@@ -655,7 +661,7 @@
         },
         "transition": {
             "tests": 5,
-            "lines": 338,
+            "lines": 356,
             "files": 1,
             "testNames": [
                 "transition",
@@ -667,7 +673,7 @@
         },
         "forced-color": {
             "tests": 1,
-            "lines": 23,
+            "lines": 25,
             "files": 1,
             "testNames": [
                 "forced-color-adjust"
@@ -675,7 +681,7 @@
         },
         "outline": {
             "tests": 2,
-            "lines": 414,
+            "lines": 420,
             "files": 1,
             "testNames": [
                 "outline",
@@ -684,7 +690,7 @@
         },
         "opacity": {
             "tests": 1,
-            "lines": 43,
+            "lines": 45,
             "files": 1,
             "testNames": [
                 "opacity"
@@ -692,7 +698,7 @@
         },
         "shadow": {
             "tests": 1,
-            "lines": 472,
+            "lines": 474,
             "files": 1,
             "testNames": [
                 "shadow"
@@ -700,7 +706,7 @@
         },
         "ring": {
             "tests": 2,
-            "lines": 785,
+            "lines": 791,
             "files": 1,
             "testNames": [
                 "ring",

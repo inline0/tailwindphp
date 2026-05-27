@@ -19,7 +19,8 @@ test('clear', async () => {
       'clear-none',
     ]),
   ).toMatchInlineSnapshot(`
-    ".clear-both {
+    "
+    .clear-both {
       clear: both;
     }
 
@@ -41,7 +42,8 @@ test('clear', async () => {
 
     .clear-start {
       clear: inline-start;
-    }"
+    }
+    "
   `)
   expect(
     await run([

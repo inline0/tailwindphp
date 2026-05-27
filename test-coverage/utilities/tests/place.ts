@@ -23,7 +23,8 @@ test('place-content', async () => {
       'place-content-stretch',
     ]),
   ).toMatchInlineSnapshot(`
-    ".place-content-around {
+    "
+    .place-content-around {
       place-content: space-around;
     }
 
@@ -61,7 +62,8 @@ test('place-content', async () => {
 
     .place-content-stretch {
       place-content: stretch;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -98,7 +100,8 @@ test('place-items', async () => {
       'place-items-stretch',
     ]),
   ).toMatchInlineSnapshot(`
-    ".place-items-baseline {
+    "
+    .place-items-baseline {
       place-items: baseline;
     }
 
@@ -124,7 +127,8 @@ test('place-items', async () => {
 
     .place-items-stretch {
       place-items: stretch stretch;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -155,7 +159,8 @@ test('place-self', async () => {
       'place-self-stretch',
     ]),
   ).toMatchInlineSnapshot(`
-    ".place-self-auto {
+    "
+    .place-self-auto {
       place-self: auto;
     }
 
@@ -181,7 +186,8 @@ test('place-self', async () => {
 
     .place-self-stretch {
       place-self: stretch stretch;
-    }"
+    }
+    "
   `)
   expect(
     await run([

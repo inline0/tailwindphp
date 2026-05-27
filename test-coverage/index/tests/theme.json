@@ -6,7 +6,7 @@
             "accent-red-500"
         ],
         "css": "@theme {\n            --color-red-500: #f00;\n          }\n          @tailwind utilities;",
-        "expected": "\":root, :host {\n        --color-red-500: red;\n      }\n\n      .accent-red-500 {\n        accent-color: var(--color-red-500);\n      }\""
+        "expected": "\"\n      :root, :host {\n        --color-red-500: red;\n      }\n\n      .accent-red-500 {\n        accent-color: var(--color-red-500);\n      }\n      \""
     },
     {
         "name": "Later values from `@theme` override earlier ones",
@@ -15,7 +15,7 @@
             "accent-red-500"
         ],
         "css": "@theme {\n            --color-red-500: #f00;\n            --color-red-500: #f10;\n          }\n          @tailwind utilities;",
-        "expected": "\":root, :host {\n        --color-red-500: #f10;\n      }\n\n      .accent-red-500 {\n        accent-color: var(--color-red-500);\n      }\""
+        "expected": "\"\n      :root, :host {\n        --color-red-500: #f10;\n      }\n\n      .accent-red-500 {\n        accent-color: var(--color-red-500);\n      }\n      \""
     },
     {
         "name": "Multiple `@theme` blocks are merged",
@@ -25,7 +25,7 @@
             "accent-blue-500"
         ],
         "css": "@theme {\n            --color-red-500: #f00;\n          }\n          @theme {\n            --color-blue-500: #00f;\n          }\n          @tailwind utilities;",
-        "expected": "\":root, :host {\n        --color-red-500: red;\n        --color-blue-500: #00f;\n      }\n\n      .accent-blue-500 {\n        accent-color: var(--color-blue-500);\n      }\n\n      .accent-red-500 {\n        accent-color: var(--color-red-500);\n      }\""
+        "expected": "\"\n      :root, :host {\n        --color-red-500: red;\n        --color-blue-500: #00f;\n      }\n\n      .accent-blue-500 {\n        accent-color: var(--color-blue-500);\n      }\n\n      .accent-red-500 {\n        accent-color: var(--color-red-500);\n      }\n      \""
     },
     {
         "name": "`@theme` values with escaped forward slashes map to unescaped slashes in candidate values",
@@ -35,7 +35,7 @@
             "w-75%"
         ],
         "css": "@theme {\n            \/* Cursed but we want this to work *\/\n            --width-1\\\/2: 75%;\n            --width-75\\%: 50%;\n          }\n          @tailwind utilities;",
-        "expected": "\":root, :host {\n        --width-1\\\\\/2: 75%;\n        --width-75\\\\%: 50%;\n      }\n\n      .w-1\\\\\/2 {\n        width: var(--width-1\\\\\/2);\n      }\n\n      .w-75\\\\% {\n        width: var(--width-75\\\\%);\n      }\""
+        "expected": "\"\n      :root, :host {\n        --width-1\\\\\/2: 75%;\n        --width-75\\\\%: 50%;\n      }\n\n      .w-1\\\\\/2 {\n        width: var(--width-1\\\\\/2);\n      }\n\n      .w-75\\\\% {\n        width: var(--width-75\\\\%);\n      }\n      \""
     },
     {
         "name": "`@keyframes` in `@theme` are hoisted",
@@ -45,7 +45,7 @@
             "text-lg"
         ],
         "css": "@theme {\n            --color-red: red;\n            --animate-foo: foo 1s infinite;\n\n            @keyframes foo {\n              to {\n                opacity: 1;\n              }\n            }\n\n            --text-lg: 20px;\n          }\n          @tailwind utilities;",
-        "expected": "\":root, :host {\n        --color-red: red;\n        --text-lg: 20px;\n      }\n\n      .text-lg {\n        font-size: var(--text-lg);\n      }\n\n      .accent-red {\n        accent-color: var(--color-red);\n      }\""
+        "expected": "\"\n      :root, :host {\n        --color-red: red;\n        --text-lg: 20px;\n      }\n\n      .text-lg {\n        font-size: var(--text-lg);\n      }\n\n      .accent-red {\n        accent-color: var(--color-red);\n      }\n      \""
     },
     {
         "name": "`@keyframes` in `@theme` are generated when name contains a new line",
@@ -54,7 +54,7 @@
             "animate-very-long-animation-name"
         ],
         "css": "@theme {\n            --animate-very-long-animation-name: very-long-animation-name\n              var(\n                --very-long-animation-name-configuration,\n                2.5s ease-in-out 0s infinite normal none running\n              );\n\n            @keyframes very-long-animation-name {\n              to {\n                opacity: 1;\n              }\n            }\n          }\n\n          @tailwind utilities;",
-        "expected": "\":root, :host {\n        --animate-very-long-animation-name: very-long-animation-name\n                    var(--very-long-animation-name-configuration, 2.5s ease-in-out 0s infinite normal none running);\n      }\n\n      .animate-very-long-animation-name {\n        animation: var(--animate-very-long-animation-name);\n      }\n\n      @keyframes very-long-animation-name {\n        to {\n          opacity: 1;\n        }\n      }\""
+        "expected": "\"\n      :root, :host {\n        --animate-very-long-animation-name: very-long-animation-name\n                    var(--very-long-animation-name-configuration, 2.5s ease-in-out 0s infinite normal none running);\n      }\n\n      .animate-very-long-animation-name {\n        animation: var(--animate-very-long-animation-name);\n      }\n\n      @keyframes very-long-animation-name {\n        to {\n          opacity: 1;\n        }\n      }\n      \""
     },
     {
         "name": "`@theme` values can be unset",
@@ -67,7 +67,7 @@
             "text-md"
         ],
         "css": "@theme {\n            --color-red: #f00;\n            --color-blue: #00f;\n            --text-sm: 13px;\n            --text-md: 16px;\n\n            --animate-spin: spin 1s infinite linear;\n\n            @keyframes spin {\n              to {\n                transform: rotate(360deg);\n              }\n            }\n          }\n          @theme {\n            --color-*: initial;\n            --text-md: initial;\n            --animate-*: initial;\n            --keyframes-*: initial;\n          }\n          @theme {\n            --color-green: #0f0;\n          }\n          @tailwind utilities;",
-        "expected": "\":root, :host {\n        --text-sm: 13px;\n        --color-green: #0f0;\n      }\n\n      .text-sm {\n        font-size: var(--text-sm);\n      }\n\n      .accent-green {\n        accent-color: var(--color-green);\n      }\""
+        "expected": "\"\n      :root, :host {\n        --text-sm: 13px;\n        --color-green: #0f0;\n      }\n\n      .text-sm {\n        font-size: var(--text-sm);\n      }\n\n      .accent-green {\n        accent-color: var(--color-green);\n      }\n      \""
     },
     {
         "name": "`@theme` values can be unset (using the escaped syntax)",
@@ -80,7 +80,7 @@
             "text-md"
         ],
         "css": "@theme {\n            --color-red: #f00;\n            --color-blue: #00f;\n            --text-sm: 13px;\n            --text-md: 16px;\n\n            --animate-spin: spin 1s infinite linear;\n\n            @keyframes spin {\n              to {\n                transform: rotate(360deg);\n              }\n            }\n          }\n          @theme {\n            --color-\\*: initial;\n            --text-md: initial;\n            --animate-\\*: initial;\n            --keyframes-\\*: initial;\n          }\n          @theme {\n            --color-green: #0f0;\n          }\n          @tailwind utilities;",
-        "expected": "\":root, :host {\n        --text-sm: 13px;\n        --color-green: #0f0;\n      }\n\n      .text-sm {\n        font-size: var(--text-sm);\n      }\n\n      .accent-green {\n        accent-color: var(--color-green);\n      }\""
+        "expected": "\"\n      :root, :host {\n        --text-sm: 13px;\n        --color-green: #0f0;\n      }\n\n      .text-sm {\n        font-size: var(--text-sm);\n      }\n\n      .accent-green {\n        accent-color: var(--color-green);\n      }\n      \""
     },
     {
         "name": "all `@theme` values can be unset at once",
@@ -93,7 +93,7 @@
             "text-md"
         ],
         "css": "@theme {\n            --color-red: #f00;\n            --color-blue: #00f;\n            --font-size-sm: 13px;\n            --font-size-md: 16px;\n          }\n          @theme {\n            --*: initial;\n          }\n          @theme {\n            --color-green: #0f0;\n          }\n          @tailwind utilities;",
-        "expected": "\":root, :host {\n        --color-green: #0f0;\n      }\n\n      .accent-green {\n        accent-color: var(--color-green);\n      }\""
+        "expected": "\"\n      :root, :host {\n        --color-green: #0f0;\n      }\n\n      .accent-green {\n        accent-color: var(--color-green);\n      }\n      \""
     },
     {
         "name": "keyframes are generated when used in an animation using `@theme inline`",
@@ -102,7 +102,7 @@
             "animate-foo"
         ],
         "css": "@theme inline {\n            --animate-foo: used 1s infinite;\n            --animate-bar: unused 1s infinite;\n\n            @keyframes used {\n              to {\n                opacity: 1;\n              }\n            }\n\n            @keyframes unused {\n              to {\n                opacity: 0;\n              }\n            }\n          }\n\n          @tailwind utilities;",
-        "expected": "\".animate-foo {\n        animation: 1s infinite used;\n      }\n\n      @keyframes used {\n        to {\n          opacity: 1;\n        }\n      }\""
+        "expected": "\"\n      .animate-foo {\n        animation: 1s infinite used;\n      }\n\n      @keyframes used {\n        to {\n          opacity: 1;\n        }\n      }\n      \""
     },
     {
         "name": "keyframes are generated when used in an animation using `@theme static`",
@@ -111,14 +111,14 @@
             "animate-foo"
         ],
         "css": "@theme static {\n            --animate-foo: used 1s infinite;\n            --animate-bar: unused-but-kept 1s infinite;\n\n            @keyframes used {\n              to {\n                opacity: 1;\n              }\n            }\n\n            @keyframes unused-but-kept {\n              to {\n                opacity: 0;\n              }\n            }\n          }\n\n          @tailwind utilities;",
-        "expected": "\":root, :host {\n        --animate-foo: used 1s infinite;\n        --animate-bar: unused-but-kept 1s infinite;\n      }\n\n      .animate-foo {\n        animation: var(--animate-foo);\n      }\n\n      @keyframes used {\n        to {\n          opacity: 1;\n        }\n      }\n\n      @keyframes unused-but-kept {\n        to {\n          opacity: 0;\n        }\n      }\""
+        "expected": "\"\n      :root, :host {\n        --animate-foo: used 1s infinite;\n        --animate-bar: unused-but-kept 1s infinite;\n      }\n\n      .animate-foo {\n        animation: var(--animate-foo);\n      }\n\n      @keyframes used {\n        to {\n          opacity: 1;\n        }\n      }\n\n      @keyframes unused-but-kept {\n        to {\n          opacity: 0;\n        }\n      }\n      \""
     },
     {
         "name": "keyframes outside of `@theme are always preserved",
         "type": "compileCss",
         "classes": [],
         "css": "@theme {\n            @keyframes used {\n              to {\n                opacity: 1;\n              }\n            }\n          }\n\n          @keyframes unused {\n            to {\n              opacity: 0;\n            }\n          }\n\n          .foo {\n            animation: used 1s infinite;\n          }\n\n          @tailwind utilities;",
-        "expected": "\"@keyframes unused {\n        to {\n          opacity: 0;\n        }\n      }\n\n      .foo {\n        animation: 1s infinite used;\n      }\n\n      @keyframes used {\n        to {\n          opacity: 1;\n        }\n      }\""
+        "expected": "\"\n      @keyframes unused {\n        to {\n          opacity: 0;\n        }\n      }\n\n      .foo {\n        animation: 1s infinite used;\n      }\n\n      @keyframes used {\n        to {\n          opacity: 1;\n        }\n      }\n      \""
     },
     {
         "name": "`@keyframes` added in `@theme reference` should not be emitted",
@@ -127,7 +127,7 @@
             "animate-foo"
         ],
         "css": "@theme reference {\n            --animate-foo: foo 1s infinite;\n\n            @keyframes foo {\n              0%,\n              100% {\n                color: red;\n              }\n              50% {\n                color: blue;\n              }\n            }\n          }\n          @tailwind utilities;",
-        "expected": "\".animate-foo {\n        animation: var(--animate-foo, foo 1s infinite);\n      }\n\n      @keyframes foo {\n        0%, 100% {\n          color: red;\n        }\n\n        50% {\n          color: #00f;\n        }\n      }\""
+        "expected": "\"\n      .animate-foo {\n        animation: var(--animate-foo, foo 1s infinite);\n      }\n\n      @keyframes foo {\n        0%, 100% {\n          color: red;\n        }\n\n        50% {\n          color: #00f;\n        }\n      }\n      \""
     },
     {
         "name": "`@keyframes` added in `@theme reference` should not be emitted, even if another `@theme` block exists",
@@ -137,7 +137,7 @@
             "animate-foo"
         ],
         "css": "@theme reference {\n            --animate-foo: foo 1s infinite;\n\n            @keyframes foo {\n              0%,\n              100% {\n                color: red;\n              }\n              50% {\n                color: blue;\n              }\n            }\n          }\n\n          @theme {\n            --color-pink: pink;\n          }\n\n          @tailwind utilities;",
-        "expected": "\":root, :host {\n        --color-pink: pink;\n      }\n\n      .animate-foo {\n        animation: var(--animate-foo, foo 1s infinite);\n      }\n\n      .bg-pink {\n        background-color: var(--color-pink);\n      }\n\n      @keyframes foo {\n        0%, 100% {\n          color: red;\n        }\n\n        50% {\n          color: #00f;\n        }\n      }\""
+        "expected": "\"\n      :root, :host {\n        --color-pink: pink;\n      }\n\n      .animate-foo {\n        animation: var(--animate-foo, foo 1s infinite);\n      }\n\n      .bg-pink {\n        background-color: var(--color-pink);\n      }\n\n      @keyframes foo {\n        0%, 100% {\n          color: red;\n        }\n\n        50% {\n          color: #00f;\n        }\n      }\n      \""
     },
     {
         "name": "wrapping `@theme` with `@media reference` behaves like `@theme reference` to support `@import` statements",
@@ -148,7 +148,7 @@
             "bg-avocado"
         ],
         "css": "@theme {\n            --color-tomato: #e10c04;\n          }\n          @media theme(reference) {\n            @theme {\n              --color-potato: #ac855b;\n            }\n            @theme {\n              --color-avocado: #c0cc6d;\n            }\n          }\n          @tailwind utilities;",
-        "expected": "\":root, :host {\n        --color-tomato: #e10c04;\n      }\n\n      .bg-avocado {\n        background-color: var(--color-avocado, #c0cc6d);\n      }\n\n      .bg-potato {\n        background-color: var(--color-potato, #ac855b);\n      }\n\n      .bg-tomato {\n        background-color: var(--color-tomato);\n      }\""
+        "expected": "\"\n      :root, :host {\n        --color-tomato: #e10c04;\n      }\n\n      .bg-avocado {\n        background-color: var(--color-avocado, #c0cc6d);\n      }\n\n      .bg-potato {\n        background-color: var(--color-potato, #ac855b);\n      }\n\n      .bg-tomato {\n        background-color: var(--color-tomato);\n      }\n      \""
     },
     {
         "name": "wrapping `@theme` with `@media theme(inline)` behaves like `@theme inline` to support `@import` statements",
@@ -159,6 +159,6 @@
             "bg-primary"
         ],
         "css": "@media theme(inline) {\n            @theme {\n              --color-tomato: #e10c04;\n              --color-potato: #ac855b;\n              --color-primary: var(--primary);\n            }\n          }\n\n          @tailwind utilities;",
-        "expected": "\".bg-potato {\n        background-color: #ac855b;\n      }\n\n      .bg-primary {\n        background-color: var(--primary);\n      }\n\n      .bg-tomato {\n        background-color: #e10c04;\n      }\""
+        "expected": "\"\n      .bg-potato {\n        background-color: #ac855b;\n      }\n\n      .bg-primary {\n        background-color: var(--primary);\n      }\n\n      .bg-tomato {\n        background-color: #e10c04;\n      }\n      \""
     }
 ]

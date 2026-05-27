@@ -59,7 +59,8 @@ test('ring', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-shadow: 0 0 #0000;
@@ -86,37 +87,37 @@ test('ring', async () => {
     }
 
     .ring {
-      --tw-ring-shadow: var(--tw-ring-inset,  ) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+      --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .ring-0 {
-      --tw-ring-shadow: var(--tw-ring-inset,  ) 0 0 0 calc(0px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+      --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(0px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .ring-1 {
-      --tw-ring-shadow: var(--tw-ring-inset,  ) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+      --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .ring-2 {
-      --tw-ring-shadow: var(--tw-ring-inset,  ) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+      --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .ring-4 {
-      --tw-ring-shadow: var(--tw-ring-inset,  ) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+      --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .ring-\\[12px\\] {
-      --tw-ring-shadow: var(--tw-ring-inset,  ) 0 0 0 calc(12px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+      --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(12px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
     .ring-\\[length\\:var\\(--my-width\\)\\] {
-      --tw-ring-shadow: var(--tw-ring-inset,  ) 0 0 0 calc(var(--my-width) + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+      --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(var(--my-width) + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
@@ -375,7 +376,8 @@ test('ring', async () => {
       syntax: "*";
       inherits: false;
       initial-value: 0 0 #0000;
-    }"
+    }
+    "
   `)
   expect(
     await compileCss(
@@ -388,7 +390,8 @@ test('ring', async () => {
       ['ring'],
     ),
   ).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-shadow: 0 0 #0000;
@@ -410,7 +413,7 @@ test('ring', async () => {
     }
 
     .ring {
-      --tw-ring-shadow: var(--tw-ring-inset,  ) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+      --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
@@ -491,7 +494,8 @@ test('ring', async () => {
       syntax: "*";
       inherits: false;
       initial-value: 0 0 #0000;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -579,39 +583,40 @@ test('ring-offset', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --color-red-500: #ef4444;
       --ring-offset-color-blue-500: #3b82f6;
     }
 
     .ring-offset-0 {
       --tw-ring-offset-width: 0px;
-      --tw-ring-offset-shadow: var(--tw-ring-inset,  ) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+      --tw-ring-offset-shadow: var(--tw-ring-inset, ) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
     }
 
     .ring-offset-1 {
       --tw-ring-offset-width: 1px;
-      --tw-ring-offset-shadow: var(--tw-ring-inset,  ) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+      --tw-ring-offset-shadow: var(--tw-ring-inset, ) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
     }
 
     .ring-offset-2 {
       --tw-ring-offset-width: 2px;
-      --tw-ring-offset-shadow: var(--tw-ring-inset,  ) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+      --tw-ring-offset-shadow: var(--tw-ring-inset, ) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
     }
 
     .ring-offset-4 {
       --tw-ring-offset-width: 4px;
-      --tw-ring-offset-shadow: var(--tw-ring-inset,  ) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+      --tw-ring-offset-shadow: var(--tw-ring-inset, ) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
     }
 
     .ring-offset-\\[12px\\] {
       --tw-ring-offset-width: 12px;
-      --tw-ring-offset-shadow: var(--tw-ring-inset,  ) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+      --tw-ring-offset-shadow: var(--tw-ring-inset, ) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
     }
 
     .ring-offset-\\[length\\:var\\(--my-width\\)\\] {
       --tw-ring-offset-width: var(--my-width);
-      --tw-ring-offset-shadow: var(--tw-ring-inset,  ) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+      --tw-ring-offset-shadow: var(--tw-ring-inset, ) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
     }
 
     .ring-offset-\\[\\#0088cc\\] {
@@ -756,7 +761,8 @@ test('ring-offset', async () => {
 
     .ring-offset-transparent {
       --tw-ring-offset-color: transparent;
-    }"
+    }
+    "
   `)
   expect(
     await run([

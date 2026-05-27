@@ -6,7 +6,7 @@ Tests extracted from `tailwindcss/packages/tailwindcss/src/candidate.test.ts`
 
 | Metric | Value |
 |--------|-------|
-| Source File Lines | 2144 |
+| Source File Lines | 2142 |
 | Original Tests | 72 |
 | Extracted Cases | 94 |
 

@@ -18,7 +18,8 @@ test('overflow', async () => {
       'overflow-scroll',
     ]),
   ).toMatchInlineSnapshot(`
-    ".overflow-auto {
+    "
+    .overflow-auto {
       overflow: auto;
     }
 
@@ -36,7 +37,8 @@ test('overflow', async () => {
 
     .overflow-visible {
       overflow: visible;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -65,7 +67,8 @@ test('overflow-x', async () => {
       'overflow-x-scroll',
     ]),
   ).toMatchInlineSnapshot(`
-    ".overflow-x-auto {
+    "
+    .overflow-x-auto {
       overflow-x: auto;
     }
 
@@ -83,7 +86,8 @@ test('overflow-x', async () => {
 
     .overflow-x-visible {
       overflow-x: visible;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -112,7 +116,8 @@ test('overflow-y', async () => {
       'overflow-y-scroll',
     ]),
   ).toMatchInlineSnapshot(`
-    ".overflow-y-auto {
+    "
+    .overflow-y-auto {
       overflow-y: auto;
     }
 
@@ -130,7 +135,8 @@ test('overflow-y', async () => {
 
     .overflow-y-visible {
       overflow-y: visible;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -151,7 +157,8 @@ test('overflow-y', async () => {
 
 test('overflow-wrap', async () => {
   expect(await run(['wrap-anywhere', 'wrap-break-word', 'wrap-normal'])).toMatchInlineSnapshot(`
-    ".wrap-anywhere {
+    "
+    .wrap-anywhere {
       overflow-wrap: anywhere;
     }
 
@@ -161,7 +168,8 @@ test('overflow-wrap', async () => {
 
     .wrap-normal {
       overflow-wrap: normal;
-    }"
+    }
+    "
   `)
   expect(
     await run([

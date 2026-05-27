@@ -529,7 +529,7 @@ class Theme
      * Get all values in a namespace.
      *
      * @param string $namespace
-     * @return array<string|null, string>
+     * @return array<string, string>
      */
     public function namespace(string $namespace): array
     {
@@ -538,7 +538,7 @@ class Theme
 
         foreach ($this->values as $key => $value) {
             if ($key === $namespace) {
-                $values[null] = $value['value'];
+                $values[''] = $value['value'];
             } elseif (str_starts_with($key, "{$prefix}-")) {
                 // Preserve `--` prefix for sub-variables
                 // e.g. `--font-size-sm--line-height`
