@@ -931,8 +931,13 @@ function parseCss(array &$ast, array $options = []): array
                         $themeAst = [atRule('@media', $modifiers, $themeAst)];
                     }
 
-                    // Combine: theme + preflight + utilities
-                    $fullContent = array_merge($themeAst, $preflightAst, [$utilitiesNode]);
+                    // Match Tailwind's canonical index.css expansion so cascade layer priority is preserved.
+                    $fullContent = [
+                        atRule('@layer', 'theme, base, components, utilities', []),
+                        atRule('@layer', 'theme', $themeAst),
+                        atRule('@layer', 'base', $preflightAst),
+                        atRule('@layer', 'utilities', [$utilitiesNode]),
+                    ];
 
                     return WalkAction::Replace($fullContent);
                 }

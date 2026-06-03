@@ -114,4 +114,28 @@ PHP,
         $this->assertStringContainsString('width:calc(var(--spacing) * 4)', $css);
         $this->assertStringContainsString('height:calc(var(--spacing) * 4)', $css);
     }
+
+    public function test_full_tailwind_import_preserves_canonical_layer_order(): void
+    {
+        $css = Tailwind::generate([
+            'content' => '<div class="text-red-500"></div>',
+            'css' => '@import "tailwindcss"; @layer base { .text-red-500 { color: blue; } }',
+            'minify' => false,
+        ]);
+
+        $layerOrder = strpos($css, '@layer theme, base, components, utilities;');
+        $baseLayer = strpos($css, '@layer base');
+        $utilitiesLayer = strpos($css, '@layer utilities');
+        $customBaseLayer = strrpos($css, '@layer base');
+
+        $this->assertNotFalse($layerOrder);
+        $this->assertNotFalse($baseLayer);
+        $this->assertNotFalse($utilitiesLayer);
+        $this->assertNotFalse($customBaseLayer);
+
+        $this->assertLessThan($baseLayer, $layerOrder);
+        $this->assertLessThan($utilitiesLayer, $layerOrder);
+        $this->assertLessThan($customBaseLayer, $layerOrder);
+        $this->assertMatchesRegularExpression('/@layer utilities\s*\{[^}]*\.text-red-500/s', $css);
+    }
 }
