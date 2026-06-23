@@ -30,6 +30,29 @@ Each sub-import is itself a virtual module you can import on its own. The availa
 
 Importing the parts individually lets you skip Preflight or reorder layers (see below).
 
+## Animations with tw-animate-css
+
+[tw-animate-css](https://github.com/Wombosvideo/tw-animate-css) is a TailwindCSS v4 animation library — a drop-in replacement for `tailwindcss-animate`. It ships as a built-in virtual module, so importing it alongside the utilities layer makes its enter/exit animation classes compile like any other utility:
+
+```css
+@import "tw-animate-css";
+@import "tailwindcss/utilities.css";
+```
+
+The animation utilities cover:
+
+- **Enter / exit** — `animate-in`, `animate-out`
+- **Fade** — `fade-in`, `fade-out`
+- **Zoom** — `zoom-in`, `zoom-out`
+- **Spin** — `spin-in`, `spin-out`
+- **Blur** — `blur-in`, `blur-out`
+- **Slide** — `slide-in-from-top` / `-bottom` / `-left` / `-right` and the matching `slide-out-to-*`, plus RTL-aware `-start` / `-end`
+- **Timing** — `duration-*`, `delay-*`, `repeat-1` / `repeat-infinite`, `direction-normal` / `-reverse` / `-alternate`, and `fill-mode-none` / `-forwards` / `-backwards` / `-both`
+- **Play state** — `running`, `paused`
+- **Component animations** — `accordion-down` / `accordion-up`, `collapsible-down` / `collapsible-up`, and `caret-blink`
+
+These classes stack with Tailwind variants like any other utility, which makes them a drop-in fit for shadcn/ui dialog and dropdown patterns.
+
 ## The `importPaths` option
 
 To resolve `@import` against the filesystem, pass `importPaths` in the array form of `generate()`. It accepts a single path, a directory, or an array of either.
