@@ -40,6 +40,9 @@ parameters:
         - '#Comparison operation .* between 0 and 0#'
         - '#Comparison operation .* between \*NEVER\* and int<0, max>#'
         - '#Result of && is always false#'
+        # math-operators.php $formattable flag — newer PHPStan rewords the same
+        # PHPDoc-driven false positive as "Right side of && is always false"
+        - '#Right side of && is always false#'
         - '#Unreachable statement - code above always terminates#'
         # Defensive type checking in ported code (may never match but kept for safety)
         - '#Call to function is_string\(\) with .* will always evaluate to false#'
