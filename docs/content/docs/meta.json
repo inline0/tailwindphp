@@ -6,8 +6,8 @@
     "usage",
     "class-utilities",
     "plugins",
-    "api",
+    "advanced",
     "cli",
-    "advanced"
+    "api"
   ]
 }
