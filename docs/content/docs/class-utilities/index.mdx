@@ -1,0 +1,110 @@
+---
+title: Class Utilities
+description: cn(), merge(), and join() for building and de-conflicting Tailwind class strings in PHP — PHP ports of clsx and tailwind-merge, no JS toolchain required.
+---
+
+# Class Utilities
+
+Building `class` attributes in templates means joining strings, toggling classes on conditions, and stopping later utilities from clashing with earlier ones (`p-2` and `p-4` should not both survive). In JavaScript that work is split across [clsx](https://github.com/lukeed/clsx) and [tailwind-merge](https://github.com/dcastil/tailwind-merge). TailwindPHP ships PHP ports of both, so you get the same behavior with no Node.js toolchain and no extra Composer packages.
+
+Three functions cover the spectrum: `cn()` constructs and de-conflicts, `merge()` only de-conflicts, and `join()` only concatenates.
+
+## cn()
+
+The recommended utility. It runs clsx-style conditional construction first, then resolves Tailwind conflicts with tailwind-merge — so the last conflicting utility wins.
+
+```php
+use function TailwindPHP\cn;
+
+// Conflicts are resolved — px-4 overrides px-2
+cn('px-2 py-1', 'px-4');
+// => 'py-1 px-4'
+
+// Conditional classes via a key => bool array
+cn('btn', ['btn-primary' => true, 'btn-disabled' => false]);
+// => 'btn btn-primary'
+```
+
+### Accepted arguments
+
+`cn()` accepts any number of arguments. Each is flattened and filtered with clsx semantics:
+
+| Argument | Behavior |
+|----------|----------|
+| `string` | Added as-is. |
+| `int` / `float` | Cast to string and added. |
+| Sequential array | Each element is processed recursively. |
+| `key => bool` array | Each key is added when its value is truthy. |
+| `null`, `false`, `0`, `''` | Ignored. |
+
+```php
+cn('flex', ['items-center' => true], ['p-4', ['gap-2']], null);
+// => 'flex items-center p-4 gap-2'
+```
+
+### Component pattern
+
+`cn()` is what makes a component overridable: merge the component's own classes with whatever the caller passes, and conflicts resolve in the caller's favor.
+
+```php
+use function TailwindPHP\cn;
+
+function Card(array $props = []): string {
+    $class = cn(
+        'rounded-lg border bg-card text-card-foreground shadow-sm',
+        $props['class'] ?? null
+    );
+    return "<div class=\"{$class}\">" . ($props['children'] ?? '') . "</div>";
+}
+
+Card(['class' => 'p-6', 'children' => 'Content']);
+// <div class="rounded-lg border bg-card text-card-foreground shadow-sm p-6">Content</div>
+```
+
+For declarative, multi-axis component styles, pair `cn()` with [variants()](/docs/class-utilities/variants).
+
+## merge()
+
+Conflict resolution only — no conditional construction. Pass class strings; later classes override earlier ones when they target the same property. Use it when your input is already plain strings.
+
+```php
+use function TailwindPHP\merge;
+
+merge('px-2 py-1 bg-red-500', 'px-4 bg-blue-500');
+// => 'py-1 px-4 bg-blue-500'
+
+// Conflict resolution is variant-aware
+merge('hover:bg-red-500', 'hover:bg-blue-500');
+// => 'hover:bg-blue-500'
+```
+
+`cn()` is `merge()` composed on top of clsx, so reach for `merge()` directly only when you do not need the conditional array syntax.
+
+## join()
+
+Simple concatenation with no conflict resolution. Falsy values are dropped, but conflicting utilities are all kept. Use it when you know there are no conflicts and want the cheapest option.
+
+```php
+use function TailwindPHP\join;
+
+join('foo', 'bar', null, 'baz');
+// => 'foo bar baz'
+```
+
+## Which should I use?
+
+| Function | Constructs (conditionals, arrays) | Resolves conflicts | Use when |
+|----------|:---:|:---:|----------|
+| `cn()`    | yes | yes | Default choice — building class strings that may conflict. |
+| `merge()` | no  | yes | Input is plain strings; you only need de-conflicting. |
+| `join()`  | yes | no  | You know there are no conflicts and want minimal work. |
+
+## Imports
+
+```php
+use function TailwindPHP\cn;
+use function TailwindPHP\merge;
+use function TailwindPHP\join;
+```
+
+All three live in the main `TailwindPHP` namespace and are bundled with the package. They are PHP ports of clsx (by Luke Edwards) and tailwind-merge (by Dany Castillo).

@@ -1,0 +1,107 @@
+---
+title: Caching & Minification
+description: The file-based cache (cache, cacheTtl, clearCache) and the CSS minifier that shrinks output for production.
+---
+
+# Caching & Minification
+
+Two production concerns sit at the edge of the pipeline: avoiding recompilation of identical input, and shrinking the generated CSS. Both are PHP-specific helpers under `src/_tailwindphp/` and the public API around them.
+
+## Caching
+
+CSS generation runs the whole pipeline on every call. For content that doesn't change between requests, the file-based cache writes the result to disk and serves it on subsequent calls.
+
+Pass `cache` to `tw::generate()` — `true` for the default directory, or a path string for a custom one:
+
+```php
+use TailwindPHP\tw;
+
+// Cache to the default directory: sys_get_temp_dir() . '/tailwindphp'
+$css = tw::generate([
+    'content' => '<div class="flex p-4">Hello</div>',
+    'cache' => true,
+]);
+
+// Cache to a custom directory
+$css = tw::generate([
+    'content' => '<div class="flex p-4">Hello</div>',
+    'cache' => '/path/to/cache',
+]);
+
+// With a time-to-live (seconds)
+$css = tw::generate([
+    'content' => '<div class="flex p-4">Hello</div>',
+    'cache' => true,
+    'cacheTtl' => 3600, // expire after 1 hour
+]);
+```
+
+The cache directory is created automatically if it doesn't exist.
+
+### Cache key
+
+The key is derived from the **content**, the **CSS configuration**, and the **minify** flag — hashed into the filename `tailwind_<hash>.css`. Any change to the markup, the CSS input, or whether minification is on produces a different key, and therefore a different file. There is no risk of stale output for a given input: different inputs never collide on the same cache file.
+
+### Time-to-live
+
+`cacheTtl` is a lifetime in seconds. On a cache hit, the file's modification time is compared against the current time; if the file is older than `cacheTtl`, it is treated as a miss and recompiled. With no `cacheTtl`, entries never expire — clear them explicitly.
+
+### Clearing the cache
+
+`tw::clearCache()` (or the `clearCache()` function) removes the `tailwind_*.css` files from a cache directory and returns the number of files deleted.
+
+```php
+use TailwindPHP\tw;
+use function TailwindPHP\clearCache;
+
+$deleted = tw::clearCache();                  // default directory
+$deleted = tw::clearCache('/path/to/cache');  // custom directory
+clearCache('/path/to/cache');                 // function form
+```
+
+## Minification
+
+The minifier (`src/_tailwindphp/CssMinifier.php`) shrinks the output for production. Enable it inline with `minify`, or run it as a separate pass with `tw::minify()`:
+
+```php
+use TailwindPHP\tw;
+
+// Minify during generation
+$css = tw::generate([
+    'content' => '<div class="flex p-4">Hello</div>',
+    'minify' => true,
+]);
+
+// Or minify an existing string
+$css = tw::generate('<div class="flex p-4">Hello</div>');
+$minified = tw::minify($css);
+```
+
+### What it does
+
+The minifier applies a fixed set of size reductions:
+
+| Step | Effect |
+|------|--------|
+| Remove comments | Strips `/* … */` blocks |
+| Collapse whitespace | Collapses runs of whitespace and removes it around `{ } ; : ,` and selector combinators |
+| Shorten hex colors | `#ffffff` → `#fff`, `#aabbcc` → `#abc` |
+| Remove zero units | `0px` → `0` (preserves `0s`/`0ms` time values) |
+| Shorten font-weight | `font-weight:normal` → `400`, `font-weight:bold` → `700` |
+| Remove empty rules | Drops selectors with empty declaration blocks |
+
+By design it does **not** merge duplicate selectors or combine shorthand properties — both make debugging harder and can affect the cascade.
+
+### CLI: `--minify` vs `--optimize`
+
+The [CLI](/docs/cli) exposes the same minifier through two flags:
+
+```bash
+# Optimize and minify (smallest output)
+tailwindphp -i ./src/app.css -o ./dist/styles.css --minify   # or -m
+
+# Optimize only — apply transforms without minifying
+tailwindphp -i ./src/app.css -o ./dist/styles.css --optimize
+```
+
+For the rest of the public API — `tw::generate()`, `tw::compile()`, inspection methods, and input formats — see the [API reference](/docs/api).

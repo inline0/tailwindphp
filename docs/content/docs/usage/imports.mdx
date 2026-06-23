@@ -1,0 +1,183 @@
+---
+title: Imports & Virtual Modules
+description: Resolve @import in your CSS — virtual modules, file imports via importPaths, custom resolvers, Preflight, and per-import modifiers.
+---
+
+# Imports & Virtual Modules
+
+TailwindPHP resolves `@import` rules before compilation. Imports can point at built-in virtual modules (`tailwindcss` and friends), at files on disk via the `importPaths` option, or at anything you return from a custom resolver.
+
+## Virtual modules
+
+`@import "tailwindcss"` is the entry point most projects use. It expands to the four lines below — the layer order declaration plus the three sub-imports, each assigned to its cascade layer:
+
+```css
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities);
+```
+
+Each sub-import is itself a virtual module you can import on its own. The available virtual modules are:
+
+| Module | Contents |
+|--------|----------|
+| `tailwindcss` | The full bundle: theme + Preflight + utilities. |
+| `tailwindcss/theme.css` | Theme variables only (colors, spacing base, breakpoints, etc.). |
+| `tailwindcss/preflight.css` | The Preflight base reset. |
+| `tailwindcss/utilities.css` | The utilities layer. |
+| `tw-animate-css` | The `tw-animate-css` animation utilities. |
+
+Importing the parts individually lets you skip Preflight or reorder layers (see below).
+
+## The `importPaths` option
+
+To resolve `@import` against the filesystem, pass `importPaths` in the array form of `generate()`. It accepts a single path, a directory, or an array of either.
+
+```php
+use TailwindPHP\tw;
+
+// Single file
+$css = tw::generate([
+    'content'     => '<div class="flex btn">Hello</div>',
+    'importPaths' => '/path/to/styles.css',
+]);
+
+// Directory (loads all .css files alphabetically)
+$css = tw::generate([
+    'content'     => '<div class="flex btn">Hello</div>',
+    'importPaths' => '/path/to/css/',
+]);
+
+// Multiple paths — files and directories
+$css = tw::generate([
+    'content'     => '<div class="flex btn card">Hello</div>',
+    'importPaths' => [
+        '/path/to/base.css',
+        '/path/to/components/',
+    ],
+]);
+
+// Combine with inline css
+$css = tw::generate([
+    'content'     => '<div class="flex btn custom">Hello</div>',
+    'css'         => '.custom { color: red; }',
+    'importPaths' => '/path/to/styles.css',
+]);
+```
+
+### Nested imports
+
+Imports inside a loaded file are resolved relative to that file. If `/path/to/styles.css` contains `@import "./components/buttons.css"`, the path is resolved against `/path/to/`:
+
+```css
+/* /path/to/styles.css */
+@import "tailwindcss";
+@import "./components/buttons.css";
+@import "./components/cards.css";
+
+@theme {
+    --color-brand: #3b82f6;
+}
+```
+
+### Deduplication
+
+Importing the same file or virtual module more than once is a no-op after the first — repeated `@import "tailwindcss"` lines, or two files that both import the same partial, are deduplicated automatically. This also protects against circular imports.
+
+## Custom resolver
+
+For virtual file systems, databases, or any non-filesystem source, pass a callable as `importPaths`. It receives the import URI and the file doing the importing, and returns CSS or `null`:
+
+```php
+use TailwindPHP\tw;
+
+$css = tw::generate([
+    'content'     => '<div class="flex virtual-class">Hello</div>',
+    'importPaths' => function (?string $uri, ?string $fromFile): ?string {
+        if ($uri === null) {
+            // Entry CSS — returned when no file is supplied
+            return '@import "tailwindcss"; @import "custom.css";';
+        }
+        if ($uri === 'custom.css') {
+            return '.virtual-class { color: purple; }';
+        }
+        return null; // Unknown imports are silently skipped
+    },
+]);
+```
+
+When `$uri` is `null`, return the entry CSS. For any other URI, return its CSS contents, or `null` to skip it.
+
+## Preflight
+
+Preflight is Tailwind's opinionated base reset, built on top of [modern-normalize](https://github.com/sindresorhus/modern-normalize). It smooths over cross-browser inconsistencies so utilities behave predictably. Among other things it removes default margins, unstyles headings and lists, makes images block-level, resets border styles so `border-width` alone draws a border, and lets buttons inherit fonts.
+
+Preflight ships inside `@import "tailwindcss"` — if you import the full bundle, you already have it:
+
+```php
+use TailwindPHP\tw;
+
+$css = tw::generate([
+    'content' => '<div class="flex p-4">Hello</div>',
+    'css'     => '@import "tailwindcss";',
+]);
+```
+
+### Extending Preflight
+
+Add your own base styles on top of Preflight with `@layer base`:
+
+```php
+use TailwindPHP\tw;
+
+$css = tw::generate([
+    'content' => '<article><h1>Title</h1><p>Content</p></article>',
+    'css'     => '
+        @import "tailwindcss";
+        @layer base {
+            h1 { font-size: var(--text-2xl); }
+            h2 { font-size: var(--text-xl); }
+            a  { color: var(--color-blue-600); text-decoration-line: underline; }
+        }
+    ',
+]);
+```
+
+### Disabling Preflight
+
+When integrating into an existing project, import only the parts you need and omit the Preflight line:
+
+```php
+use TailwindPHP\tw;
+
+$css = tw::generate([
+    'content' => '<div class="flex p-4">Hello</div>',
+    'css'     => '
+        @layer theme, base, components, utilities;
+        @import "tailwindcss/theme.css" layer(theme);
+        @import "tailwindcss/utilities.css" layer(utilities);
+    ',
+]);
+```
+
+## Import modifiers
+
+When importing Tailwind's files individually, modifiers go on the imports they affect:
+
+```css
+/* Assign the import to a cascade layer */
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/* prefix affects both theme variables and utilities */
+@import "tailwindcss/theme.css" layer(theme) prefix(tw);
+@import "tailwindcss/utilities.css" layer(utilities) prefix(tw);
+
+/* important affects utilities */
+@import "tailwindcss/utilities.css" layer(utilities) important;
+
+/* theme(static) or theme(inline) affects theme variables */
+@import "tailwindcss/theme.css" layer(theme) theme(static);
+```
+
+Continue with [Theme](/docs/usage/theme) for theme variables, or [@source](/docs/usage/source) to control which files are scanned for class names.

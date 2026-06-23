@@ -1,0 +1,167 @@
+---
+title: Theme & Customization
+description: Define design tokens with @theme, read them in CSS with theme() and the --theme/--spacing/--alpha functions, and inspect resolved values from PHP.
+---
+
+# Theme & Customization
+
+Tailwind's theme is a flat set of CSS variables. You extend or replace it with a `@theme { … }` block in your input CSS, reference those values from inside CSS via the theme functions, and read the resolved values back from PHP. There is no JavaScript config file — the theme lives entirely in CSS.
+
+## The `@theme` block
+
+A `@theme` block declares design tokens as CSS custom properties. The namespace prefix on each variable (`--color-*`, `--font-*`, `--breakpoint-*`, `--spacing-*`, …) tells Tailwind which utilities and variants the token feeds.
+
+```php
+use TailwindPHP\tw;
+
+$css = tw::generate('<div class="bg-brand text-brand xs:flex">', '
+    @import "tailwindcss";
+
+    @theme {
+        --color-brand: #3b82f6;
+        --font-heading: "Inter", sans-serif;
+        --breakpoint-xs: 20rem;
+        --spacing-huge: 10rem;
+    }
+');
+```
+
+Each token registers utilities under its namespace. The example above makes `bg-brand`, `text-brand`, `border-brand`, the `font-heading` family, an `xs:` responsive variant, and `p-huge`/`m-huge` spacing available — generated only when the class appears in your content.
+
+```css
+/* bg-brand resolves to the theme variable */
+:root {
+  --color-brand: #3b82f6;
+}
+.bg-brand {
+  background-color: var(--color-brand);
+}
+```
+
+The `--breakpoint-xs` token registers the `xs:` variant directly:
+
+```css
+@media (min-width: 20rem) {
+  .xs\:flex {
+    display: flex;
+  }
+}
+```
+
+### Common namespaces
+
+| Namespace | Feeds |
+|-----------|-------|
+| `--color-*` | `bg-*`, `text-*`, `border-*`, `fill-*`, `stroke-*`, … |
+| `--font-*` | `font-*` family utilities |
+| `--text-*` | `text-*` font-size utilities |
+| `--breakpoint-*` | responsive variants (`sm:`, `md:`, custom `xs:`) |
+| `--spacing-*` | named spacing values (`p-huge`, `m-huge`) |
+| `--radius-*` | `rounded-*` utilities |
+| `--shadow-*` | `shadow-*` utilities |
+
+### Clearing a namespace
+
+Setting a namespace wildcard to `initial` removes Tailwind's defaults for that namespace before your own tokens are added. This lets you start from a clean palette:
+
+```css
+@theme {
+    /* Drop every default color, then define only what you need */
+    --color-*: initial;
+    --color-brand: #3b82f6;
+    --color-ink: #111827;
+}
+```
+
+`--*: initial;` clears the entire theme. A single value of `initial` on a non-wildcard key (`--color-red-500: initial;`) removes just that one token. Only `initial` is accepted as the value for a `-*` wildcard — any other value is an error.
+
+## Reading theme values in CSS
+
+### `theme()`
+
+The legacy `theme()` function reads a value using dot notation against the v3-style namespaces. It resolves to the token's value at compile time, so it can be used anywhere a value is expected — including custom rules and other declarations.
+
+```php
+$css = tw::generate('<div class="callout">', '
+    @import "tailwindcss";
+    .callout { color: theme(colors.red.500); }
+');
+```
+
+```css
+.callout {
+  color: oklch(63.7% .237 25.331);
+}
+```
+
+Dot paths map to the underlying variables (`colors.red.500` → `--color-red-500`, `fontFamily.sans` → the sans family). An opacity modifier is supported: `theme(colors.red.500 / 50%)`. A fallback can be passed as a second argument: `theme(colors.brand, #000)`. If a path cannot be resolved and no fallback is given, the candidate using it is dropped.
+
+### `--theme()`
+
+`--theme()` reads a theme variable by its CSS custom-property name and returns a `var()` reference by default, so the value stays overridable at runtime:
+
+```css
+.btn { color: --theme(--color-brand); }
+/* → color: var(--color-brand); */
+```
+
+Add `inline` to substitute the resolved value instead of a `var()` reference: `--theme(--color-brand inline)`. A second argument is a fallback (`--theme(--color-brand, #000)`), and an `initial` fallback is handled specially — it is injected into nested `var()` references that themselves resolve to `initial`. Inside an at-rule (`@media`, `@container`), `--theme()` always resolves inline because `var()` is not valid in those preludes.
+
+### `--spacing()`
+
+`--spacing(n)` multiplies the theme's base spacing unit (`--spacing`) by `n`:
+
+```css
+@utility my-gap { gap: --spacing(4); }
+/* → gap: calc(var(--spacing) * 4); */
+```
+
+This is the same calculation the built-in spacing utilities use, so custom values stay consistent with `p-4`, `m-4`, and friends.
+
+### `--alpha()`
+
+`--alpha(color / opacity)` applies an opacity to a color using a `color-mix()` in the oklab color space:
+
+```css
+@utility tint { color: --alpha(var(--color-red-500) / 50%); }
+/* → color: color-mix(in oklab, var(--color-red-500) 50%, transparent); */
+```
+
+### Stacking opacity and `color-mix()` → `oklab()`
+
+Opacity modifiers compose. Applying 50% on a value that already carries 50% yields 25%, computed in oklab. When an opacity modifier resolves against a static color, TailwindPHP folds the `color-mix(in oklab, …)` expression down to a concrete `oklab()` value — the same conversion lightningcss performs in the upstream Tailwind toolchain — while dynamic colors (those still wrapped in `var()`) keep the `color-mix()` form so they remain runtime-overridable.
+
+## Reading theme values from PHP
+
+Three accessors return resolved theme values as PHP arrays. They accept the same input formats as `tw::generate()` and are also available on a [compiler instance](/docs/api).
+
+```php
+use TailwindPHP\tw;
+
+tw::colors();
+// ['red-500' => 'oklch(63.7% .237 25.331)', 'blue-500' => 'oklch(62.3% .214 259.815)', ...]
+
+tw::breakpoints();
+// ['sm' => '40rem', 'md' => '48rem', 'lg' => '64rem', 'xl' => '80rem', '2xl' => '96rem']
+
+tw::spacing('@import "tailwindcss"; @theme { --spacing-huge: 10rem; }');
+// ['huge' => '10rem']
+```
+
+Pass a CSS string to read against a customized theme:
+
+```php
+tw::colors('@import "tailwindcss"; @theme { --color-brand: #3b82f6; }');
+// [..., 'brand' => '#3b82f6']
+
+tw::breakpoints('@import "tailwindcss"; @theme { --breakpoint-xs: 20rem; }');
+// ['xs' => '20rem', 'sm' => '40rem', ...]
+```
+
+TailwindCSS 4 uses a single `--spacing` base value rather than a `--spacing-*` scale, so `tw::spacing()` returns only the custom `--spacing-*` tokens you define. From a compiler instance the same methods exist: `$compiler->colors()`, `$compiler->breakpoints()`, `$compiler->spacing()`. See the [API](/docs/api) for full signatures.
+
+## Next steps
+
+- [Directives](/docs/usage/directives) — `@apply`, `@utility`, `@custom-variant`, `@layer`.
+- [Imports](/docs/usage/imports) — `@import`, virtual modules, and Preflight.
+- [API](/docs/api) — every accessor and inspection method.

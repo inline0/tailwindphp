@@ -1,0 +1,13 @@
+{
+  "title": "Documentation",
+  "pages": [
+    "index",
+    "getting-started",
+    "usage",
+    "class-utilities",
+    "plugins",
+    "api",
+    "cli",
+    "advanced"
+  ]
+}
