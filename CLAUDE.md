@@ -202,14 +202,16 @@ The project uses Pint (formatting) and PHPStan (static analysis):
 ```bash
 composer lint      # Check formatting (Pint --test)
 composer format    # Fix formatting (Pint)
-composer analyse   # Static analysis (PHPStan level 3)
+composer analyse   # Static analysis (PHPStan level 4)
 composer quality   # Run both lint + analyse
 ```
 
+**inline0 profile note:** TailwindPHP is registered in `_cp` as a Tailwind reproduction special case. Its colocated `.test.php` files and Pint workflow are intentional because they preserve upstream Tailwind traceability; do not move tests into `tests/Unit` / `tests/Integration` or replace Pint with PHPCS for profile alignment.
+
 **PHPStan Notes:**
-- Level 3 is used (higher levels conflict with function-based architecture)
+- Level 4 is used (higher levels conflict with function-based architecture)
 - Some patterns are intentionally ignored (dynamic arrays, cross-file functions)
-- All 75 source files are analyzed, test files are excluded
+- Source files are analyzed, test files are excluded
 
 ---
 

@@ -1,5 +1,7 @@
 parameters:
     level: 4
+    treatPhpDocTypesAsCertain: false
+    tmpDir: .phpstan
     paths:
         - src
     excludePaths:
