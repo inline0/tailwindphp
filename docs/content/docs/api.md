@@ -1,6 +1,11 @@
 ---
-title: API
-description: The full TailwindPHP\tw static API — generate, compile, properties, computed values, theme inspectors, caching — plus the reusable TailwindCompiler instance.
+title: "API"
+description: "The full TailwindPHP\\tw static API — generate, compile, properties, computed values, theme inspectors, caching — plus the reusable TailwindCompiler instance."
+path: "api"
+order: 18
+section: "Documentation"
+meta_title: "API"
+meta_description: "The full TailwindPHP\\tw static API — generate, compile, properties, computed values, theme inspectors, caching — plus the reusable TailwindCompiler instance."
 ---
 
 # API

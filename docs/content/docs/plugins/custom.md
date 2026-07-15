@@ -1,6 +1,11 @@
 ---
-title: Custom Plugins
-description: Write your own plugin by implementing PluginInterface and using the PluginAPI to register utilities, components, and variants, then load it with @plugin.
+title: "Custom Plugins"
+description: "Write your own plugin by implementing PluginInterface and using the PluginAPI to register utilities, components, and variants, then load it with @plugin."
+path: "plugins/custom"
+order: 12
+section: "Plugins"
+meta_title: "Custom Plugins"
+meta_description: "Write your own plugin by implementing PluginInterface and using the PluginAPI to register utilities, components, and variants, then load it with @plugin."
 ---
 
 # Custom Plugins

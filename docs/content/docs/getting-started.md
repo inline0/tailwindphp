@@ -1,6 +1,11 @@
 ---
-title: Getting Started
-description: Install TailwindPHP with Composer and generate your first Tailwind CSS from PHP — no Node.js, no build step, no config file.
+title: "Getting Started"
+description: "Install TailwindPHP with Composer and generate your first Tailwind CSS from PHP — no Node.js, no build step, no config file."
+path: "getting-started"
+order: 1
+section: "Documentation"
+meta_title: "Getting Started"
+meta_description: "Install TailwindPHP with Composer and generate your first Tailwind CSS from PHP — no Node.js, no build step, no config file."
 ---
 
 # Getting Started

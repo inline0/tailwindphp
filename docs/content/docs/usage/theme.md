@@ -1,6 +1,11 @@
 ---
-title: Theme & Customization
-description: Define design tokens with @theme, read them in CSS with theme() and the --theme/--spacing/--alpha functions, and inspect resolved values from PHP.
+title: "Theme & Customization"
+description: "Define design tokens with @theme, read them in CSS with theme() and the --theme/--spacing/--alpha functions, and inspect resolved values from PHP."
+path: "usage/theme"
+order: 3
+section: "Usage"
+meta_title: "Theme & Customization"
+meta_description: "Define design tokens with @theme, read them in CSS with theme() and the --theme/--spacing/--alpha functions, and inspect resolved values from PHP."
 ---
 
 # Theme & Customization

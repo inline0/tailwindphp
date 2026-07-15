@@ -1,6 +1,11 @@
 ---
-title: Imports & Virtual Modules
-description: Resolve @import in your CSS — virtual modules, file imports via importPaths, custom resolvers, Preflight, and per-import modifiers.
+title: "Imports & Virtual Modules"
+description: "Resolve @import in your CSS — virtual modules, file imports via importPaths, custom resolvers, Preflight, and per-import modifiers."
+path: "usage/imports"
+order: 5
+section: "Usage"
+meta_title: "Imports & Virtual Modules"
+meta_description: "Resolve @import in your CSS — virtual modules, file imports via importPaths, custom resolvers, Preflight, and per-import modifiers."
 ---
 
 # Imports & Virtual Modules

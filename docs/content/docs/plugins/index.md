@@ -1,6 +1,11 @@
 ---
-title: Overview
-description: Load the official typography and forms plugins with the @plugin directive, pass options via CSS blocks, and register your own PHP plugin classes.
+title: "Overview"
+description: "Load the official typography and forms plugins with the @plugin directive, pass options via CSS blocks, and register your own PHP plugin classes."
+path: "plugins"
+order: 9
+section: "Plugins"
+meta_title: "Overview"
+meta_description: "Load the official typography and forms plugins with the @plugin directive, pass options via CSS blocks, and register your own PHP plugin classes."
 ---
 
 # Plugins

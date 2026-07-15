@@ -1,6 +1,11 @@
 ---
-title: The @source Directive
-description: Use @source in your input CSS to control which template files are scanned for class names and which candidates are forced in or excluded.
+title: "The @source Directive"
+description: "Use @source in your input CSS to control which template files are scanned for class names and which candidates are forced in or excluded."
+path: "usage/source"
+order: 6
+section: "Usage"
+meta_title: "The @source Directive"
+meta_description: "Use @source in your input CSS to control which template files are scanned for class names and which candidates are forced in or excluded."
 ---
 
 # The @source Directive

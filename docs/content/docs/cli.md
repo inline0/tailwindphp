@@ -1,6 +1,11 @@
 ---
-title: CLI
-description: The bin/tailwindphp command — a 1:1 port of @tailwindcss/cli that builds, watches, and minifies CSS with no Node.js.
+title: "CLI"
+description: "The bin/tailwindphp command — a 1:1 port of @tailwindcss/cli that builds, watches, and minifies CSS with no Node.js."
+path: "cli"
+order: 17
+section: "Documentation"
+meta_title: "CLI"
+meta_description: "The bin/tailwindphp command — a 1:1 port of @tailwindcss/cli that builds, watches, and minifies CSS with no Node.js."
 ---
 
 # CLI
