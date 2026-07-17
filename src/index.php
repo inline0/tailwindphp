@@ -542,8 +542,8 @@ function loadDefaultTheme(): Theme
  *   - `onDependency`: Callback invoked when a file dependency is detected
  *
  * @return array{
- *     build: callable(array<string>): string,
- *     buildExact: callable(array<string>): string,
+ *     build: callable(array<string>, bool=): string,
+ *     buildExact: callable(array<string>, bool=): string,
  *     sources: array<string>,
  *     root: array,
  *     features: int,
@@ -676,7 +676,7 @@ function compileAst(array $ast, array $options = []): array
         'root' => $root,
         'features' => $features,
         'designSystem' => $designSystem,
-        'build' => function (array $newRawCandidates) use (
+        'build' => function (array $newRawCandidates, bool $minify = false) use (
             &$allValidCandidates,
             &$compiled,
             &$previousAstNodeCount,
@@ -688,7 +688,7 @@ function compileAst(array $ast, array $options = []): array
             $optimize
         ) {
             if ($features === FEATURE_NONE) {
-                return toCss($ast);
+                return toCss($ast, $minify);
             }
 
             if ($utilitiesNodePath === null) {
@@ -696,7 +696,7 @@ function compileAst(array $ast, array $options = []): array
                     $compiled = optimizeAst($ast, $designSystem, $options['polyfills'] ?? POLYFILL_ALL);
                 }
 
-                return toCss($compiled);
+                return toCss($compiled, $minify);
             }
 
             // Track if this is the first build call with inline candidates
@@ -723,7 +723,7 @@ function compileAst(array $ast, array $options = []): array
                     $compiled = $optimize([]);
                 }
 
-                return toCss($compiled);
+                return toCss($compiled, $minify);
             }
 
             $compileResult = \TailwindPHP\Compile\compileCandidates(
@@ -745,14 +745,14 @@ function compileAst(array $ast, array $options = []): array
                     $compiled = $optimize([]);
                 }
 
-                return toCss($compiled);
+                return toCss($compiled, $minify);
             }
 
             $previousAstNodeCount = count($newNodes);
 
             $compiled = $optimize($newNodes);
 
-            return toCss($compiled);
+            return toCss($compiled, $minify);
         },
         // Exact per-call build: compiles exactly the given candidate set (plus
         // inline candidates from @source inline()) against the shared design
@@ -760,7 +760,7 @@ function compileAst(array $ast, array $options = []): array
         // calls and never returns a cached result, so the output matches a
         // cold compile of the same candidate set byte for byte while still
         // reusing the design system's parse/compile memos.
-        'buildExact' => function (array $rawCandidates) use (
+        'buildExact' => function (array $rawCandidates, bool $minify = false) use (
             $designSystem,
             $utilitiesNodePath,
             &$ast,
@@ -770,11 +770,11 @@ function compileAst(array $ast, array $options = []): array
             $inlineCandidates
         ) {
             if ($features === FEATURE_NONE) {
-                return toCss($ast);
+                return toCss($ast, $minify);
             }
 
             if ($utilitiesNodePath === null) {
-                return toCss(optimizeAst($ast, $designSystem, $options['polyfills'] ?? POLYFILL_ALL));
+                return toCss(optimizeAst($ast, $designSystem, $options['polyfills'] ?? POLYFILL_ALL), $minify);
             }
 
             $validCandidates = [];
@@ -808,7 +808,7 @@ function compileAst(array $ast, array $options = []): array
             // Apply CSS function substitution to compiled utilities (resolves theme() etc.)
             substituteFunctions($newNodes, $designSystem);
 
-            return toCss($optimize($newNodes));
+            return toCss($optimize($newNodes), $minify);
         },
     ];
 }
@@ -2625,14 +2625,8 @@ function generateWithoutCache(string $content, string $css, array $compileOption
     // Compile
     $compiled = compile($css, $compileOptions);
 
-    $result = $compiled['build']($candidates);
-
-    // Optionally minify output
-    if ($minify) {
-        $result = \TailwindPHP\Minifier\CssMinifier::minify($result);
-    }
-
-    return $result;
+    // Minified output is emitted directly during serialization
+    return $compiled['build']($candidates, $minify);
 }
 
 /**
@@ -3098,24 +3092,26 @@ class TailwindCompiler
      * Generate CSS from content containing Tailwind classes.
      *
      * @param string $content HTML string to extract classes from
+     * @param bool $minify Emit minified CSS during serialization
      * @return string Generated CSS
      */
-    public function generate(string $content): string
+    public function generate(string $content, bool $minify = false): string
     {
         $candidates = extractCandidates($content);
 
-        return $this->compiled['build']($candidates);
+        return $this->compiled['build']($candidates, $minify);
     }
 
     /**
      * Generate CSS from an array of class candidates.
      *
      * @param array<string> $candidates Array of class names
+     * @param bool $minify Emit minified CSS during serialization
      * @return string Generated CSS
      */
-    public function css(array $candidates): string
+    public function css(array $candidates, bool $minify = false): string
     {
-        return $this->compiled['build']($candidates);
+        return $this->compiled['build']($candidates, $minify);
     }
 
     /**
@@ -3126,13 +3122,14 @@ class TailwindCompiler
      * produce, while still reusing this compiler's parsed design system.
      *
      * @param string $content HTML string to extract classes from
+     * @param bool $minify Emit minified CSS during serialization
      * @return string Generated CSS
      */
-    public function generateExact(string $content): string
+    public function generateExact(string $content, bool $minify = false): string
     {
         $candidates = extractCandidates($content);
 
-        return $this->compiled['buildExact']($candidates);
+        return $this->compiled['buildExact']($candidates, $minify);
     }
 
     /**
@@ -3141,11 +3138,12 @@ class TailwindCompiler
      * compiler.
      *
      * @param array<string> $candidates Array of class names
+     * @param bool $minify Emit minified CSS during serialization
      * @return string Generated CSS
      */
-    public function cssExact(array $candidates): string
+    public function cssExact(array $candidates, bool $minify = false): string
     {
-        return $this->compiled['buildExact']($candidates);
+        return $this->compiled['buildExact']($candidates, $minify);
     }
 
     /**

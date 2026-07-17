@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 require __DIR__.'/../autoload.php';
 
-use TailwindPHP\Minifier\CssMinifier;
 use TailwindPHP\Tailwind;
 
 $inputs = [
@@ -43,13 +42,13 @@ foreach ($inputs as $inputName => $css) {
     foreach ($pages as $pageName => $content) {
         $exact = $compiler->generateExact($content);
         $check("$pageName|$inputName|pass1|pretty", $cold[$pageName]['pretty'], $exact);
-        $check("$pageName|$inputName|pass1|min", $cold[$pageName]['min'], CssMinifier::minify($exact));
+        $check("$pageName|$inputName|pass1|min", $cold[$pageName]['min'], $compiler->generateExact($content, true));
     }
 
     foreach ($pages as $pageName => $content) {
         $exact = $compiler->generateExact($content);
         $check("$pageName|$inputName|pass2|pretty", $cold[$pageName]['pretty'], $exact);
-        $check("$pageName|$inputName|pass2|min", $cold[$pageName]['min'], CssMinifier::minify($exact));
+        $check("$pageName|$inputName|pass2|min", $cold[$pageName]['min'], $compiler->generateExact($content, true));
     }
 
     foreach ($pages as $content) {
@@ -59,7 +58,7 @@ foreach ($inputs as $inputName => $css) {
     foreach ($pages as $pageName => $content) {
         $exact = $compiler->generateExact($content);
         $check("$pageName|$inputName|pass3-after-cumulative|pretty", $cold[$pageName]['pretty'], $exact);
-        $check("$pageName|$inputName|pass3-after-cumulative|min", $cold[$pageName]['min'], CssMinifier::minify($exact));
+        $check("$pageName|$inputName|pass3-after-cumulative|min", $cold[$pageName]['min'], $compiler->generateExact($content, true));
     }
 }
 

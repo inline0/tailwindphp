@@ -1,31 +1,31 @@
 {
     "divine-large|minimal|min": {
-        "sha256": "0705aa2dd3c0a08373f8208fc9f0c005da1bcb52e5b306d19fa79810f991a223",
-        "bytes": 22415
+        "sha256": "480e166eadeebb6310b0a90b7b8e544f3a388a1c863bdc4bb1ca57ed474b3381",
+        "bytes": 22419
     },
     "divine-large|minimal|pretty": {
         "sha256": "7f814f42f89a4ca3d8d0366e1a829e0986ff88aab47850f4d0d4e8ce58118b94",
         "bytes": 28802
     },
     "divine-large|theme|min": {
-        "sha256": "53535901a1168ebf4107480d5571d1f32ce4d9154b78967371cbbb0cb3f807da",
-        "bytes": 145517
+        "sha256": "ee6cfb97b5eb79c0e99eda3c1ea27152db906474189a4b6d2e9bc2464d1b271d",
+        "bytes": 145545
     },
     "divine-large|theme|pretty": {
         "sha256": "03c64a96daaf9eec960c7e426e8d8a470730ef87eace540a5e5101d7fad653fe",
         "bytes": 167495
     },
     "divine-median|minimal|min": {
-        "sha256": "0840e44d7b2e31a8ce115fed79c1d31d03e9818cc345c9ea9da84303f1e9fa4b",
-        "bytes": 16317
+        "sha256": "08dc9f1519e810182a68fb0621682f6301e04d7d63a00cfbdf7c839696ef7463",
+        "bytes": 16319
     },
     "divine-median|minimal|pretty": {
         "sha256": "d492b4eaf2106d44a5da87a531331187221095936753613b563ea50465cec84a",
         "bytes": 20836
     },
     "divine-median|theme|min": {
-        "sha256": "a7be78d64e9c151b2d44aae09cc0a1d82e827e372a21ce4f77cfe853342eca32",
-        "bytes": 137412
+        "sha256": "cdc38719d21070d9e6a313d65a9acadef10ae82ddeb28ac0f10b4533d3313b98",
+        "bytes": 137438
     },
     "divine-median|theme|pretty": {
         "sha256": "74d9dc0a3915db2c37090301abb30bc1012ec14fe34d828667c15f02d6b52e86",
@@ -40,8 +40,8 @@
         "bytes": 15118
     },
     "glaze-large|theme|min": {
-        "sha256": "d26f80347d1c95f8adca4455616f0d419941d633cae0f96a9b9d8d8c43eae44e",
-        "bytes": 133844
+        "sha256": "36d28ebf2b8e98cc811be9b4a8f1d2d7e9ad2d2e2d8b9f314f2f08c0faa78b43",
+        "bytes": 133868
     },
     "glaze-large|theme|pretty": {
         "sha256": "c986a8d960f39803a642b1a8b56a080b9add05f0ca4a4e1055934c9b90d60d8c",
@@ -56,8 +56,8 @@
         "bytes": 15118
     },
     "glaze-median|theme|min": {
-        "sha256": "d26f80347d1c95f8adca4455616f0d419941d633cae0f96a9b9d8d8c43eae44e",
-        "bytes": 133844
+        "sha256": "36d28ebf2b8e98cc811be9b4a8f1d2d7e9ad2d2e2d8b9f314f2f08c0faa78b43",
+        "bytes": 133868
     },
     "glaze-median|theme|pretty": {
         "sha256": "c986a8d960f39803a642b1a8b56a080b9add05f0ca4a4e1055934c9b90d60d8c",
@@ -72,8 +72,8 @@
         "bytes": 15118
     },
     "queuety-large|theme|min": {
-        "sha256": "d26f80347d1c95f8adca4455616f0d419941d633cae0f96a9b9d8d8c43eae44e",
-        "bytes": 133844
+        "sha256": "36d28ebf2b8e98cc811be9b4a8f1d2d7e9ad2d2e2d8b9f314f2f08c0faa78b43",
+        "bytes": 133868
     },
     "queuety-large|theme|pretty": {
         "sha256": "c986a8d960f39803a642b1a8b56a080b9add05f0ca4a4e1055934c9b90d60d8c",
@@ -88,40 +88,40 @@
         "bytes": 15118
     },
     "queuety-median|theme|min": {
-        "sha256": "d26f80347d1c95f8adca4455616f0d419941d633cae0f96a9b9d8d8c43eae44e",
-        "bytes": 133844
+        "sha256": "36d28ebf2b8e98cc811be9b4a8f1d2d7e9ad2d2e2d8b9f314f2f08c0faa78b43",
+        "bytes": 133868
     },
     "queuety-median|theme|pretty": {
         "sha256": "c986a8d960f39803a642b1a8b56a080b9add05f0ca4a4e1055934c9b90d60d8c",
         "bytes": 152079
     },
     "sleek-large|minimal|min": {
-        "sha256": "d08218975e65c98e67e7e82921a8fb6f592b4d76e7e4e762dc2939386470bc95",
-        "bytes": 15394
+        "sha256": "b500fc7db317fcad2001537d9de79a7de7ab3a0a0c64573e159b08ca6e73b7df",
+        "bytes": 15396
     },
     "sleek-large|minimal|pretty": {
         "sha256": "d964b07e2f83fdf54599fdb1409e59481b426dfbfb4038679a36000a5131bcfa",
         "bytes": 19526
     },
     "sleek-large|theme|min": {
-        "sha256": "fb23953988c23fb1cae706b464cf2f29607271ed804575637bd54e6aec22125f",
-        "bytes": 137504
+        "sha256": "2df0a8b8096ec1a6fbeb5944d4b49e420aaf8fed5576a47c1b7818cf2fe783d4",
+        "bytes": 137530
     },
     "sleek-large|theme|pretty": {
         "sha256": "5c18a3ed35f073f16a13d24b33cbe3a50ae58244b82d0dd3b7593f4e764b1a1d",
         "bytes": 156860
     },
     "sleek-median|minimal|min": {
-        "sha256": "638cd2949192ed3f42c21dd15639d4c2e92994b426454134a77e21837e32f440",
-        "bytes": 16234
+        "sha256": "9ec08655d9c5ccbb732ba9eace99f5b26d7a31ec179c664eb5615bf0cc2adab3",
+        "bytes": 16236
     },
     "sleek-median|minimal|pretty": {
         "sha256": "37059813362be772b86f1196b91c420e64b2f2396b7023af5b07c34d7ace7fbd",
         "bytes": 20610
     },
     "sleek-median|theme|min": {
-        "sha256": "92768832d53dc32c5bbb19bc20d97b6a07a51fa536c64f45ee89c24ef52ba2e6",
-        "bytes": 138443
+        "sha256": "5f7b537ff9ad8e7df568a443fb9c1e948a4a8a286895f1a79880e68ad518cbda",
+        "bytes": 138469
     },
     "sleek-median|theme|pretty": {
         "sha256": "aa17e6c9983bfe4ca1efb0a9b6d8b334ab09dff20e74dd698137f098220076c4",

@@ -60,6 +60,49 @@ class LightningCss
     }
 
     /**
+     * Minify a CSS declaration value for compact serialization.
+     *
+     * Applies the value-level wins the string CssMinifier used to apply over
+     * the full output: shorten 6-digit hex colors to 3 digits, drop units
+     * from zero lengths (time units are preserved), and shorten font-weight
+     * keywords to their numeric values. Unlike optimizeValue(), this is only
+     * used for minified output, so pretty output stays byte-identical.
+     *
+     * @param string $value The CSS value to minify
+     * @param string $property The CSS property name (for font-weight handling)
+     * @return string Minified value
+     */
+    public static function minifyValue(string $value, string $property = ''): string
+    {
+        if ($property === 'font-weight' || str_ends_with($property, '-font-weight')) {
+            if ($value === 'normal') {
+                return '400';
+            }
+            if ($value === 'bold') {
+                return '700';
+            }
+        }
+
+        if (str_contains($value, '#')) {
+            $value = preg_replace_callback(
+                '/#([0-9a-fA-F])\1([0-9a-fA-F])\2([0-9a-fA-F])\3\b/',
+                fn ($m) => '#' . strtolower($m[1] . $m[2] . $m[3]),
+                $value,
+            );
+        }
+
+        if (str_contains($value, '0')) {
+            $value = preg_replace(
+                '/\b0(px|rem|em|ex|ch|vw|vh|vmin|vmax|cm|mm|in|pt|pc)\b/',
+                '0',
+                $value,
+            );
+        }
+
+        return $value;
+    }
+
+    /**
      * Normalize URL quoting.
      *
      * LightningCSS adds quotes around URL values if not already quoted.

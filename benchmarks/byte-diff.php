@@ -7,6 +7,7 @@ require __DIR__.'/../autoload.php';
 use TailwindPHP\Tailwind;
 
 $record = in_array('--record', $argv, true);
+$skipMinified = in_array('--skip-minified', $argv, true);
 $expectedFile = __DIR__.'/fixtures/expected-hashes.json';
 $expected = is_file($expectedFile) ? json_decode((string) file_get_contents($expectedFile), true) : [];
 $actual = [];
@@ -22,6 +23,9 @@ foreach (glob(__DIR__.'/fixtures/pages/*.json') as $pageFile) {
     $content = '<div class="'.implode(' ', $page['candidates']).'"></div>';
     foreach ($inputs as $inputName => $css) {
         foreach ([true, false] as $minify) {
+            if ($skipMinified && $minify) {
+                continue;
+            }
             $key = basename($pageFile, '.json')."|$inputName|".($minify ? 'min' : 'pretty');
             $out = Tailwind::generate(['content' => $content, 'css' => $css, 'minify' => $minify]);
             $actual[$key] = ['sha256' => hash('sha256', $out), 'bytes' => strlen($out)];
