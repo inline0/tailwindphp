@@ -140,16 +140,23 @@ foreach ($inputs as $inputName => $css) {
 }
 
 $results['baseline_pre_program'] = [
-    'source' => 'mono-theme prds/014_RENDER_ENGINE_AND_STACK_DEEP_DIVE.md Finding 3, verified 2026-07-18, xdebug off',
+    'source' => 'mono-theme prds/014_RENDER_ENGINE_AND_STACK_DEEP_DIVE.md Finding 3 and 014_reports/tailwindphp-deep-dive-raw.json verify table, xdebug off, same machine',
+    'variance' => 'baseline documented +/-10% run-to-run variance and this file records single-run medians, so treat every ratio below as approximate',
     'cold_generate_ms' => 66.0,
-    'warm_per_page_ms' => 8.0,
-    'repeat_minify_off_ms' => 0.9,
-    'repeat_minify_on_ms' => 8.0,
+    'warm_first_visit_per_page_ms_range' => [9.0, 30.0],
+    'warm_repeat_minify_on_ms' => 8.0,
+    'warm_repeat_minify_off_ms' => 0.9,
 ];
 
 $results['comparison'] = [
+    'notes' => [
+        'cold' => 'cold_theme_mean vs the 66 ms baseline; the delta sits inside the baseline run variance, and cold still rebuilds the invariant prefix',
+        'warm_first_visit' => 'batch per_page medians are the like-for-like first-visit pair against the 9-30 ms baseline range; the ratio divides by the conservative 9 ms low end',
+        'warm_memoized' => 'warm_compiler per_page_exact medians re-run the same candidate set, so samples after the first hit the design-system candidate memos; they have no pre-program analogue and get no baseline ratio',
+        'repeat' => 'repeat floor pairs against the old warm-repeat floor of ~8 ms minified and 0.9 ms unminified',
+    ],
     'cold_theme_mean_vs_baseline' => r($results['cold_generate_ms']['theme']['_mean'] / 66.0),
-    'warm_theme_mean_vs_baseline' => r($results['warm_compiler']['theme']['per_page_mean_ms'] / 8.0),
+    'batch_theme_first_visit_vs_baseline_low_end' => r($results['batch']['theme']['per_page_mean_ms'] / 9.0),
     'repeat_theme_minify_on_vs_baseline' => r($results['repeat_floor_ms']['theme']['_mean']['minify_on'] / 8.0),
     'repeat_theme_minify_off_vs_baseline' => r($results['repeat_floor_ms']['theme']['_mean']['minify_off'] / 0.9),
 ];
