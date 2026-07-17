@@ -9,18 +9,24 @@ use function TailwindPHP\Ast\toCss;
 use function TailwindPHP\Compile\compileCandidates;
 use function TailwindPHP\CssParser\parse;
 use function TailwindPHP\extractCandidates;
-use function TailwindPHP\parseCss;
-use function TailwindPHP\optimizeAst;
-use function TailwindPHP\substituteAtApply;
-use function TailwindPHP\substituteFunctions;
-use function TailwindPHP\Walk\walk;
-
-use TailwindPHP\Minifier\CssMinifier;
-use TailwindPHP\Tailwind;
-use TailwindPHP\Walk\WalkAction;
 
 use const TailwindPHP\FEATURE_NONE;
+
+use TailwindPHP\Minifier\CssMinifier;
+
+use function TailwindPHP\optimizeAst;
+use function TailwindPHP\parseCss;
+
 use const TailwindPHP\POLYFILL_ALL;
+
+use function TailwindPHP\substituteAtApply;
+use function TailwindPHP\substituteFunctions;
+
+use TailwindPHP\Tailwind;
+
+use function TailwindPHP\Walk\walk;
+
+use TailwindPHP\Walk\WalkAction;
 
 $corpusDir = $argv[1] ?? '/Users/dennis/Local Sites/fabrikat/app/public/wp-content/uploads/sites/334/divine/static-prerender';
 $files = glob($corpusDir . '/*.html');

@@ -9,18 +9,24 @@ use function TailwindPHP\Ast\toCss;
 use function TailwindPHP\Compile\compileCandidates;
 use function TailwindPHP\CssParser\parse;
 use function TailwindPHP\extractCandidates;
-use function TailwindPHP\parseCss;
-use function TailwindPHP\optimizeAst;
-use function TailwindPHP\substituteAtApply;
-use function TailwindPHP\substituteFunctions;
-use function TailwindPHP\Walk\walk;
-
-use TailwindPHP\Minifier\CssMinifier;
-use TailwindPHP\Tailwind;
-use TailwindPHP\Walk\WalkAction;
 
 use const TailwindPHP\FEATURE_NONE;
+
+use TailwindPHP\Minifier\CssMinifier;
+
+use function TailwindPHP\optimizeAst;
+use function TailwindPHP\parseCss;
+
 use const TailwindPHP\POLYFILL_ALL;
+
+use function TailwindPHP\substituteAtApply;
+use function TailwindPHP\substituteFunctions;
+
+use TailwindPHP\Tailwind;
+
+use function TailwindPHP\Walk\walk;
+
+use TailwindPHP\Walk\WalkAction;
 
 const UPLOADS = '/Users/dennis/Local Sites/fabrikat/app/public/wp-content/uploads/sites';
 const STYLE_CSS = '/Users/dennis/Local Sites/fabrikat/inline0/mono-theme/style.css';
@@ -291,7 +297,7 @@ printf(
     'extract ms',
     'filter ms',
     'generate ms',
-    'css KB'
+    'css KB',
 );
 foreach ($pages as $page) {
     printf(
@@ -303,7 +309,7 @@ foreach ($pages as $page) {
         $page['extractMs'],
         $page['filterMs'],
         $page['generateMs'],
-        $page['cssBytes'] / 1024
+        $page['cssBytes'] / 1024,
     );
 }
 
@@ -320,7 +326,7 @@ foreach ($byClass as $class => $rows) {
         array_sum(array_column($rows, 'bytes')) / count($rows) / 1024,
         array_sum(array_column($rows, 'candidates')) / count($rows),
         array_sum(array_column($rows, 'extractMs')) / count($rows),
-        array_sum(array_column($rows, 'generateMs')) / count($rows)
+        array_sum(array_column($rows, 'generateMs')) / count($rows),
     );
 }
 
@@ -357,7 +363,7 @@ foreach ($stages as $stage) {
         $cells[1],
         $cells[2],
         $cells[3],
-        $cells[3] * 100 / $allTotal
+        $cells[3] * 100 / $allTotal,
     );
 }
 printf("  %-44s %35s %8.2f\n", 'TOTAL staged', '', $allTotal);
@@ -378,7 +384,7 @@ foreach ($pages as $page) {
         ms($ns),
         strlen($min) / 1024,
         $page['cssBytes'] / 1024,
-        $page['generateMs']
+        $page['generateMs'],
     );
 }
 echo "  second pass, all candidates already accumulated:\n";

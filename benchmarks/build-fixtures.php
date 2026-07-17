@@ -31,7 +31,7 @@ foreach ($corpus as $name => $file) {
     sort($candidates);
     file_put_contents(
         __DIR__."/fixtures/pages/$name.json",
-        json_encode(['source' => basename($file), 'bytes' => filesize($file), 'candidates' => $candidates], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)."\n"
+        json_encode(['source' => basename($file), 'bytes' => filesize($file), 'candidates' => $candidates], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)."\n",
     );
     echo "$name: ".count($candidates)." candidates\n";
 }

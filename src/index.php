@@ -543,14 +543,18 @@ function loadDefaultTheme(): Theme
  *
  * @return array{
  *     build: callable(array<string>): string,
+ *     buildExact: callable(array<string>): string,
  *     sources: array<string>,
  *     root: array,
- *     features: int
+ *     features: int,
+ *     designSystem: \TailwindPHP\DesignSystem\DesignSystem
  * } Compilation result:
- *   - `build`: Function that takes candidate class names and returns CSS
+ *   - `build`: Function that takes candidate class names and returns CSS (cumulative across calls)
+ *   - `buildExact`: Function that compiles exactly the given candidate set per call
  *   - `sources`: Detected content source patterns
  *   - `root`: Compiled AST root
  *   - `features`: Bitmask of detected features
+ *   - `designSystem`: The design system built during compilation
  *
  * @throws \Exception When CSS parsing fails
  * @throws \Exception When @utility or @custom-variant directives are invalid
@@ -579,7 +583,7 @@ function compile(string $css, array $options = []): array
  *
  * @param array $ast CSS AST
  * @param array $options Compilation options
- * @return array{build: callable, sources: array, root: mixed, features: int}
+ * @return array{build: callable, buildExact: callable, sources: array, root: mixed, features: int, designSystem: \TailwindPHP\DesignSystem\DesignSystem}
  */
 function compileAst(array $ast, array $options = []): array
 {
@@ -644,6 +648,7 @@ function compileAst(array $ast, array $options = []): array
         'sources' => $sources,
         'root' => $root,
         'features' => $features,
+        'designSystem' => $designSystem,
         'build' => function (array $newRawCandidates) use (
             &$allValidCandidates,
             &$compiled,
@@ -724,6 +729,66 @@ function compileAst(array $ast, array $options = []): array
             $compiled = optimizeAst($ast, $designSystem, $options['polyfills'] ?? POLYFILL_ALL);
 
             return toCss($compiled);
+        },
+        // Exact per-call build: compiles exactly the given candidate set (plus
+        // inline candidates from @source inline()) against the shared design
+        // system. Unlike `build`, it does not accumulate candidates across
+        // calls and never returns a cached result, so the output matches a
+        // cold compile of the same candidate set byte for byte while still
+        // reusing the design system's parse/compile memos.
+        'buildExact' => function (array $rawCandidates) use (
+            $designSystem,
+            $utilitiesNodePath,
+            &$ast,
+            $features,
+            $options,
+            $updateUtilitiesNode,
+            $inlineCandidates
+        ) {
+            if ($features === FEATURE_NONE) {
+                return toCss($ast);
+            }
+
+            if ($utilitiesNodePath === null) {
+                return toCss(optimizeAst($ast, $designSystem, $options['polyfills'] ?? POLYFILL_ALL));
+            }
+
+            $validCandidates = [];
+
+            foreach ($inlineCandidates as $candidate) {
+                if (!$designSystem->hasInvalidCandidate($candidate)) {
+                    $validCandidates[$candidate] = true;
+                }
+            }
+
+            foreach ($rawCandidates as $candidate) {
+                if (!$designSystem->hasInvalidCandidate($candidate)) {
+                    if (str_starts_with($candidate, '--')) {
+                        $designSystem->getTheme()->markUsedVariable($candidate);
+                    } else {
+                        $validCandidates[$candidate] = true;
+                    }
+                }
+            }
+
+            $compileResult = \TailwindPHP\Compile\compileCandidates(
+                array_keys($validCandidates),
+                $designSystem,
+                ['onInvalidCandidate' => function ($candidate) use ($designSystem) {
+                    $designSystem->addInvalidCandidate($candidate);
+                }],
+            );
+
+            $newNodes = $compileResult['astNodes'];
+
+            // Apply CSS function substitution to compiled utilities (resolves theme() etc.)
+            substituteFunctions($newNodes, $designSystem);
+
+            // Work on a copy of the shared AST so cumulative `build` state stays intact
+            $exactAst = $ast;
+            $updateUtilitiesNode($exactAst, $newNodes);
+
+            return toCss(optimizeAst($exactAst, $designSystem, $options['polyfills'] ?? POLYFILL_ALL));
         },
     ];
 }
@@ -2514,11 +2579,8 @@ class TailwindCompiler
         // compileAst internally calls parseCss and returns the compiled result with build()
         $this->compiled = compileAst($ast, $options);
 
-        // Get design system from a fresh parse (compileAst already processed it)
-        // We need to re-parse to get the design system for properties() etc.
-        $ast2 = parse($css);
-        $result = parseCss($ast2, $options);
-        $this->designSystem = $result['designSystem'];
+        // Reuse the design system that compileAst already built for properties() etc.
+        $this->designSystem = $this->compiled['designSystem'];
         $this->theme = $this->designSystem->getTheme();
     }
 
@@ -2544,6 +2606,36 @@ class TailwindCompiler
     public function css(array $candidates): string
     {
         return $this->compiled['build']($candidates);
+    }
+
+    /**
+     * Generate CSS for exactly the given content, without accumulating
+     * candidates from previous generate()/css() calls on this compiler.
+     *
+     * The output matches what a cold generate() of the same content would
+     * produce, while still reusing this compiler's parsed design system.
+     *
+     * @param string $content HTML string to extract classes from
+     * @return string Generated CSS
+     */
+    public function generateExact(string $content): string
+    {
+        $candidates = extractCandidates($content);
+
+        return $this->compiled['buildExact']($candidates);
+    }
+
+    /**
+     * Generate CSS for exactly the given class candidates, without
+     * accumulating candidates from previous generate()/css() calls on this
+     * compiler.
+     *
+     * @param array<string> $candidates Array of class names
+     * @return string Generated CSS
+     */
+    public function cssExact(array $candidates): string
+    {
+        return $this->compiled['buildExact']($candidates);
     }
 
     /**
@@ -2680,7 +2772,7 @@ class TailwindCompiler
     /**
      * Get the compiled build function result.
      *
-     * @return array{build: callable, sources: array, root: array, features: int}
+     * @return array{build: callable, buildExact: callable, sources: array, root: array, features: int, designSystem: \TailwindPHP\DesignSystem\DesignSystem}
      */
     public function getCompiled(): array
     {
