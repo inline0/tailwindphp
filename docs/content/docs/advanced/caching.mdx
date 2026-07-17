@@ -61,25 +61,27 @@ clearCache('/path/to/cache');                 // function form
 
 ## Minification
 
-The minifier (`src/_tailwindphp/CssMinifier.php`) shrinks the output for production. Enable it inline with `minify`, or run it as a separate pass with `tw::minify()`:
+Minification shrinks the output for production. The `minify` flag emits minified CSS directly during serialization, so it is both the fastest and the most precise path; `tw::minify()` runs the string-based minifier (`src/_tailwindphp/CssMinifier.php`) over an existing CSS string:
 
 ```php
 use TailwindPHP\tw;
 
-// Minify during generation
+// Minify during generation (serializer path, preferred)
 $css = tw::generate([
     'content' => '<div class="flex p-4">Hello</div>',
     'minify' => true,
 ]);
 
-// Or minify an existing string
+// Or minify an existing string (string-based post-pass)
 $css = tw::generate('<div class="flex p-4">Hello</div>');
 $minified = tw::minify($css);
 ```
 
+The two paths produce equivalent structure but not identical bytes. The serializer path preserves descendant `:not()` selectors that the string pass collapses, so prefer the `minify` flag for generated output and reserve `tw::minify()` for CSS that arrives as a string.
+
 ### What it does
 
-The minifier applies a fixed set of size reductions:
+Both paths apply the same set of size reductions:
 
 | Step | Effect |
 |------|--------|
@@ -94,7 +96,7 @@ By design it does **not** merge duplicate selectors or combine shorthand propert
 
 ### CLI: `--minify` vs `--optimize`
 
-The [CLI](/docs/cli) exposes the same minifier through two flags:
+The [CLI](/docs/cli) exposes the serializer minify path through two flags:
 
 ```bash
 # Optimize and minify (smallest output)

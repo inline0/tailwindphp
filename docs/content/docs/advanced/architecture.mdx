@@ -30,9 +30,9 @@ CSS input          (@import "tailwindcss"; @theme { … })
 ┌──────────────┐
 │   Optimize   │  _tailwindphp/LightningCss.php — nesting, @media, calc()
 └──────┬───────┘
-       ▼  ast.php toCss()
+       ▼
 ┌──────────────┐
-│   Minify     │  _tailwindphp/CssMinifier.php   (optional)
+│  Serialize   │  ast.php toCss()   (minified when requested)
 └──────┬───────┘
        ▼
 CSS output
@@ -48,7 +48,7 @@ CSS output
 
 **Serialize and optimize.** `ast.php`'s `toCss()` walks the tree (helpers in `walk.php`) and emits the CSS string. The `lightningcss`-equivalent transforms in `_tailwindphp/LightningCss.php` are applied so the output matches what TailwindCSS produces after its Rust post-processing pass.
 
-**Minify.** When `minify` is enabled, `_tailwindphp/CssMinifier.php` runs as a final pass. See [Caching & minification](/docs/advanced/caching).
+**Minify.** When `minify` is enabled, `toCss()` emits minified CSS during serialization. `_tailwindphp/CssMinifier.php` backs the standalone `tw::minify()` string pass. See [Caching & minification](/docs/advanced/caching).
 
 ## Source layout
 

@@ -57,7 +57,7 @@ The array form accepts these keys:
 public static function compile(string $css = '@import "tailwindcss";', array $options = []): TailwindCompiler
 ```
 
-Creates a reusable `TailwindCompiler` bound to the given CSS. Parsing and design-system construction happen once, so this is the efficient choice when generating CSS for many different content strings. **Returns** `TailwindCompiler`.
+Creates a reusable `TailwindCompiler` bound to the given CSS. Parsing and design-system construction happen once, so this is the efficient choice when generating CSS for many different content strings. Use `generate()` to accumulate one stylesheet across calls, or [`generateExact()`](#accumulating-vs-exact-generation) for independent per-page output. **Returns** `TailwindCompiler`.
 
 ```php
 use TailwindPHP\tw;
@@ -164,7 +164,9 @@ tw::extractCandidates('<div class="flex p-4" className="bg-blue-500">');
 public static function minify(string $css): string
 ```
 
-Minifies CSS: removes comments, collapses whitespace, shortens hex colors (`#ffffff` → `#fff`), drops units from zero values (`0px` → `0`), and more. **Returns** `string`.
+Minifies an arbitrary CSS string: removes comments, collapses whitespace, shortens hex colors (`#ffffff` → `#fff`), drops units from zero values (`0px` → `0`), and more. **Returns** `string`.
+
+For CSS that TailwindPHP generates itself, prefer the `minify` option (`tw::generate(['minify' => true])`) or the `$minify` parameter on the [compiler methods](#tailwindcompiler-instance-methods). That path minifies during serialization, which is faster and preserves descendant `:not()` selectors that the string-based pass collapses.
 
 ```php
 use TailwindPHP\tw;
@@ -274,7 +276,10 @@ tw::properties(['content' => 'p-4', 'css' => '@import "tailwindcss";']);
 The object returned by [`tw::compile()`](#twcompile) exposes the same inspection surface as the static class, bound to the CSS it was compiled with. Use it to avoid re-parsing the theme on every call.
 
 ```php
-public function generate(string $content): string
+public function generate(string $content, bool $minify = false): string
+public function css(array $candidates, bool $minify = false): string
+public function generateExact(string $content, bool $minify = false): string
+public function cssExact(array $candidates, bool $minify = false): string
 public function extractCandidates(string $html): array
 public function properties(string|array $utilities): array
 public function computedProperties(string|array $utilities): array
@@ -305,6 +310,24 @@ $compiler->colors();        // all color values
 $compiler->breakpoints();   // all breakpoint values
 $compiler->spacing();       // custom spacing values
 ```
+
+### Accumulating vs. exact generation
+
+`generate()` and `css()` **accumulate**: every call adds its candidates to the compiler's growing set, and the returned stylesheet covers everything seen so far. That fits a single stylesheet built up across templates.
+
+`generateExact()` and `cssExact()` compile **exactly** the given content or candidates per call, with no carry-over between calls, while still reusing the compiler's parsed design system. The output matches what a cold `tw::generate()` of the same content would produce. This is the fastest way to build per-page CSS from one long-lived compiler:
+
+```php
+use TailwindPHP\tw;
+
+$compiler = tw::compile($themeCss);
+
+foreach ($pages as $slug => $html) {
+    $perPageCss[$slug] = $compiler->generateExact($html, true);
+}
+```
+
+All four methods accept an optional `$minify` flag that emits minified CSS during serialization, byte-identical to `tw::generate(['minify' => true])` and cheaper than minifying the pretty output afterwards.
 
 ### Advanced inspectors
 
