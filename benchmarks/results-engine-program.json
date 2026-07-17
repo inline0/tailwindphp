@@ -1,0 +1,226 @@
+{
+    "recorded": "2026-07-17T23:12:02+00:00",
+    "commit": "14c1c08",
+    "branch": "perf/engine-program",
+    "php": "8.5.6",
+    "xdebug_mode": "off",
+    "protocol": {
+        "cold": "Tailwind::generate minify=true, full pipeline per call, median of 5",
+        "warm": "shared warm TailwindCompiler per css input, generateExact minify=true, median of 5",
+        "repeat": "fresh compiler per fixture, generate once, then median of 20 repeats of the same candidate set",
+        "batch": "fresh compiler, all 8 fixtures sequentially via generateExact minify=true, median across 5 batch runs"
+    },
+    "inputs": {
+        "minimal": {
+            "bytes": 23
+        },
+        "theme": {
+            "bytes": 88603
+        }
+    },
+    "fixtures": {
+        "divine-large": {
+            "candidates": 430
+        },
+        "divine-median": {
+            "candidates": 249
+        },
+        "glaze-large": {
+            "candidates": 181
+        },
+        "glaze-median": {
+            "candidates": 180
+        },
+        "queuety-large": {
+            "candidates": 182
+        },
+        "queuety-median": {
+            "candidates": 180
+        },
+        "sleek-large": {
+            "candidates": 214
+        },
+        "sleek-median": {
+            "candidates": 220
+        }
+    },
+    "cold_generate_ms": {
+        "minimal": {
+            "divine-large": 13.735,
+            "divine-median": 11.598,
+            "glaze-large": 10.832,
+            "glaze-median": 10.322,
+            "queuety-large": 10.964,
+            "queuety-median": 10.655,
+            "sleek-large": 11.962,
+            "sleek-median": 12.318,
+            "_mean": 11.548
+        },
+        "theme": {
+            "divine-large": 56.955,
+            "divine-median": 54.257,
+            "glaze-large": 53.668,
+            "glaze-median": 54.253,
+            "queuety-large": 55.708,
+            "queuety-median": 55.78,
+            "sleek-large": 59.373,
+            "sleek-median": 56.168,
+            "_mean": 55.77
+        }
+    },
+    "warm_compiler": {
+        "minimal": {
+            "setup_ms": 6.937,
+            "per_page_exact_ms": {
+                "divine-large": 4.228,
+                "divine-median": 2.482,
+                "glaze-large": 1.715,
+                "glaze-median": 1.52,
+                "queuety-large": 1.499,
+                "queuety-median": 1.521,
+                "sleek-large": 2.083,
+                "sleek-median": 2.893
+            },
+            "per_page_mean_ms": 2.243
+        },
+        "theme": {
+            "setup_ms": 40.301,
+            "per_page_exact_ms": {
+                "divine-large": 6.368,
+                "divine-median": 4.383,
+                "glaze-large": 3.192,
+                "glaze-median": 2.93,
+                "queuety-large": 2.936,
+                "queuety-median": 3.007,
+                "sleek-large": 4.081,
+                "sleek-median": 4.034
+            },
+            "per_page_mean_ms": 3.866
+        }
+    },
+    "repeat_floor_ms": {
+        "minimal": {
+            "divine-large": {
+                "minify_off": 0.209,
+                "minify_on": 0.275
+            },
+            "divine-median": {
+                "minify_off": 0.143,
+                "minify_on": 0.19
+            },
+            "glaze-large": {
+                "minify_off": 0.097,
+                "minify_on": 0.127
+            },
+            "glaze-median": {
+                "minify_off": 0.097,
+                "minify_on": 0.127
+            },
+            "queuety-large": {
+                "minify_off": 0.097,
+                "minify_on": 0.128
+            },
+            "queuety-median": {
+                "minify_off": 0.095,
+                "minify_on": 0.126
+            },
+            "sleek-large": {
+                "minify_off": 0.137,
+                "minify_on": 0.17
+            },
+            "sleek-median": {
+                "minify_off": 0.133,
+                "minify_on": 0.18
+            },
+            "_mean": {
+                "minify_off": 0.126,
+                "minify_on": 0.165
+            }
+        },
+        "theme": {
+            "divine-large": {
+                "minify_off": 0.787,
+                "minify_on": 1.134
+            },
+            "divine-median": {
+                "minify_off": 0.918,
+                "minify_on": 1.203
+            },
+            "glaze-large": {
+                "minify_off": 0.619,
+                "minify_on": 0.904
+            },
+            "glaze-median": {
+                "minify_off": 0.762,
+                "minify_on": 1.086
+            },
+            "queuety-large": {
+                "minify_off": 0.618,
+                "minify_on": 0.932
+            },
+            "queuety-median": {
+                "minify_off": 0.661,
+                "minify_on": 1.057
+            },
+            "sleek-large": {
+                "minify_off": 0.688,
+                "minify_on": 1.002
+            },
+            "sleek-median": {
+                "minify_off": 0.7,
+                "minify_on": 0.975
+            },
+            "_mean": {
+                "minify_off": 0.719,
+                "minify_on": 1.037
+            }
+        }
+    },
+    "batch": {
+        "minimal": {
+            "setup_ms": 7.761,
+            "per_page_ms": {
+                "divine-large": 10.041,
+                "divine-median": 2.661,
+                "glaze-large": 1.979,
+                "glaze-median": 1.468,
+                "queuety-large": 1.486,
+                "queuety-median": 1.457,
+                "sleek-large": 2.63,
+                "sleek-median": 2.414
+            },
+            "pages_total_ms": 25.726,
+            "total_with_setup_ms": 33.487,
+            "per_page_mean_ms": 3.216
+        },
+        "theme": {
+            "setup_ms": 41.629,
+            "per_page_ms": {
+                "divine-large": 29.326,
+                "divine-median": 7.313,
+                "glaze-large": 4.628,
+                "glaze-median": 3.749,
+                "queuety-large": 3.697,
+                "queuety-median": 3.394,
+                "sleek-large": 5.145,
+                "sleek-median": 4.92
+            },
+            "pages_total_ms": 59.851,
+            "total_with_setup_ms": 101.48,
+            "per_page_mean_ms": 7.481
+        }
+    },
+    "baseline_pre_program": {
+        "source": "mono-theme prds/014_RENDER_ENGINE_AND_STACK_DEEP_DIVE.md Finding 3, verified 2026-07-18, xdebug off",
+        "cold_generate_ms": 66,
+        "warm_per_page_ms": 8,
+        "repeat_minify_off_ms": 0.9,
+        "repeat_minify_on_ms": 8
+    },
+    "comparison": {
+        "cold_theme_mean_vs_baseline": 0.845,
+        "warm_theme_mean_vs_baseline": 0.483,
+        "repeat_theme_minify_on_vs_baseline": 0.13,
+        "repeat_theme_minify_off_vs_baseline": 0.799
+    }
+}
