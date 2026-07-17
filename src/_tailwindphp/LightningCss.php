@@ -437,18 +437,44 @@ class LightningCss
      */
     public static function transformNesting(array $ast): array
     {
-        $result = [];
         $atRules = []; // Collected @media and other at-rules
 
-        foreach ($ast as $node) {
+        $result = self::flattenNodes($ast, $atRules);
+
+        // Append at-rules at the end (they should come after regular rules)
+        return array_merge($result, self::mergeCollectedAtRules($atRules));
+    }
+
+    /**
+     * Flatten a list of nodes, collecting hoistable at-rules into the shared
+     * collector instead of appending them. Callers that process the AST in
+     * segments use this with one collector so hoisting order matches a single
+     * transformNesting() pass over the concatenated list.
+     *
+     * @param array $nodes The nodes to flatten
+     * @param array &$atRules Shared collector for hoisted at-rules
+     * @return array Flattened nodes without the hoisted at-rules
+     */
+    public static function flattenNodes(array $nodes, array &$atRules): array
+    {
+        $result = [];
+
+        foreach ($nodes as $node) {
             self::flattenNode($node, $result, $atRules, null);
         }
 
-        // Merge at-rules with same params
-        $mergedAtRules = self::mergeAtRules($atRules);
+        return $result;
+    }
 
-        // Append at-rules at the end (they should come after regular rules)
-        return array_merge($result, $mergedAtRules);
+    /**
+     * Merge at-rules collected by flattenNodes() with same name and params.
+     *
+     * @param array $atRules
+     * @return array
+     */
+    public static function mergeCollectedAtRules(array $atRules): array
+    {
+        return self::mergeAtRules($atRules);
     }
 
     /**
@@ -780,7 +806,7 @@ class LightningCss
      * @param array $nodes
      * @return string
      */
-    private static function serializeDeclarations(array $nodes): string
+    public static function serializeDeclarations(array $nodes): string
     {
         $parts = [];
         foreach ($nodes as $node) {
