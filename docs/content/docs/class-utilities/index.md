@@ -2,7 +2,7 @@
 title: "Overview"
 description: "cn(), merge(), and join() for building and de-conflicting Tailwind class strings in PHP — PHP ports of clsx and tailwind-merge, no JS toolchain required."
 path: "class-utilities"
-order: 7
+order: 80
 section: "Class Utilities"
 meta_title: "Overview"
 meta_description: "cn(), merge(), and join() for building and de-conflicting Tailwind class strings in PHP — PHP ports of clsx and tailwind-merge, no JS toolchain required."

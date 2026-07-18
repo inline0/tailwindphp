@@ -2,7 +2,7 @@
 title: "Variants"
 description: "variants() and compose() — a PHP port of CVA (Class Variance Authority) for declarative, multi-axis component styles built on base, variants, compoundVariants, and defaults."
 path: "class-utilities/variants"
-order: 8
+order: 90
 section: "Class Utilities"
 meta_title: "Variants"
 meta_description: "variants() and compose() — a PHP port of CVA (Class Variance Authority) for declarative, multi-axis component styles built on base, variants, compoundVariants, and defaults."

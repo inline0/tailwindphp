@@ -2,7 +2,7 @@
 title: "Forms Plugin"
 description: "The @tailwindcss/forms port resets native form controls to a consistent baseline so inputs, selects, checkboxes, and radios are easy to style with utilities."
 path: "plugins/forms"
-order: 11
+order: 120
 section: "Plugins"
 meta_title: "Forms Plugin"
 meta_description: "The @tailwindcss/forms port resets native form controls to a consistent baseline so inputs, selects, checkboxes, and radios are easy to style with utilities."

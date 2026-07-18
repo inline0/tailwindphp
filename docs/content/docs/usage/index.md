@@ -2,7 +2,7 @@
 title: "Overview"
 description: "Generate Tailwind CSS from your content — scan markup for class names, pass optional CSS configuration, and get back only the CSS you use."
 path: "usage"
-order: 2
+order: 30
 section: "Usage"
 meta_title: "Overview"
 meta_description: "Generate Tailwind CSS from your content — scan markup for class names, pass optional CSS configuration, and get back only the CSS you use."

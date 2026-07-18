@@ -2,7 +2,7 @@
 title: "Architecture"
 description: "How TailwindPHP mirrors TailwindCSS file-for-file, the compilation pipeline, the lightningcss equivalent, and where the PHP port deviates."
 path: "advanced/architecture"
-order: 14
+order: 150
 section: "Advanced"
 meta_title: "Architecture"
 meta_description: "How TailwindPHP mirrors TailwindCSS file-for-file, the compilation pipeline, the lightningcss equivalent, and where the PHP port deviates."

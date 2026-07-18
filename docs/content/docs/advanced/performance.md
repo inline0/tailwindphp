@@ -2,7 +2,7 @@
 title: "Performance & Testing"
 description: "PHP-specific optimizations that preserve identical output, and the extraction-based test loop that keeps the port in lockstep with TailwindCSS."
 path: "advanced/performance"
-order: 16
+order: 170
 section: "Advanced"
 meta_title: "Performance & Testing"
 meta_description: "PHP-specific optimizations that preserve identical output, and the extraction-based test loop that keeps the port in lockstep with TailwindCSS."
