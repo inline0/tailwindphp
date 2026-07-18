@@ -2824,7 +2824,7 @@ function resolveThemeCallsInValue(string $value, Theme $theme): string
         // Try to get the value from the theme
         $prefix = $theme->getPrefix();
         $prefixedPath = $path;
-        if ($prefix !== null && str_starts_with($path, '--')) {
+        if ($prefix !== null) {
             $prefixedPath = '--' . $prefix . '-' . substr($path, 2);
         }
 

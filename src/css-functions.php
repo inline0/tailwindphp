@@ -782,7 +782,7 @@ function resolveNestedThemeCallsForInitial(string $value, object $designSystem, 
 
         // Apply prefix for output
         $prefixedPath = $path;
-        if ($prefix !== null && str_starts_with($path, '--')) {
+        if ($prefix !== null) {
             $prefixedPath = '--' . $prefix . '-' . substr($path, 2);
         }
 
