@@ -1,6 +1,11 @@
 ---
-title: Caching & Minification
-description: The file-based cache (cache, cacheTtl, clearCache) and the CSS minifier that shrinks output for production.
+title: "Caching & Minification"
+description: "The file-based cache (cache, cacheTtl, clearCache) and the CSS minifier that shrinks output for production."
+path: "advanced/caching"
+order: 160
+section: "Advanced"
+meta_title: "Caching & Minification"
+meta_description: "The file-based cache (cache, cacheTtl, clearCache) and the CSS minifier that shrinks output for production."
 ---
 
 # Caching & Minification

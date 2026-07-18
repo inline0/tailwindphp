@@ -1,6 +1,11 @@
 ---
-title: Overview
-description: The internals of TailwindPHP — how the port mirrors TailwindCSS file-for-file, the compilation pipeline, caching, minification, and performance.
+title: "Overview"
+description: "The internals of TailwindPHP — how the port mirrors TailwindCSS file-for-file, the compilation pipeline, caching, minification, and performance."
+path: "advanced"
+order: 140
+section: "Advanced"
+meta_title: "Overview"
+meta_description: "The internals of TailwindPHP — how the port mirrors TailwindCSS file-for-file, the compilation pipeline, caching, minification, and performance."
 ---
 
 # Advanced

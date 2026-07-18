@@ -1,6 +1,11 @@
 ---
-title: Typography Plugin
-description: The @tailwindcss/typography port adds the prose classes — typographic defaults for rendered HTML — with size, color, and invert modifiers.
+title: "Typography Plugin"
+description: "The @tailwindcss/typography port adds the prose classes — typographic defaults for rendered HTML — with size, color, and invert modifiers."
+path: "plugins/typography"
+order: 110
+section: "Plugins"
+meta_title: "Typography Plugin"
+meta_description: "The @tailwindcss/typography port adds the prose classes — typographic defaults for rendered HTML — with size, color, and invert modifiers."
 ---
 
 # Typography Plugin

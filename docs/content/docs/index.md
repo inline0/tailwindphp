@@ -1,6 +1,10 @@
 ---
-title: Introduction
-description: A 1:1 port of TailwindCSS 4.x to PHP. Generate Tailwind utility CSS with pure PHP — no Node.js, no build step — plus cn(), tailwind-merge, CVA, and the typography and forms plugins.
+title: "Introduction"
+description: "A 1:1 port of TailwindCSS 4.x to PHP. Generate Tailwind utility CSS with pure PHP — no Node.js, no build step — plus cn(), tailwind-merge, CVA, and the typography and forms plugins."
+path: "."
+order: 10
+meta_title: "Introduction"
+meta_description: "A 1:1 port of TailwindCSS 4.x to PHP. Generate Tailwind utility CSS with pure PHP — no Node.js, no build step — plus cn(), tailwind-merge, CVA, and the typography and forms plugins."
 ---
 
 # TailwindPHP

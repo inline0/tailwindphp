@@ -1,6 +1,11 @@
 ---
-title: Directives
-description: Inline utilities with @apply, register custom utilities with @utility, define variants with @custom-variant, and control cascade order with @layer.
+title: "Directives"
+description: "Inline utilities with @apply, register custom utilities with @utility, define variants with @custom-variant, and control cascade order with @layer."
+path: "usage/directives"
+order: 50
+section: "Usage"
+meta_title: "Directives"
+meta_description: "Inline utilities with @apply, register custom utilities with @utility, define variants with @custom-variant, and control cascade order with @layer."
 ---
 
 # Directives
