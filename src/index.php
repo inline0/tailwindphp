@@ -589,6 +589,24 @@ function compileAst(array $ast, array $options = []): array
 {
     $result = parseCss($ast, $options);
 
+    return compileParsed($ast, $result, $options);
+}
+
+/**
+ * Assemble the compiled build API from a parsed CSS result.
+ *
+ * Shared tail of compileAst(): runs the post-parse substitutions and returns
+ * the build closures. The state-cache restore path calls this directly with a
+ * rehydrated parse result so both construction paths stay byte-identical.
+ *
+ * @param array $ast Import-substituted CSS AST, mutated in place and captured
+ *                   by reference in the returned build closures
+ * @param array $result parseCss() result
+ * @param array $options Compilation options
+ * @return array
+ */
+function compileParsed(array &$ast, array $result, array $options = []): array
+{
     $designSystem = $result['designSystem'];
     $sources = $result['sources'];
     $root = $result['root'];
@@ -821,6 +839,26 @@ function compileAst(array $ast, array $options = []): array
  * @return array
  */
 function parseCss(array &$ast, array $options = []): array
+{
+    $state = parseCssState($ast, $options);
+
+    return finalizeCssState($ast, $state, $options);
+}
+
+/**
+ * Run the expensive, deterministic phase of parseCss().
+ *
+ * Resolves imports, accumulates the theme, and applies every AST rewrite that
+ * depends only on the CSS input and engine resources. The returned state is
+ * pure data (the Theme carries no closures), so callers may persist it along
+ * with the mutated AST and later rebuild an identical compiler through
+ * finalizeCssState() without re-running this phase.
+ *
+ * @param array $ast CSS AST, mutated in place
+ * @param array $options Parse options
+ * @return array Serializable parse state
+ */
+function parseCssState(array &$ast, array $options = []): array
 {
     $features = FEATURE_NONE;
     // Use default theme unless 'loadDefaultTheme' option is explicitly false
@@ -1379,6 +1417,45 @@ function parseCss(array &$ast, array $options = []): array
             $ast[] = $keyframes;
         }
     }
+
+    return [
+        'theme' => $theme,
+        'features' => $features,
+        'utilitiesNodePath' => $utilitiesNodePath,
+        'sources' => $sources,
+        'root' => $root,
+        'inlineCandidates' => $inlineCandidates,
+        'ignoredCandidates' => $ignoredCandidates,
+        'important' => $important,
+        'customVariants' => $customVariants,
+        'plugins' => $plugins,
+        'files' => array_keys($seenFiles),
+    ];
+}
+
+/**
+ * Build the design system and registrations from parsed CSS state.
+ *
+ * The cheap finalization phase of parseCss(): everything here rebuilds
+ * closures and registries that cannot be persisted, from state that can.
+ *
+ * @param array $ast Import-substituted CSS AST, mutated in place
+ * @param array $state parseCssState() result
+ * @param array $options Parse options
+ * @return array
+ */
+function finalizeCssState(array &$ast, array $state, array $options = []): array
+{
+    $theme = $state['theme'];
+    $features = $state['features'];
+    $utilitiesNodePath = $state['utilitiesNodePath'];
+    $sources = $state['sources'];
+    $root = $state['root'];
+    $inlineCandidates = $state['inlineCandidates'];
+    $ignoredCandidates = $state['ignoredCandidates'];
+    $important = $state['important'];
+    $customVariants = $state['customVariants'];
+    $plugins = $state['plugins'];
 
     // Build the design system
     $designSystem = buildDesignSystem($theme);
@@ -3073,15 +3150,25 @@ class TailwindCompiler
     /**
      * Create a new TailwindCompiler instance.
      *
+     * Pass a `stateCacheFile` option to persist the expensive construction
+     * state across processes; see StateCache\compileCssCached().
+     *
      * @param string $css CSS input with @import, @theme, @utility directives
      * @param array $options Compilation options
      */
     public function __construct(string $css = '@import "tailwindcss";', array $options = [])
     {
-        $ast = parse($css);
+        $stateCacheFile = $options['stateCacheFile'] ?? null;
+        unset($options['stateCacheFile']);
 
-        // compileAst internally calls parseCss and returns the compiled result with build()
-        $this->compiled = compileAst($ast, $options);
+        if (is_string($stateCacheFile) && $stateCacheFile !== '') {
+            $this->compiled = StateCache\compileCssCached($css, $stateCacheFile, $options);
+        } else {
+            $ast = parse($css);
+
+            // compileAst internally calls parseCss and returns the compiled result with build()
+            $this->compiled = compileAst($ast, $options);
+        }
 
         // Reuse the design system that compileAst already built for properties() etc.
         $this->designSystem = $this->compiled['designSystem'];

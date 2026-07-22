@@ -50,6 +50,7 @@ $files = [
     'plugin/plugins/typography-plugin.php',
     'plugin/plugins/forms-plugin.php',
     'index.php',
+    'state-cache.php',
 ];
 
 foreach ($files as $file) {
