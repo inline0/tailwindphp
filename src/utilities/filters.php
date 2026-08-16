@@ -67,12 +67,49 @@ function registerFiltersUtilities(UtilityBuilder $builder): void
         'var(--tw-backdrop-sepia,)',
     ]);
 
+    // Registers the composed --tw-* filter variable group with @property.
+    // Wired into every filter utility (not just drop-shadow) so a lone
+    // blur/grayscale/etc. build still gets valid composed `filter` values.
+    $filterProperties = function () {
+        return atRoot([
+            property('--tw-blur'),
+            property('--tw-brightness'),
+            property('--tw-contrast'),
+            property('--tw-grayscale'),
+            property('--tw-hue-rotate'),
+            property('--tw-invert'),
+            property('--tw-opacity'),
+            property('--tw-saturate'),
+            property('--tw-sepia'),
+            property('--tw-drop-shadow'),
+            property('--tw-drop-shadow-color'),
+            property('--tw-drop-shadow-alpha', '100%', '<percentage>'),
+            property('--tw-drop-shadow-size'),
+        ]);
+    };
+
+    // Registers the composed --tw-backdrop-* variable group with @property.
+    $backdropFilterProperties = function () {
+        return atRoot([
+            property('--tw-backdrop-blur'),
+            property('--tw-backdrop-brightness'),
+            property('--tw-backdrop-contrast'),
+            property('--tw-backdrop-grayscale'),
+            property('--tw-backdrop-hue-rotate'),
+            property('--tw-backdrop-invert'),
+            property('--tw-backdrop-opacity'),
+            property('--tw-backdrop-saturate'),
+            property('--tw-backdrop-sepia'),
+        ]);
+    };
+
     // ==================================================
     // filter
     // ==================================================
 
     // filter (default)
     $builder->staticUtility('filter', [
+        $filterProperties,
         ['filter', $cssFilterValue],
     ]);
 
@@ -96,6 +133,7 @@ function registerFiltersUtilities(UtilityBuilder $builder): void
 
     // backdrop-filter (default)
     $builder->staticUtility('backdrop-filter', [
+        $backdropFilterProperties,
         ['-webkit-backdrop-filter', $cssBackdropFilterValue],
         ['backdrop-filter', $cssBackdropFilterValue],
     ]);
@@ -124,14 +162,16 @@ function registerFiltersUtilities(UtilityBuilder $builder): void
 
     $builder->functionalUtility('blur', [
         'themeKeys' => ['--blur'],
-        'handle' => function ($value) use ($cssFilterValue) {
+        'handle' => function ($value) use ($cssFilterValue, $filterProperties) {
             return [
+                $filterProperties(),
                 decl('--tw-blur', "blur({$value})"),
                 decl('filter', $cssFilterValue),
             ];
         },
         'staticValues' => [
             'none' => [
+                $filterProperties(),
                 decl('--tw-blur', ' '),
                 decl('filter', $cssFilterValue),
             ],
@@ -144,8 +184,9 @@ function registerFiltersUtilities(UtilityBuilder $builder): void
 
     $builder->functionalUtility('backdrop-blur', [
         'themeKeys' => ['--backdrop-blur', '--blur'],
-        'handle' => function ($value) use ($cssBackdropFilterValue) {
+        'handle' => function ($value) use ($cssBackdropFilterValue, $backdropFilterProperties) {
             return [
+                $backdropFilterProperties(),
                 decl('--tw-backdrop-blur', "blur({$value})"),
                 decl('-webkit-backdrop-filter', $cssBackdropFilterValue),
                 decl('backdrop-filter', $cssBackdropFilterValue),
@@ -153,6 +194,7 @@ function registerFiltersUtilities(UtilityBuilder $builder): void
         },
         'staticValues' => [
             'none' => [
+                $backdropFilterProperties(),
                 decl('--tw-backdrop-blur', ' '),
                 decl('-webkit-backdrop-filter', $cssBackdropFilterValue),
                 decl('backdrop-filter', $cssBackdropFilterValue),
@@ -174,8 +216,9 @@ function registerFiltersUtilities(UtilityBuilder $builder): void
 
             return "{$value['value']}%";
         },
-        'handle' => function ($value) use ($cssFilterValue) {
+        'handle' => function ($value) use ($cssFilterValue, $filterProperties) {
             return [
+                $filterProperties(),
                 decl('--tw-brightness', "brightness({$value})"),
                 decl('filter', $cssFilterValue),
             ];
@@ -196,8 +239,9 @@ function registerFiltersUtilities(UtilityBuilder $builder): void
 
             return "{$value['value']}%";
         },
-        'handle' => function ($value) use ($cssBackdropFilterValue) {
+        'handle' => function ($value) use ($cssBackdropFilterValue, $backdropFilterProperties) {
             return [
+                $backdropFilterProperties(),
                 decl('--tw-backdrop-brightness', "brightness({$value})"),
                 decl('-webkit-backdrop-filter', $cssBackdropFilterValue),
                 decl('backdrop-filter', $cssBackdropFilterValue),
@@ -219,8 +263,9 @@ function registerFiltersUtilities(UtilityBuilder $builder): void
 
             return "{$value['value']}%";
         },
-        'handle' => function ($value) use ($cssFilterValue) {
+        'handle' => function ($value) use ($cssFilterValue, $filterProperties) {
             return [
+                $filterProperties(),
                 decl('--tw-contrast', "contrast({$value})"),
                 decl('filter', $cssFilterValue),
             ];
@@ -241,8 +286,9 @@ function registerFiltersUtilities(UtilityBuilder $builder): void
 
             return "{$value['value']}%";
         },
-        'handle' => function ($value) use ($cssBackdropFilterValue) {
+        'handle' => function ($value) use ($cssBackdropFilterValue, $backdropFilterProperties) {
             return [
+                $backdropFilterProperties(),
                 decl('--tw-backdrop-contrast', "contrast({$value})"),
                 decl('-webkit-backdrop-filter', $cssBackdropFilterValue),
                 decl('backdrop-filter', $cssBackdropFilterValue),
@@ -264,8 +310,9 @@ function registerFiltersUtilities(UtilityBuilder $builder): void
 
             return "{$value['value']}%";
         },
-        'handle' => function ($value) use ($cssFilterValue) {
+        'handle' => function ($value) use ($cssFilterValue, $filterProperties) {
             return [
+                $filterProperties(),
                 decl('--tw-grayscale', "grayscale({$value})"),
                 decl('filter', $cssFilterValue),
             ];
@@ -286,8 +333,9 @@ function registerFiltersUtilities(UtilityBuilder $builder): void
 
             return "{$value['value']}%";
         },
-        'handle' => function ($value) use ($cssBackdropFilterValue) {
+        'handle' => function ($value) use ($cssBackdropFilterValue, $backdropFilterProperties) {
             return [
+                $backdropFilterProperties(),
                 decl('--tw-backdrop-grayscale', "grayscale({$value})"),
                 decl('-webkit-backdrop-filter', $cssBackdropFilterValue),
                 decl('backdrop-filter', $cssBackdropFilterValue),
@@ -310,8 +358,9 @@ function registerFiltersUtilities(UtilityBuilder $builder): void
 
             return "{$value['value']}deg";
         },
-        'handle' => function ($value) use ($cssFilterValue) {
+        'handle' => function ($value) use ($cssFilterValue, $filterProperties) {
             return [
+                $filterProperties(),
                 decl('--tw-hue-rotate', "hue-rotate({$value})"),
                 decl('filter', $cssFilterValue),
             ];
@@ -333,8 +382,9 @@ function registerFiltersUtilities(UtilityBuilder $builder): void
 
             return "{$value['value']}deg";
         },
-        'handle' => function ($value) use ($cssBackdropFilterValue) {
+        'handle' => function ($value) use ($cssBackdropFilterValue, $backdropFilterProperties) {
             return [
+                $backdropFilterProperties(),
                 decl('--tw-backdrop-hue-rotate', "hue-rotate({$value})"),
                 decl('-webkit-backdrop-filter', $cssBackdropFilterValue),
                 decl('backdrop-filter', $cssBackdropFilterValue),
@@ -356,8 +406,9 @@ function registerFiltersUtilities(UtilityBuilder $builder): void
 
             return "{$value['value']}%";
         },
-        'handle' => function ($value) use ($cssFilterValue) {
+        'handle' => function ($value) use ($cssFilterValue, $filterProperties) {
             return [
+                $filterProperties(),
                 decl('--tw-invert', "invert({$value})"),
                 decl('filter', $cssFilterValue),
             ];
@@ -378,8 +429,9 @@ function registerFiltersUtilities(UtilityBuilder $builder): void
 
             return "{$value['value']}%";
         },
-        'handle' => function ($value) use ($cssBackdropFilterValue) {
+        'handle' => function ($value) use ($cssBackdropFilterValue, $backdropFilterProperties) {
             return [
+                $backdropFilterProperties(),
                 decl('--tw-backdrop-invert', "invert({$value})"),
                 decl('-webkit-backdrop-filter', $cssBackdropFilterValue),
                 decl('backdrop-filter', $cssBackdropFilterValue),
@@ -401,8 +453,9 @@ function registerFiltersUtilities(UtilityBuilder $builder): void
 
             return "{$value['value']}%";
         },
-        'handle' => function ($value) use ($cssFilterValue) {
+        'handle' => function ($value) use ($cssFilterValue, $filterProperties) {
             return [
+                $filterProperties(),
                 decl('--tw-saturate', "saturate({$value})"),
                 decl('filter', $cssFilterValue),
             ];
@@ -423,8 +476,9 @@ function registerFiltersUtilities(UtilityBuilder $builder): void
 
             return "{$value['value']}%";
         },
-        'handle' => function ($value) use ($cssBackdropFilterValue) {
+        'handle' => function ($value) use ($cssBackdropFilterValue, $backdropFilterProperties) {
             return [
+                $backdropFilterProperties(),
                 decl('--tw-backdrop-saturate', "saturate({$value})"),
                 decl('-webkit-backdrop-filter', $cssBackdropFilterValue),
                 decl('backdrop-filter', $cssBackdropFilterValue),
@@ -446,8 +500,9 @@ function registerFiltersUtilities(UtilityBuilder $builder): void
 
             return "{$value['value']}%";
         },
-        'handle' => function ($value) use ($cssFilterValue) {
+        'handle' => function ($value) use ($cssFilterValue, $filterProperties) {
             return [
+                $filterProperties(),
                 decl('--tw-sepia', "sepia({$value})"),
                 decl('filter', $cssFilterValue),
             ];
@@ -468,8 +523,9 @@ function registerFiltersUtilities(UtilityBuilder $builder): void
 
             return "{$value['value']}%";
         },
-        'handle' => function ($value) use ($cssBackdropFilterValue) {
+        'handle' => function ($value) use ($cssBackdropFilterValue, $backdropFilterProperties) {
             return [
+                $backdropFilterProperties(),
                 decl('--tw-backdrop-sepia', "sepia({$value})"),
                 decl('-webkit-backdrop-filter', $cssBackdropFilterValue),
                 decl('backdrop-filter', $cssBackdropFilterValue),
@@ -480,25 +536,6 @@ function registerFiltersUtilities(UtilityBuilder $builder): void
     // ==================================================
     // drop-shadow
     // ==================================================
-
-    // Filter properties for @property rules
-    $filterProperties = function () {
-        return atRoot([
-            property('--tw-blur'),
-            property('--tw-brightness'),
-            property('--tw-contrast'),
-            property('--tw-grayscale'),
-            property('--tw-hue-rotate'),
-            property('--tw-invert'),
-            property('--tw-opacity'),
-            property('--tw-saturate'),
-            property('--tw-sepia'),
-            property('--tw-drop-shadow'),
-            property('--tw-drop-shadow-color'),
-            property('--tw-drop-shadow-alpha', '100%', '<percentage>'),
-            property('--tw-drop-shadow-size'),
-        ]);
-    };
 
     // Helper for alpha-replaced drop shadow properties
     $alphaReplacedDropShadowProperties = function (
@@ -696,8 +733,9 @@ function registerFiltersUtilities(UtilityBuilder $builder): void
 
             return "{$value['value']}%";
         },
-        'handle' => function ($value) use ($cssBackdropFilterValue) {
+        'handle' => function ($value) use ($cssBackdropFilterValue, $backdropFilterProperties) {
             return [
+                $backdropFilterProperties(),
                 decl('--tw-backdrop-opacity', "opacity({$value})"),
                 decl('-webkit-backdrop-filter', $cssBackdropFilterValue),
                 decl('backdrop-filter', $cssBackdropFilterValue),

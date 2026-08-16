@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TailwindPHP\Utilities;
 
+use function TailwindPHP\Ast\atRoot;
 use function TailwindPHP\Ast\atRule;
 use function TailwindPHP\Ast\decl;
 use function TailwindPHP\Utils\compareBreakpoints;
@@ -237,14 +238,25 @@ function registerLayoutUtilities(UtilityBuilder $builder): void
 
     // Contain
     $containVar = 'var(--tw-contain-size, ) var(--tw-contain-layout, ) var(--tw-contain-paint, ) var(--tw-contain-style, )';
+
+    // Registers the composed --tw-contain-* group with @property.
+    $cssContainProperties = function () {
+        return atRoot([
+            property('--tw-contain-size'),
+            property('--tw-contain-layout'),
+            property('--tw-contain-paint'),
+            property('--tw-contain-style'),
+        ]);
+    };
+
     $builder->staticUtility('contain-none', [['contain', 'none']]);
     $builder->staticUtility('contain-content', [['contain', 'content']]);
     $builder->staticUtility('contain-strict', [['contain', 'strict']]);
-    $builder->staticUtility('contain-size', [['--tw-contain-size', 'size'], ['contain', $containVar]]);
-    $builder->staticUtility('contain-inline-size', [['--tw-contain-size', 'inline-size'], ['contain', $containVar]]);
-    $builder->staticUtility('contain-layout', [['--tw-contain-layout', 'layout'], ['contain', $containVar]]);
-    $builder->staticUtility('contain-paint', [['--tw-contain-paint', 'paint'], ['contain', $containVar]]);
-    $builder->staticUtility('contain-style', [['--tw-contain-style', 'style'], ['contain', $containVar]]);
+    $builder->staticUtility('contain-size', [$cssContainProperties, ['--tw-contain-size', 'size'], ['contain', $containVar]]);
+    $builder->staticUtility('contain-inline-size', [$cssContainProperties, ['--tw-contain-size', 'inline-size'], ['contain', $containVar]]);
+    $builder->staticUtility('contain-layout', [$cssContainProperties, ['--tw-contain-layout', 'layout'], ['contain', $containVar]]);
+    $builder->staticUtility('contain-paint', [$cssContainProperties, ['--tw-contain-paint', 'paint'], ['contain', $containVar]]);
+    $builder->staticUtility('contain-style', [$cssContainProperties, ['--tw-contain-style', 'style'], ['contain', $containVar]]);
 
     $builder->functionalUtility('contain', [
         'themeKeys' => [],
