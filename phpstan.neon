@@ -16,8 +16,9 @@ parameters:
         # Allow dynamic array access patterns used throughout
         - '#Cannot access offset .* on mixed#'
         # PHPDoc type aliases not recognized
-        - '#invalid type TailwindPHP\\Ast\\AstNode#'
+        - '#invalid (return )?type TailwindPHP\\Ast\\AstNode#'
         - '#invalid type TailwindPHP\\DesignSystem#'
+        - '#should return array<TailwindPHP\\Ast\\AstNode> but returns#'
         # Functions from other files in same namespace
         - '#Function .* not found#'
         - '#Call to .* on an unknown class#'
@@ -49,6 +50,10 @@ parameters:
         # Defensive type checking in ported code (may never match but kept for safety)
         - '#Call to function is_string\(\) with .* will always evaluate to false#'
         - '#If condition is always true#'
+        # selector-parser.php closures mutate flags via by-ref use bindings,
+        # which PHPStan cannot track (it sees only the initial false)
+        - '#Ternary operator condition is always false#'
+        - '#If condition is always false#'
         # Comparison always true in ported escape logic
         - '#Comparison operation .* between int<1, 255> and 1 is always true#'
         - '#Comparison operation .* between int<1, max> and 0 is always true#'

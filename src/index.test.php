@@ -86,11 +86,6 @@ class index extends TestCase
     private const PENDING_TESTS = [
         // Extraction captured wrong classes for this test (comment in source confused parser)
         'built-in variants can be overridden while keeping their order',
-        // The single-slash validation this test targets is ported; its inline
-        // snapshot additionally depends on lightningcss reordering the
-        // declarations inside the rule (`background` before `display`), which
-        // the PHP port does not emulate
-        '@utility name cannot contain multiple `/` characters',
     ];
 
     /**

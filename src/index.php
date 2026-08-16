@@ -6,6 +6,7 @@ namespace TailwindPHP;
 
 use function TailwindPHP\Ast\atRule;
 use function TailwindPHP\Ast\decl;
+use function TailwindPHP\Ast\handleNesting;
 use function TailwindPHP\Ast\styleRule;
 use function TailwindPHP\Ast\toCss;
 use function TailwindPHP\CssParser\parse;
@@ -2664,7 +2665,9 @@ function optimizeAstProcessAtRoots(array $atRoots, int $polyfills): array
     // @keyframes, matching the reference output order. The non-@property
     // nodes join the result after the main value-optimization pass, so run
     // it here; @property initial values print as authored (`black` stays
-    // `black`).
+    // `black`). Keyframe blocks get the same lightningcss declaration
+    // reordering as style rules.
+    $otherAtRoots = LightningCss::reorderDeclarations($otherAtRoots);
     optimizeAstOptimizeValues($otherAtRoots);
 
     return ['fallback' => $fallback, 'append' => array_merge($atPropertyRules, $otherAtRoots)];
@@ -2692,8 +2695,17 @@ function optimizeAst(array $ast, DesignSystem $designSystem, int $polyfills = PO
 
     $result = optimizeAstTransformNodes($ast, $theme, $usedVariables, $usedKeyframeNames, $atRoots, $seenAtProperties);
 
-    // Transform CSS nesting (flatten & selectors, hoist @media)
+    // Flatten nesting the way the reference does (handleNesting in ast.ts):
+    // substitute `&` with `:is(…)` semantics, hoist conditional at-rules,
+    // keep native nesting below the first declaration-carrying level
+    $result = handleNesting($result);
+
+    // Downlevel the remaining native nesting (lightningcss equivalent)
     $result = LightningCss::transformNesting($result);
+
+    // Reorder declarations per lightningcss's handler model (typed values
+    // flush at the end of each block in handler-chain order)
+    $result = LightningCss::reorderDeclarations($result);
 
     // Add vendor prefixes to declarations that need them
     $result = LightningCss::addVendorPrefixes($result);
@@ -2934,8 +2946,10 @@ function optimizeAstPrepareIncremental(array $ast, DesignSystem $designSystem, i
         $atRoots = [];
         $seenAtProperties = [];
         $stage = optimizeAstTransformNodes([$chunk['node']], $theme, [], [], $atRoots, $seenAtProperties);
+        $stage = handleNesting($stage);
         $chunkAtRules = [];
         $flat = LightningCss::flattenNodes($stage, $chunkAtRules);
+        $flat = LightningCss::reorderDeclarations($flat);
         $flat = LightningCss::addVendorPrefixes($flat);
         if ($polyfills & POLYFILL_COLOR_MIX) {
             $flat = applyColorMixPolyfill($flat, $designSystem);
@@ -3053,11 +3067,13 @@ function optimizeAstIncremental(array $cache, array $utilityNodes, DesignSystem 
         }
 
         $stage = optimizeAstTransformNodes([$node], $theme, $usedVariables, $usedKeyframeNames, $atRoots, $seenAtProperties);
+        $stage = handleNesting($stage);
         $atRulesBefore = count($atRules);
         $flat = LightningCss::flattenNodes($stage, $atRules);
         if (count($atRules) !== $atRulesBefore) {
             $hasFreshAtRules = true;
         }
+        $flat = LightningCss::reorderDeclarations($flat);
         $flat = LightningCss::addVendorPrefixes($flat);
         if ($polyfills & POLYFILL_COLOR_MIX) {
             $flat = applyColorMixPolyfill($flat, $designSystem);

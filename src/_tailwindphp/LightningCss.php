@@ -568,11 +568,17 @@ class LightningCss
     }
 
     /**
-     * Transform CSS nesting to flat CSS.
+     * Downlevel native CSS nesting to flat CSS, the way lightningcss does
+     * for the reference pipeline's browser targets.
      *
-     * Handles:
-     * - `&:hover` style selectors → resolved with parent selector
-     * - `@media` hoisting → moved to top level
+     * The heavy lifting — `&` substitution with `:is(…)` semantics,
+     * conditional at-rule hoisting, adjacent merging — happens first in
+     * `TailwindPHP\Ast\handleNesting()` (the 1:1 port of the reference's
+     * pass), which intentionally leaves nesting below the first
+     * declaration-carrying level in native syntax. This pass flattens that
+     * remainder and applies the selector serialization normalizations
+     * lightningcss performs while reprinting (`::before` → `:before`,
+     * `*::x` → ` ::x`, parentless `&` → `:scope`).
      *
      * @param array $ast The CSS AST
      * @return array Transformed AST with flat selectors
@@ -587,6 +593,306 @@ class LightningCss
         // callers late in their pipelines so the full and incremental
         // optimizeAst paths stay byte-identical.
         return $result;
+    }
+
+    /**
+     * The property-handler chain of lightningcss's DeclarationHandler, in
+     * flush order (declaration.rs). Each entry maps a handler name to the
+     * longhand properties it absorbs, listed in the handler's own flush
+     * order. Properties not listed here (including logical properties, which
+     * Tailwind's reference pipeline excludes via
+     * `exclude: Features.LogicalProperties`, custom properties, and
+     * vendor-prefixed properties) pass through in source order.
+     *
+     * @var array<string, array<int, string>>
+     */
+    private const DECLARATION_HANDLERS = [
+        'direction' => ['direction', 'unicode-bidi'],
+        'background' => [
+            'background', 'background-color', 'background-image', 'background-position',
+            'background-position-x', 'background-position-y', 'background-repeat',
+            'background-size', 'background-attachment', 'background-origin', 'background-clip',
+        ],
+        'border' => [
+            'border', 'border-top', 'border-right', 'border-bottom', 'border-left',
+            'border-width', 'border-style', 'border-color',
+            'border-top-width', 'border-top-style', 'border-top-color',
+            'border-right-width', 'border-right-style', 'border-right-color',
+            'border-bottom-width', 'border-bottom-style', 'border-bottom-color',
+            'border-left-width', 'border-left-style', 'border-left-color',
+            'border-radius', 'border-top-left-radius', 'border-top-right-radius',
+            'border-bottom-left-radius', 'border-bottom-right-radius',
+            'border-image', 'border-image-source', 'border-image-slice',
+            'border-image-width', 'border-image-outset', 'border-image-repeat',
+        ],
+        'outline' => ['outline', 'outline-color', 'outline-style', 'outline-width'],
+        'flex' => [
+            'flex', 'flex-grow', 'flex-shrink', 'flex-basis',
+            'flex-direction', 'flex-wrap', 'flex-flow', 'order',
+        ],
+        'grid' => [
+            'grid', 'grid-template', 'grid-template-areas', 'grid-template-rows',
+            'grid-template-columns', 'grid-area', 'grid-row', 'grid-row-start', 'grid-row-end',
+            'grid-column', 'grid-column-start', 'grid-column-end',
+            'grid-auto-rows', 'grid-auto-columns', 'grid-auto-flow',
+        ],
+        'align' => [
+            'align-content', 'justify-content', 'place-content',
+            'align-self', 'justify-self', 'place-self',
+            'align-items', 'justify-items', 'place-items',
+            'row-gap', 'column-gap', 'gap',
+        ],
+        'size' => [
+            'width', 'min-width', 'max-width',
+            'height', 'min-height', 'max-height',
+        ],
+        'margin' => ['margin-top', 'margin-bottom', 'margin-left', 'margin-right', 'margin'],
+        'padding' => ['padding-top', 'padding-bottom', 'padding-left', 'padding-right', 'padding'],
+        'scroll-margin' => [
+            'scroll-margin-top', 'scroll-margin-bottom', 'scroll-margin-left',
+            'scroll-margin-right', 'scroll-margin',
+        ],
+        'scroll-padding' => [
+            'scroll-padding-top', 'scroll-padding-bottom', 'scroll-padding-left',
+            'scroll-padding-right', 'scroll-padding',
+        ],
+        'font' => [
+            'font', 'font-family', 'font-size', 'font-style', 'font-weight',
+            'font-stretch', 'line-height', 'font-variant-caps',
+        ],
+        'text' => [
+            'text-decoration', 'text-decoration-line', 'text-decoration-style',
+            'text-decoration-color', 'text-decoration-thickness',
+            'text-emphasis', 'text-emphasis-style', 'text-emphasis-color', 'text-emphasis-position',
+        ],
+        'list' => ['list-style', 'list-style-type', 'list-style-image', 'list-style-position'],
+        'transition' => [
+            'transition-property', 'transition-duration', 'transition-delay',
+            'transition-timing-function', 'transition',
+        ],
+        'animation' => [
+            'animation-name', 'animation-duration', 'animation-timing-function',
+            'animation-iteration-count', 'animation-direction', 'animation-play-state',
+            'animation-delay', 'animation-fill-mode', 'animation',
+        ],
+        'display' => ['display'],
+        'position' => ['position'],
+        'inset' => ['top', 'bottom', 'left', 'right', 'inset'],
+        'overflow' => ['overflow-x', 'overflow-y', 'overflow'],
+        'transform' => [
+            'perspective', 'perspective-origin', 'backface-visibility', 'transform-style',
+            'transform-box', 'transform-origin', 'transform', 'translate', 'rotate', 'scale',
+        ],
+        'box-shadow' => ['box-shadow'],
+        'mask' => [
+            'clip-path', 'mask', 'mask-image', 'mask-position', 'mask-size', 'mask-repeat',
+            'mask-clip', 'mask-origin', 'mask-composite', 'mask-mode',
+            'mask-border', 'mask-border-source', 'mask-border-slice', 'mask-border-width',
+            'mask-border-outset', 'mask-border-repeat', 'mask-border-mode',
+        ],
+        'container' => ['container', 'container-type', 'container-name'],
+    ];
+
+    /**
+     * Property name → [handler name, canonical index] lookup built from
+     * DECLARATION_HANDLERS on first use.
+     *
+     * @var array<string, array{string, int}>|null
+     */
+    private static ?array $handlerForProperty = null;
+
+    /**
+     * Reorder declarations within every style rule (and keyframe block) the
+     * way lightningcss's DeclarationHandler does: declarations whose property
+     * belongs to a handler and whose value is fully parseable are absorbed
+     * into that handler's pending state and flushed at the end of the block
+     * in the fixed handler-chain order; everything else (custom properties,
+     * unhandled properties, vendor-prefixed properties) passes through in
+     * source order. A handler property whose value contains `var(`/`env(`
+     * cannot be represented in typed form (lightningcss's
+     * `Property::Unparsed`), so it flushes that handler's pending state and
+     * then passes through, preserving relative order. Important declarations
+     * form their own block appended after the normal ones, and repeated
+     * absorbed properties keep one slot with the last value while repeated
+     * custom properties keep their first position with the last value.
+     *
+     * Shorthand combination and target-driven compatibility fallbacks of the
+     * reference handlers are intentionally not emulated: the reference
+     * output never exercises them (Tailwind emits one longhand per concern
+     * and modern values stay `Unparsed` via their `var()` references).
+     *
+     * @param array $nodes
+     * @return array
+     */
+    public static function reorderDeclarations(array $nodes): array
+    {
+        if (self::$handlerForProperty === null) {
+            self::$handlerForProperty = [];
+            foreach (self::DECLARATION_HANDLERS as $handler => $properties) {
+                foreach ($properties as $index => $property) {
+                    self::$handlerForProperty[$property] = [$handler, $index];
+                }
+            }
+        }
+
+        foreach ($nodes as &$node) {
+            if ($node['kind'] === 'rule') {
+                $node['nodes'] = self::reorderDeclarationBlock($node['nodes'] ?? []);
+                // Style rules never nest other rules at this point in the
+                // pipeline, but keyframe blocks reach here through the
+                // at-rule recursion below.
+            } elseif ($node['kind'] === 'at-rule' && !empty($node['nodes'])) {
+                // Descriptor blocks keep their authored order.
+                if (in_array($node['name'], ['@property', '@font-face', '@counter-style', '@page'], true)) {
+                    continue;
+                }
+                $node['nodes'] = self::reorderDeclarations($node['nodes']);
+            }
+        }
+        unset($node);
+
+        return $nodes;
+    }
+
+    /**
+     * Reorder one declaration block per the handler model. Non-declaration
+     * children (comments) keep their source position within the pass-through
+     * stream.
+     *
+     * @param array $children
+     * @return array
+     */
+    private static function reorderDeclarationBlock(array $children): array
+    {
+        // Fast path: nothing to reorder for zero or one declaration.
+        if (count($children) < 2) {
+            return $children;
+        }
+
+        $normal = [];
+        $important = [];
+        foreach ($children as $child) {
+            if ($child['kind'] === 'declaration' && ($child['important'] ?? false)) {
+                $important[] = $child;
+            } else {
+                $normal[] = $child;
+            }
+        }
+
+        $result = self::reorderDeclarationGroup($normal);
+        if ($important !== []) {
+            $result = array_merge($result, self::reorderDeclarationGroup($important));
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array $children
+     * @return array
+     */
+    private static function reorderDeclarationGroup(array $children): array
+    {
+        $out = [];
+        $customIndex = []; // custom property name => index in $out
+
+        /** @var array<string, array<string, array>> $buckets handler => [property => declaration] */
+        $buckets = [];
+
+        $flushHandler = function (string $handler) use (&$out, &$buckets): void {
+            if (empty($buckets[$handler])) {
+                return;
+            }
+            foreach (self::DECLARATION_HANDLERS[$handler] as $property) {
+                if (isset($buckets[$handler][$property])) {
+                    $out[] = $buckets[$handler][$property];
+                }
+            }
+            $buckets[$handler] = [];
+        };
+
+        foreach ($children as $child) {
+            if ($child['kind'] !== 'declaration') {
+                $out[] = $child;
+
+                continue;
+            }
+
+            $property = $child['property'] ?? '';
+
+            // Custom properties: IndexMap semantics — first position wins,
+            // a repeat with a different value replaces in place, an
+            // identical repeat is dropped.
+            if (str_starts_with($property, '--')) {
+                if (isset($customIndex[$property])) {
+                    if ($out[$customIndex[$property]] !== $child) {
+                        $out[$customIndex[$property]] = $child;
+                    }
+                } else {
+                    $customIndex[$property] = count($out);
+                    $out[] = $child;
+                }
+
+                continue;
+            }
+
+            // Vendor-prefixed declarations pass through untouched (the
+            // reference pipeline receives them rarely and its PrefixHandler
+            // interplay is not emulated).
+            if ($property !== '' && $property[0] === '-') {
+                $out[] = $child;
+
+                continue;
+            }
+
+            $handlerInfo = self::$handlerForProperty[$property] ?? null;
+            $value = $child['value'] ?? '';
+
+            // Values with variable references and CSS-wide keywords stay
+            // unparsed in lightningcss (`Property::Unparsed`). Such a
+            // declaration travels the whole handler chain: the size handler
+            // flushes its pending state for ANY unparsed property that
+            // reaches it (its match arm is unguarded in size.rs), the owning
+            // handler flushes its own pending state, and the declaration
+            // then passes through in place. Handlers before size in the
+            // chain claim their own unparsed properties first, so the size
+            // flush only triggers when no earlier handler owns the property.
+            $isUnparsed = str_contains($value, 'var(')
+                || str_contains($value, 'env(')
+                || in_array(strtolower(trim($value)), ['inherit', 'initial', 'unset', 'revert', 'revert-layer'], true);
+
+            if ($isUnparsed) {
+                $handler = $handlerInfo[0] ?? null;
+                static $handlerOrder = null;
+                $handlerOrder ??= array_flip(array_keys(self::DECLARATION_HANDLERS));
+                if ($handler === null || $handlerOrder[$handler] >= $handlerOrder['size']) {
+                    $flushHandler('size');
+                }
+                if ($handler !== null) {
+                    $flushHandler($handler);
+                }
+                $out[] = $child;
+
+                continue;
+            }
+
+            if ($handlerInfo === null) {
+                $out[] = $child;
+
+                continue;
+            }
+
+            // Absorb into the handler's pending state; a repeated property
+            // keeps one slot with the last value.
+            $buckets[$handlerInfo[0]][$property] = $child;
+        }
+
+        // Finalize: flush handlers in chain order.
+        foreach (array_keys(self::DECLARATION_HANDLERS) as $handler) {
+            $flushHandler($handler);
+        }
+
+        return $out;
     }
 
     /**
