@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.1] - 2026-08-16
+
+### Added
+
+- The `container` layout component utility, ported from `utilities.static('container')`: `width: 100%` plus one `@media (width >= <breakpoint>)` rule per `--breakpoint-*` theme value, sorted ascending by unit then value and honouring custom `@theme { --breakpoint-* }` definitions. Previously only the container-query utilities (`@container`, `@container/name`) existed and `class="container"` emitted nothing. ([#5](https://github.com/inline0/tailwindphp/pull/5), thanks @rhukster)
+
+### Fixed
+
+- Composed `--tw-*` variable groups are now registered with `@property`, matching the reference engine. Utilities that build a shorthand from several custom properties (`translate: var(--tw-translate-x) var(--tw-translate-y)`) previously declared only the variable they own; the unregistered members had no initial value, the composed declaration was invalid at computed-value time, and the browser silently dropped it — `.translate-x-7` updated `--tw-translate-x` in DevTools while nothing moved. Registrations added for translate, scale, rotate-x/y/z + skew, transition duration and ease, leading and tracking, font-variant-numeric, contain, touch-action, scroll-snap strictness, and border-spacing, and the existing filter registration now fires for every `filter`/`backdrop-*` utility instead of only `drop-shadow-*`. A per-class probe of 104 utilities now matches `tailwindcss` 4.3.0's `@property` output exactly, including the utilities that intentionally register nothing (`translate-none`, `scale-[…]`, `transform-cpu/gpu/none`, `normal-nums`, …). ([#7](https://github.com/inline0/tailwindphp/issues/7))
+- `normal-nums` no longer emits `--tw-ordinal: initial` and its sibling resets; like the reference, it only sets `font-variant-numeric: normal`.
+- Nested child rules are no longer dropped when the parent rule's `@apply` expands to more than one declaration. `@apply` substitution now walks each parent's subtree recursively (matching `apply.ts`) instead of tracking nested rules by index paths that shift as siblings expand, and a nested `@apply`'s dependency propagates to every ancestor rule so topological ordering stays correct. ([#4](https://github.com/inline0/tailwindphp/pull/4), thanks @rhukster)
+- Flattening nested CSS now wraps a grouped parent selector in `:is()` before substituting it for `&`, so `.a, .b { @apply hover:underline dark:bg-red-500; }` produces `:is(.a, .b):hover` instead of binding the variant to the last selector only and leaving the declarations on `.a` unconditionally. A lone parent selector is still substituted verbatim, byte-identical to previous output. ([#6](https://github.com/inline0/tailwindphp/pull/6), thanks @rhukster)
+
 ## [1.6.0] - 2026-07-22
 
 ### Added
@@ -300,16 +313,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - No external runtime dependencies
 - Zero Node.js requirement
 
-[1.4.2]: https://github.com/dnnsjsk/tailwindphp/releases/tag/v1.4.2
-[1.4.1]: https://github.com/dnnsjsk/tailwindphp/releases/tag/v1.4.1
-[1.4.0]: https://github.com/dnnsjsk/tailwindphp/releases/tag/v1.4.0
-[1.3.2]: https://github.com/dnnsjsk/tailwindphp/releases/tag/v1.3.2
-[1.3.0]: https://github.com/dnnsjsk/tailwindphp/releases/tag/v1.3.0
-[1.2.4]: https://github.com/dnnsjsk/tailwindphp/releases/tag/v1.2.4
-[1.2.3]: https://github.com/dnnsjsk/tailwindphp/releases/tag/v1.2.3
-[1.2.2]: https://github.com/dnnsjsk/tailwindphp/releases/tag/v1.2.2
-[1.2.1]: https://github.com/dnnsjsk/tailwindphp/releases/tag/v1.2.1
-[1.2.0]: https://github.com/dnnsjsk/tailwindphp/releases/tag/v1.2.0
-[1.1.0]: https://github.com/dnnsjsk/tailwindphp/releases/tag/v1.1.0
-[1.0.1]: https://github.com/dnnsjsk/tailwindphp/releases/tag/v1.0.1
-[1.0.0]: https://github.com/dnnsjsk/tailwindphp/releases/tag/v1.0.0
+[1.6.1]: https://github.com/inline0/tailwindphp/releases/tag/v1.6.1
+[1.6.0]: https://github.com/inline0/tailwindphp/releases/tag/v1.6.0
+[1.5.0]: https://github.com/inline0/tailwindphp/releases/tag/v1.5.0
+[1.4.2]: https://github.com/inline0/tailwindphp/releases/tag/v1.4.2
+[1.4.1]: https://github.com/inline0/tailwindphp/releases/tag/v1.4.1
+[1.4.0]: https://github.com/inline0/tailwindphp/releases/tag/v1.4.0
+[1.3.2]: https://github.com/inline0/tailwindphp/releases/tag/v1.3.2
+[1.3.0]: https://github.com/inline0/tailwindphp/releases/tag/v1.3.0
+[1.2.4]: https://github.com/inline0/tailwindphp/releases/tag/v1.2.4
+[1.2.3]: https://github.com/inline0/tailwindphp/releases/tag/v1.2.3
+[1.2.2]: https://github.com/inline0/tailwindphp/releases/tag/v1.2.2
+[1.2.1]: https://github.com/inline0/tailwindphp/releases/tag/v1.2.1
+[1.2.0]: https://github.com/inline0/tailwindphp/releases/tag/v1.2.0
+[1.1.0]: https://github.com/inline0/tailwindphp/releases/tag/v1.1.0
+[1.0.1]: https://github.com/inline0/tailwindphp/releases/tag/v1.0.1
+[1.0.0]: https://github.com/inline0/tailwindphp/releases/tag/v1.0.0
