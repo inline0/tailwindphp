@@ -2340,10 +2340,23 @@ function optimizeAstExpandThemeUsed(Theme $theme, array &$usedVariables, array &
         $changed = false;
         foreach ($theme->entries() as [$key, $value]) {
             if (isset($usedVariables[$key]) || ($theme->getOptions($key) & Theme::OPTIONS_STATIC)) {
-                // Extract variables this value depends on
+                // Extract variables this value depends on. Theme entries keep
+                // their raw form, so a lazily-evaluated `--theme(--x, …)`
+                // reference (which emits as `var(--x)` when `--x` exists)
+                // counts as a dependency too — the reference tracks this via
+                // the emitted declaration's `var(…)` in ast.ts
+                // (variableDependencies + isVariableUsed).
                 if (preg_match_all(REGEX_VAR_SIMPLE, $value['value'], $matches)) {
                     foreach ($matches[1] as $var) {
                         if (!isset($usedVariables[$var])) {
+                            $usedVariables[$var] = true;
+                            $changed = true;
+                        }
+                    }
+                }
+                if (preg_match_all('/--theme\(\s*(--[a-zA-Z0-9_-]+)/', $value['value'], $matches)) {
+                    foreach ($matches[1] as $var) {
+                        if (!isset($usedVariables[$var]) && $theme->get([$var]) !== null) {
                             $usedVariables[$var] = true;
                             $changed = true;
                         }
