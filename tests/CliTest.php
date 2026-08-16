@@ -204,7 +204,14 @@ class CliTest extends TestCase
     #[Test]
     public function application_has_correct_version(): void
     {
-        $this->assertSame('1.0.0', Application::VERSION);
+        // The CLI reports the package version: assert it matches the most
+        // recent release heading in CHANGELOG.md so a release cannot ship
+        // without bumping Application::VERSION.
+        $changelog = file_get_contents(__DIR__ . '/../CHANGELOG.md');
+        $this->assertMatchesRegularExpression('/^## \[(\d+\.\d+\.\d+)\]/m', $changelog);
+        preg_match('/^## \[(\d+\.\d+\.\d+)\]/m', $changelog, $match);
+
+        $this->assertSame($match[1], Application::VERSION);
     }
 
     #[Test]
