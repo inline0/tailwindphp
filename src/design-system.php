@@ -104,7 +104,30 @@ class DesignSystem implements DesignSystemInterface, CandidateDesignSystemInterf
 
         $this->compiledAstNodes = new DefaultMap(function ($flags) use ($designSystem) {
             return new DefaultMap(function ($candidate) use ($designSystem, $flags) {
-                return compileAstNodes($candidate, $designSystem, $flags);
+                $ast = compileAstNodes($candidate, $designSystem, $flags);
+
+                try {
+                    // Arbitrary values (`text-[theme(--color-red-500)]`) and
+                    // compiled utility bodies can contain CSS functions
+                    // (`--spacing(4)`), so evaluate any functions found here
+                    // that weren't in the source CSS. JS plugins might also
+                    // contain an `@variant` inside a generated utility.
+                    $nodes = array_map(fn ($entry) => $entry['node'], $ast);
+                    \TailwindPHP\substituteFunctions($nodes, $designSystem);
+                    \TailwindPHP\Variants\substituteAtVariant($nodes, $designSystem);
+                    foreach ($nodes as $index => $node) {
+                        $ast[$index]['node'] = $node;
+                    }
+                } catch (\Throwable $err) {
+                    // If substitution fails then the candidate likely contains
+                    // a call to `theme()` that is invalid, so mark the whole
+                    // candidate as invalid.
+                    $designSystem->addInvalidCandidate($designSystem->printCandidate($candidate));
+
+                    return [];
+                }
+
+                return $ast;
             });
         });
 

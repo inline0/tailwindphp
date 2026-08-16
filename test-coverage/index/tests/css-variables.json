@@ -89,5 +89,87 @@
         ],
         "css": "@theme reference {\n            --color-potato: #ac855b;\n          }\n          @theme {\n            --color-potato: #c794aa;\n          }\n          @tailwind utilities;",
         "expected": "\"\n      :root, :host {\n        --color-potato: #c794aa;\n      }\n\n      .bg-potato {\n        background-color: var(--color-potato);\n      }\n      \""
+    },
+    {
+        "name": "only emits theme variables that are used outside of being defined by another variable",
+        "type": "compileCss",
+        "classes": [
+            "get-var-b",
+            "get-var-two"
+        ],
+        "css": "@theme {\n            --var-a: var(--var-b);\n            --var-b: var(--var-c);\n            --var-c: var(--var-d);\n            --var-d: red;\n\n            --var-four: green;\n            --var-three: var(--var-four);\n            --var-two: var(--var-three);\n            --var-one: var(--var-two);\n\n            --var-eins: var(--var-zwei);\n            --var-zwei: var(--var-drei);\n            --var-drei: var(--var-vier);\n            --var-vier: blue;\n          }\n\n          @utility get-var-* {\n            color: --value(--var-\\*);\n          }\n          @tailwind utilities;",
+        "expected": "\"\n      :root, :host {\n        --var-b: var(--var-c);\n        --var-c: var(--var-d);\n        --var-d: red;\n        --var-four: green;\n        --var-three: var(--var-four);\n        --var-two: var(--var-three);\n      }\n\n      .get-var-b {\n        color: var(--var-b);\n      }\n\n      .get-var-two {\n        color: var(--var-two);\n      }\n      \""
+    },
+    {
+        "name": "emits CSS variable fallback and keyframes defined inside @reference-ed files",
+        "type": "compileCss",
+        "classes": [],
+        "css": "@reference '.\/one.css';\n          .bar {\n            @apply text-red animate-wiggle;\n          }",
+        "expected": "\"\n      .bar {\n        animation: var(--animate-wiggle, wiggle 1s ease-in-out infinite);\n        color: var(--color-red, red);\n      }\n\n      @keyframes wiggle {\n        0%, 100% {\n          transform: rotate(-3deg);\n        }\n\n        50% {\n          transform: rotate(3deg);\n        }\n      }\n      \""
+    },
+    {
+        "name": "creates an inlined variable version of the color-mix(\u2026) usages",
+        "type": "compileCss",
+        "classes": [
+            "text-red-500\/50"
+        ],
+        "css": "@theme {\n            --color-red-500: oklch(63.7% 0.237 25.331);\n          }\n          @tailwind utilities;",
+        "expected": "\"\n      :root, :host {\n        --color-red-500: oklch(63.7% .237 25.331);\n      }\n\n      .text-red-500\\\\\/50 {\n        color: #fb2c3680;\n      }\n\n      @supports (color: color-mix(in lab, red, red)) {\n        .text-red-500\\\\\/50 {\n          color: color-mix(in oklab, var(--color-red-500) 50%, transparent);\n        }\n      }\n      \""
+    },
+    {
+        "name": "creates an inlined variable version of the color-mix(\u2026) usages when it resolves to a var(\u2026) containing another theme variable",
+        "type": "compileCss",
+        "classes": [
+            "text-red\/50"
+        ],
+        "css": "@theme {\n            --color-red: var(--color-red-500);\n            --color-red-500: oklch(63.7% 0.237 25.331);\n          }\n          @tailwind utilities;",
+        "expected": "\"\n      :root, :host {\n        --color-red: var(--color-red-500);\n        --color-red-500: oklch(63.7% .237 25.331);\n      }\n\n      .text-red\\\\\/50 {\n        color: #fb2c3680;\n      }\n\n      @supports (color: color-mix(in lab, red, red)) {\n        .text-red\\\\\/50 {\n          color: color-mix(in oklab, var(--color-red) 50%, transparent);\n        }\n      }\n      \""
+    },
+    {
+        "name": "uses the first color value as the fallback when the `color-mix(\u2026)` function contains non-theme variables",
+        "type": "compileCss",
+        "classes": [
+            "text-(--my-color)\/50",
+            "text-red-500\/(--my-opacity)",
+            "text-(--my-color)\/(--my-opacity)"
+        ],
+        "css": "@theme {\n            --color-red-500: oklch(63.7% 0.237 25.331);\n          }\n          @tailwind utilities;",
+        "expected": "\"\n      :root, :host {\n        --color-red-500: oklch(63.7% .237 25.331);\n      }\n\n      .text-\\\\(--my-color\\\\)\\\\\/\\\\(--my-opacity\\\\) {\n        color: var(--my-color);\n      }\n\n      @supports (color: color-mix(in lab, red, red)) {\n        .text-\\\\(--my-color\\\\)\\\\\/\\\\(--my-opacity\\\\) {\n          color: color-mix(in oklab, var(--my-color) var(--my-opacity), transparent);\n        }\n      }\n\n      .text-\\\\(--my-color\\\\)\\\\\/50 {\n        color: var(--my-color);\n      }\n\n      @supports (color: color-mix(in lab, red, red)) {\n        .text-\\\\(--my-color\\\\)\\\\\/50 {\n          color: color-mix(in oklab, var(--my-color) 50%, transparent);\n        }\n      }\n\n      .text-red-500\\\\\/\\\\(--my-opacity\\\\) {\n        color: oklch(63.7% .237 25.331);\n      }\n\n      @supports (color: color-mix(in lab, red, red)) {\n        .text-red-500\\\\\/\\\\(--my-opacity\\\\) {\n          color: color-mix(in oklab, var(--color-red-500) var(--my-opacity), transparent);\n        }\n      }\n      \""
+    },
+    {
+        "name": "uses the first color value as the fallback when the `color-mix(\u2026)` function contains theme variables that resolves to other variables",
+        "type": "compileCss",
+        "classes": [
+            "text-red\/50"
+        ],
+        "css": "@tailwind utilities;\n          @theme {\n            --color-red: var(--my-red);\n          }",
+        "expected": "\"\n      .text-red\\\\\/50 {\n        color: var(--color-red);\n      }\n\n      @supports (color: color-mix(in lab, red, red)) {\n        .text-red\\\\\/50 {\n          color: color-mix(in oklab, var(--color-red) 50%, transparent);\n        }\n      }\n\n      :root, :host {\n        --color-red: var(--my-red);\n      }\n      \""
+    },
+    {
+        "name": "uses the first color value of the inner most `color-mix(\u2026)` function as the fallback when nested `color-mix(\u2026)` function all contain non-theme variables",
+        "type": "compileCss",
+        "classes": [],
+        "css": "@tailwind utilities;\n        .stacked {\n          color: color-mix(\n            in oklab,\n            color-mix(in oklab, var(--my-color) var(--my-inner-opacity), transparent)\n              var(--my-outer-opacity),\n            transparent\n          );\n        }",
+        "expected": "\"\n      .stacked {\n        color: var(--my-color);\n      }\n\n      @supports (color: color-mix(in lab, red, red)) {\n        .stacked {\n          color: color-mix(in oklab, color-mix(in oklab, var(--my-color) var(--my-inner-opacity), transparent) var(--my-outer-opacity), transparent);\n        }\n      }\n      \""
+    },
+    {
+        "name": "also replaces eventual variables in opacity values",
+        "type": "compileCss",
+        "classes": [
+            "text-red-500\/(--my-half)"
+        ],
+        "css": "@theme {\n            --my-half: 50%;\n            --color-red-500: oklch(63.7% 0.237 25.331);\n          }\n          @tailwind utilities;",
+        "expected": "\"\n      :root, :host {\n        --my-half: 50%;\n        --color-red-500: oklch(63.7% .237 25.331);\n      }\n\n      .text-red-500\\\\\/\\\\(--my-half\\\\) {\n        color: #fb2c3680;\n      }\n\n      @supports (color: color-mix(in lab, red, red)) {\n        .text-red-500\\\\\/\\\\(--my-half\\\\) {\n          color: color-mix(in oklab, var(--color-red-500) var(--my-half), transparent);\n        }\n      }\n      \""
+    },
+    {
+        "name": "does not delete theme variables from the output",
+        "type": "compileCss",
+        "classes": [
+            "text-red-500",
+            "shadow-xl",
+            "opacity-disabled"
+        ],
+        "css": "@layer theme {\n            @theme {\n              --color-red-500: red;\n              --shadow-xl: 0 6px 18px 4px color-mix(in oklab, var(--color-red-500) 25%, transparent);\n              --opacity-disabled: 50%;\n            }\n          }\n          @tailwind utilities;",
+        "expected": "\"\n      @layer properties {\n        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {\n          *, :before, :after, ::backdrop {\n            --tw-shadow: 0 0 #0000;\n            --tw-shadow-color: initial;\n            --tw-shadow-alpha: 100%;\n            --tw-inset-shadow: 0 0 #0000;\n            --tw-inset-shadow-color: initial;\n            --tw-inset-shadow-alpha: 100%;\n            --tw-ring-color: initial;\n            --tw-ring-shadow: 0 0 #0000;\n            --tw-inset-ring-color: initial;\n            --tw-inset-ring-shadow: 0 0 #0000;\n            --tw-ring-inset: initial;\n            --tw-ring-offset-width: 0px;\n            --tw-ring-offset-color: #fff;\n            --tw-ring-offset-shadow: 0 0 #0000;\n          }\n        }\n      }\n\n      @layer theme {\n        :root, :host {\n          --color-red-500: red;\n          --opacity-disabled: 50%;\n        }\n      }\n\n      .text-red-500 {\n        color: var(--color-red-500);\n      }\n\n      .opacity-disabled {\n        opacity: var(--opacity-disabled);\n      }\n\n      .shadow-xl {\n        --tw-shadow: 0 6px 18px 4px var(--tw-shadow-color, #ff000040);\n      }\n\n      @supports (color: color-mix(in lab, red, red)) {\n        .shadow-xl {\n          --tw-shadow: 0 6px 18px 4px var(--tw-shadow-color, color-mix(in oklab, var(--color-red-500) 25%, transparent));\n        }\n      }\n\n      .shadow-xl {\n        box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n      }\n\n      @property --tw-shadow {\n        syntax: \"*\";\n        inherits: false;\n        initial-value: 0 0 #0000;\n      }\n\n      @property --tw-shadow-color {\n        syntax: \"*\";\n        inherits: false\n      }\n\n      @property --tw-shadow-alpha {\n        syntax: \"<percentage>\";\n        inherits: false;\n        initial-value: 100%;\n      }\n\n      @property --tw-inset-shadow {\n        syntax: \"*\";\n        inherits: false;\n        initial-value: 0 0 #0000;\n      }\n\n      @property --tw-inset-shadow-color {\n        syntax: \"*\";\n        inherits: false\n      }\n\n      @property --tw-inset-shadow-alpha {\n        syntax: \"<percentage>\";\n        inherits: false;\n        initial-value: 100%;\n      }\n\n      @property --tw-ring-color {\n        syntax: \"*\";\n        inherits: false\n      }\n\n      @property --tw-ring-shadow {\n        syntax: \"*\";\n        inherits: false;\n        initial-value: 0 0 #0000;\n      }\n\n      @property --tw-inset-ring-color {\n        syntax: \"*\";\n        inherits: false\n      }\n\n      @property --tw-inset-ring-shadow {\n        syntax: \"*\";\n        inherits: false;\n        initial-value: 0 0 #0000;\n      }\n\n      @property --tw-ring-inset {\n        syntax: \"*\";\n        inherits: false\n      }\n\n      @property --tw-ring-offset-width {\n        syntax: \"<length>\";\n        inherits: false;\n        initial-value: 0;\n      }\n\n      @property --tw-ring-offset-color {\n        syntax: \"*\";\n        inherits: false;\n        initial-value: #fff;\n      }\n\n      @property --tw-ring-offset-shadow {\n        syntax: \"*\";\n        inherits: false;\n        initial-value: 0 0 #0000;\n      }\n      \""
     }
 ]

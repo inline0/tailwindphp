@@ -141,7 +141,8 @@ class SourceDirectiveTest extends TestCase
                 @import "tailwindcss/utilities.css";
             ',
         ]);
-        $this->assertStringContainsString('padding: calc(var(--spacing) * 1)', $css);
+        // TailwindCSS v4.3.3: `p-1` resolves to the multiplier itself
+        $this->assertStringContainsString('padding: var(--spacing)', $css);
         $this->assertStringContainsString('padding: calc(var(--spacing) * 2)', $css);
         $this->assertStringContainsString('padding: calc(var(--spacing) * 4)', $css);
     }
@@ -205,8 +206,8 @@ class SourceDirectiveTest extends TestCase
                 @import "tailwindcss/utilities.css";
             ',
         ]);
-        // p-1 and p-2 should be ignored
-        $this->assertStringNotContainsString('padding: calc(var(--spacing) * 1)', $css);
+        // p-1 and p-2 should be ignored (v4.3.3: p-1 would emit `padding: var(--spacing)`)
+        $this->assertStringNotContainsString('padding: var(--spacing);', $css);
         $this->assertStringNotContainsString('padding: calc(var(--spacing) * 2)', $css);
         // p-4 and p-8 should be included
         $this->assertStringContainsString('padding: calc(var(--spacing) * 4)', $css);

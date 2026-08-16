@@ -10,14 +10,14 @@ import { compileCss, run } from './test-utils/run'
 
 test('animate', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['animate-spin', 'animate-none', 'animate-[bounce_1s_infinite]', 'animate-not-found'],
       css`
         @theme {
           --animate-spin: spin 1s linear infinite;
         }
         @tailwind utilities;
       `,
-      ['animate-spin', 'animate-none', 'animate-[bounce_1s_infinite]', 'animate-not-found'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -53,14 +53,14 @@ test('animate', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['animate-none'],
       css`
         @theme {
           --animate-none: bounce 1s infinite;
         }
         @tailwind utilities;
       `,
-      ['animate-none'],
     ),
   ).toMatchInlineSnapshot(`
     "

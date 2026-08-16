@@ -195,6 +195,12 @@ class typography_plugin extends TestCase
         // Normalize quotes to double quotes
         $css = str_replace("'", '"', $css);
 
+        // The reference plugin tests compare unoptimized plugin output, while
+        // the PHP pipeline includes the lightningcss-equivalent pass that
+        // downlevels the CSS2 pseudo-elements to their single-colon legacy
+        // form; normalize both sides to the downleveled form
+        $css = preg_replace('/::(before|after|first-letter|first-line)\b/', ':$1', $css);
+
         // Normalize whitespace
         $css = preg_replace('/\s+/', ' ', $css);
         $css = preg_replace('/\s*{\s*/', ' { ', $css);

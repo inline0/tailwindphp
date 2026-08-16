@@ -1,11 +1,11 @@
 [
     {
         "name": "adds vendor prefixes",
-        "type": "compileCss",
+        "type": "run",
         "classes": [
             "[text-size-adjust:none]"
         ],
-        "css": "@tailwind utilities;",
+        "css": null,
         "expected": "\"\n      .\\\\[text-size-adjust\\\\:none\\\\] {\n        -webkit-text-size-adjust: none;\n        -moz-text-size-adjust: none;\n        text-size-adjust: none;\n      }\n      \""
     },
     {
@@ -21,7 +21,7 @@
         "name": "custom properties are generated when used from a CSS var with a prefixed setup",
         "type": "compileCss",
         "classes": [],
-        "css": "@theme prefix(tw) {\n            --color-tomato: #e10c04;\n          }\n          @tailwind utilities;\n          .red {\n            color: var(--tw-color-tomato);\n          }",
+        "css": "@theme prefix(tw) {\n          --color-tomato: #e10c04;\n        }\n        @tailwind utilities;\n        .red {\n          color: var(--tw-color-tomato);\n        }",
         "expected": "\"\n      :root, :host {\n        --tw-color-tomato: #e10c04;\n      }\n\n      .red {\n        color: var(--tw-color-tomato);\n      }\n      \""
     }
 ]

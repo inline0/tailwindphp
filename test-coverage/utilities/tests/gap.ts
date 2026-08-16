@@ -10,14 +10,14 @@ import { compileCss, run } from './test-utils/run'
 
 test('gap', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['gap-4', 'gap-[4px]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['gap-4', 'gap-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -39,14 +39,14 @@ test('gap', async () => {
 
 test('gap-x', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['gap-x-4', 'gap-x-[4px]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['gap-x-4', 'gap-x-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -70,14 +70,14 @@ test('gap-x', async () => {
 
 test('gap-y', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['gap-y-4', 'gap-y-[4px]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['gap-y-4', 'gap-y-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "

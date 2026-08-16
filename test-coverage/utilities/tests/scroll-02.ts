@@ -10,14 +10,14 @@ import { compileCss, run } from './test-utils/run'
 
 test('scroll-pl', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-pl-4', 'scroll-pl-[4px]', '-scroll-pl-4', '-scroll-pl-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-pl-4', 'scroll-pl-[4px]', '-scroll-pl-4', '-scroll-pl-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -94,20 +94,20 @@ test('scrollbar-width', async () => {
 test('scrollbar-gutter', async () => {
   expect(await run(['scrollbar-gutter-auto', 'scrollbar-gutter-stable', 'scrollbar-gutter-both']))
     .toMatchInlineSnapshot(`
-    "
-    .scrollbar-gutter-auto {
-      scrollbar-gutter: auto;
-    }
+      "
+      .scrollbar-gutter-auto {
+        scrollbar-gutter: auto;
+      }
 
-    .scrollbar-gutter-both {
-      scrollbar-gutter: stable both-edges;
-    }
+      .scrollbar-gutter-both {
+        scrollbar-gutter: stable both-edges;
+      }
 
-    .scrollbar-gutter-stable {
-      scrollbar-gutter: stable;
-    }
-    "
-  `)
+      .scrollbar-gutter-stable {
+        scrollbar-gutter: stable;
+      }
+      "
+    `)
   expect(
     await run([
       'scrollbar-gutter',
@@ -123,13 +123,7 @@ test('scrollbar-gutter', async () => {
 
 test('scrollbar-thumb', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'scrollbar-thumb-red-500',
         'scrollbar-thumb-red-500/50',
@@ -140,6 +134,12 @@ test('scrollbar-thumb', async () => {
         'scrollbar-thumb-[#0088cc]',
         'scrollbar-thumb-[#0088cc]/50',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -240,13 +240,7 @@ test('scrollbar-thumb', async () => {
 
 test('scrollbar-track', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'scrollbar-track-red-500',
         'scrollbar-track-red-500/50',
@@ -257,6 +251,12 @@ test('scrollbar-track', async () => {
         'scrollbar-track-[#0088cc]',
         'scrollbar-track-[#0088cc]/50',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "

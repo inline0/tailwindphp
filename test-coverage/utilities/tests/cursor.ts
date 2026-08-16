@@ -10,13 +10,7 @@ import { compileCss, run } from './test-utils/run'
 
 test('cursor', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --cursor-custom: url(/my-cursor.png);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'cursor-auto',
         'cursor-default',
@@ -57,6 +51,12 @@ test('cursor', async () => {
         'cursor-[var(--value)]',
         'cursor-custom',
       ],
+      css`
+        @theme {
+          --cursor-custom: url(/my-cursor.png);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "

@@ -10,13 +10,7 @@ import { compileCss, run } from './test-utils/run'
 
 test('backdrop-filter', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --blur-xl: 24px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'backdrop-filter',
         'backdrop-filter-none',
@@ -52,6 +46,12 @@ test('backdrop-filter', async () => {
         'backdrop-sepia-[50%]',
         'backdrop-sepia-[var(--value)]',
       ],
+      css`
+        @theme {
+          --blur-xl: 24px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -390,14 +390,14 @@ test('backdrop-filter', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['backdrop-blur-none'],
       css`
         @theme {
           --backdrop-blur-none: 2px;
         }
         @tailwind utilities;
       `,
-      ['backdrop-blur-none'],
     ),
   ).toMatchInlineSnapshot(`
     "

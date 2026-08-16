@@ -10,11 +10,13 @@ import { compileCss, run } from './test-utils/run'
 
 test('dark', async () => {
   expect(await run(['dark:flex'])).toMatchInlineSnapshot(`
-    "@media (prefers-color-scheme: dark) {
+    "
+    @media (prefers-color-scheme: dark) {
       .dark\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
   expect(await run(['dark/foo:flex'])).toEqual('')
 })

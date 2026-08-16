@@ -110,14 +110,14 @@ test('scroll-snap-stop', async () => {
 
 test('scroll-m', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-m-4', 'scroll-m-[4px]', '-scroll-m-4', '-scroll-m-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-m-4', 'scroll-m-[4px]', '-scroll-m-4', '-scroll-m-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -155,14 +155,14 @@ test('scroll-m', async () => {
 
 test('scroll-mx', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-mx-4', 'scroll-mx-[4px]', '-scroll-mx-4', '-scroll-mx-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-mx-4', 'scroll-mx-[4px]', '-scroll-mx-4', '-scroll-mx-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -200,14 +200,14 @@ test('scroll-mx', async () => {
 
 test('scroll-my', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-my-4', 'scroll-my-[4px]', '-scroll-my-4', '-scroll-my-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-my-4', 'scroll-my-[4px]', '-scroll-my-4', '-scroll-my-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -245,14 +245,14 @@ test('scroll-my', async () => {
 
 test('scroll-ms', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-ms-4', 'scroll-ms-[4px]', '-scroll-ms-4', '-scroll-ms-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-ms-4', 'scroll-ms-[4px]', '-scroll-ms-4', '-scroll-ms-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -290,14 +290,14 @@ test('scroll-ms', async () => {
 
 test('scroll-me', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-me-4', 'scroll-me-[4px]', '-scroll-me-4', '-scroll-me-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-me-4', 'scroll-me-[4px]', '-scroll-me-4', '-scroll-me-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -335,14 +335,14 @@ test('scroll-me', async () => {
 
 test('scroll-mbs', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-mbs-4', 'scroll-mbs-[4px]', '-scroll-mbs-4', '-scroll-mbs-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-mbs-4', 'scroll-mbs-[4px]', '-scroll-mbs-4', '-scroll-mbs-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -380,14 +380,14 @@ test('scroll-mbs', async () => {
 
 test('scroll-mbe', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-mbe-4', 'scroll-mbe-[4px]', '-scroll-mbe-4', '-scroll-mbe-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-mbe-4', 'scroll-mbe-[4px]', '-scroll-mbe-4', '-scroll-mbe-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -425,14 +425,14 @@ test('scroll-mbe', async () => {
 
 test('scroll-mt', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-mt-4', 'scroll-mt-[4px]', '-scroll-mt-4', '-scroll-mt-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-mt-4', 'scroll-mt-[4px]', '-scroll-mt-4', '-scroll-mt-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -470,14 +470,14 @@ test('scroll-mt', async () => {
 
 test('scroll-mr', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-mr-4', 'scroll-mr-[4px]', '-scroll-mr-4', '-scroll-mr-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-mr-4', 'scroll-mr-[4px]', '-scroll-mr-4', '-scroll-mr-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -515,14 +515,14 @@ test('scroll-mr', async () => {
 
 test('scroll-mb', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-mb-4', 'scroll-mb-[4px]', '-scroll-mb-4', '-scroll-mb-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-mb-4', 'scroll-mb-[4px]', '-scroll-mb-4', '-scroll-mb-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -560,14 +560,14 @@ test('scroll-mb', async () => {
 
 test('scroll-ml', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-ml-4', 'scroll-ml-[4px]', '-scroll-ml-4', '-scroll-ml-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-ml-4', 'scroll-ml-[4px]', '-scroll-ml-4', '-scroll-ml-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -605,14 +605,14 @@ test('scroll-ml', async () => {
 
 test('scroll-p', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-p-4', 'scroll-p-[4px]', '-scroll-p-4', '-scroll-p-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-p-4', 'scroll-p-[4px]', '-scroll-p-4', '-scroll-p-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -642,14 +642,14 @@ test('scroll-p', async () => {
 
 test('scroll-px', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-px-4', 'scroll-px-[4px]', '-scroll-px-4', '-scroll-px-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-px-4', 'scroll-px-[4px]', '-scroll-px-4', '-scroll-px-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -679,14 +679,14 @@ test('scroll-px', async () => {
 
 test('scroll-py', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-py-4', 'scroll-py-[4px]', '-scroll-py-4', '-scroll-py-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-py-4', 'scroll-py-[4px]', '-scroll-py-4', '-scroll-py-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -716,14 +716,14 @@ test('scroll-py', async () => {
 
 test('scroll-ps', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-ps-4', 'scroll-ps-[4px]', '-scroll-ps-4', '-scroll-ps-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-ps-4', 'scroll-ps-[4px]', '-scroll-ps-4', '-scroll-ps-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -753,14 +753,14 @@ test('scroll-ps', async () => {
 
 test('scroll-pe', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-pe-4', 'scroll-pe-[4px]', '-scroll-pe-4', '-scroll-pe-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-pe-4', 'scroll-pe-[4px]', '-scroll-pe-4', '-scroll-pe-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -790,14 +790,14 @@ test('scroll-pe', async () => {
 
 test('scroll-pbs', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-pbs-4', 'scroll-pbs-[4px]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-pbs-4', 'scroll-pbs-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -827,14 +827,14 @@ test('scroll-pbs', async () => {
 
 test('scroll-pbe', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-pbe-4', 'scroll-pbe-[4px]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-pbe-4', 'scroll-pbe-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -864,14 +864,14 @@ test('scroll-pbe', async () => {
 
 test('scroll-pt', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-pt-4', 'scroll-pt-[4px]', '-scroll-pt-4', '-scroll-pt-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-pt-4', 'scroll-pt-[4px]', '-scroll-pt-4', '-scroll-pt-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -901,14 +901,14 @@ test('scroll-pt', async () => {
 
 test('scroll-pr', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-pr-4', 'scroll-pr-[4px]', '-scroll-pr-4', '-scroll-pr-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-pr-4', 'scroll-pr-[4px]', '-scroll-pr-4', '-scroll-pr-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -938,14 +938,14 @@ test('scroll-pr', async () => {
 
 test('scroll-pb', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-pb-4', 'scroll-pb-[4px]', '-scroll-pb-4', '-scroll-pb-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-pb-4', 'scroll-pb-[4px]', '-scroll-pb-4', '-scroll-pb-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "

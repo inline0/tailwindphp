@@ -9,6 +9,7 @@ use function TailwindPHP\Ast\decl;
 use function TailwindPHP\Ast\styleRule;
 use function TailwindPHP\Utils\inferDataType;
 use function TailwindPHP\Utils\isPositiveInteger;
+use function TailwindPHP\Utils\isValidOpacityValue;
 use function TailwindPHP\Utils\isValidSpacingMultiplier;
 use function TailwindPHP\Utils\replaceShadowColors;
 
@@ -75,7 +76,7 @@ function registerTypographyUtilities(UtilityBuilder $builder): void
                             if (!$modifier && isValidSpacingMultiplier($candidate['modifier']['value'])) {
                                 $multiplier = $theme->resolve(null, ['--spacing']);
                                 if ($multiplier) {
-                                    $modifier = "calc({$multiplier} * {$candidate['modifier']['value']})";
+                                    $modifier = "--spacing({$candidate['modifier']['value']})";
                                 }
                             }
                             // Shorthand for leading-none
@@ -123,7 +124,7 @@ function registerTypographyUtilities(UtilityBuilder $builder): void
                     if (!$modifier && isValidSpacingMultiplier($candidate['modifier']['value'])) {
                         $multiplier = $theme->resolve(null, ['--spacing']);
                         if ($multiplier) {
-                            $modifier = "calc({$multiplier} * {$candidate['modifier']['value']})";
+                            $modifier = "--spacing({$candidate['modifier']['value']})";
                         }
                     }
                     // Shorthand for leading-none
@@ -524,15 +525,14 @@ function registerTypographyUtilities(UtilityBuilder $builder): void
             ];
         },
         'handleBareValue' => function ($value) use ($theme) {
-            $multiplier = $theme->resolve(null, ['--spacing']);
-            if ($multiplier === null) {
+            if ($theme->resolve(null, ['--spacing']) === null) {
                 return null;
             }
             if (!isValidSpacingMultiplier($value['value'])) {
                 return null;
             }
 
-            return "calc({$multiplier} * {$value['value']})";
+            return "--spacing({$value['value']})";
         },
         'staticValues' => [
             'none' => [$leadingProperty(), decl('--tw-leading', '1'), decl('line-height', '1')],
@@ -697,7 +697,7 @@ function registerTypographyUtilities(UtilityBuilder $builder): void
                 $alpha = $modifier['value'] ?? null;
             } else {
                 $modValue = $modifier['value'] ?? null;
-                if ($modValue !== null && isPositiveInteger($modValue)) {
+                if ($modValue !== null && isValidOpacityValue($modValue)) {
                     $alpha = "{$modValue}%";
                 }
             }

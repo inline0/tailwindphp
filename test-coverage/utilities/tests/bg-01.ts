@@ -10,14 +10,7 @@ import { compileCss, run } from './test-utils/run'
 
 test('bg', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-          --background-color-blue-500: #3b82f6;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // background-color
         'bg-red-500',
@@ -159,6 +152,13 @@ test('bg', async () => {
         'bg-repeat-round',
         'bg-repeat-space',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+          --background-color-blue-500: #3b82f6;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -1076,7 +1076,8 @@ test('bg', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['bg-current/half', 'bg-current/custom', '[color:red]/half'],
       css`
         @theme reference {
           --opacity-half: 0.5;
@@ -1084,7 +1085,6 @@ test('bg', async () => {
         }
         @tailwind utilities;
       `,
-      ['bg-current/half', 'bg-current/custom', '[color:red]/half'],
     ),
   ).toMatchInlineSnapshot(`
     "

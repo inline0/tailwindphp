@@ -79,30 +79,99 @@ $testCases = [];
 
 foreach ($tests as $test) {
     $body = $test['content'];
+    $len = strlen($body);
 
-    // Pattern 1: await run([...classes])
-    // Find all 'await run([' occurrences and extract bracket content properly
+    // Pattern 1: await run(…)
+    //
+    // Handles every call shape emitted by the upstream test suite:
+    // - `await run([...classes])`
+    // - `await run(\n [...classes],\n css`...`,\n )` — Prettier multiline
+    //   with an optional css template second argument (the v4.3.3
+    //   replacement for compileCss(css, candidates))
+    // - `await run([...classes], input)` — css template bound to a variable
     $runOffset = 0;
-    $runMatches = [];
-    while (($runPos = strpos($body, 'await run([', $runOffset)) !== false) {
-        $bracketStart = $runPos + strlen('await run(');
-        $bracketContent = extractBracketContent(substr($body, $bracketStart));
-        if ($bracketContent !== null) {
-            $runMatches[] = [
-                'pos' => $runPos,
-                'classes' => $bracketContent,
-            ];
+    while (($runPos = strpos($body, 'await run(', $runOffset)) !== false) {
+        $runOffset = $runPos + 10;
+
+        // The candidates array may follow `run(` directly or on the next line
+        $cursor = $runPos + strlen('await run(');
+        while ($cursor < $len && ctype_space($body[$cursor])) {
+            $cursor++;
         }
-        $runOffset = $runPos + 1;
-    }
+        if ($cursor >= $len || $body[$cursor] !== '[') {
+            continue;
+        }
 
-    foreach ($runMatches as $match) {
-        $classesStr = $match['classes'];
-        $classes = parseClassArray($classesStr);
-        $matchPos = $match['pos'];
+        $bracketContent = extractBracketContent(substr($body, $cursor));
+        if ($bracketContent === null) {
+            continue;
+        }
+        $classes = parseClassArray($bracketContent);
+        $afterArray = $cursor + strlen($bracketContent) + 2;
 
-        // Find toMatchInlineSnapshot after this
-        $afterMatch = substr($body, $matchPos);
+        // Skip chained method calls on the array, e.g. the sorting tests use
+        // `[...].sort(() => Math.random() - 0.5)` to shuffle the candidates
+        $cursor = $afterArray;
+        while (true) {
+            $probe = $cursor;
+            while ($probe < $len && ctype_space($body[$probe])) {
+                $probe++;
+            }
+            if (!preg_match('/\G\.[A-Za-z_$][\w$]*\(/', $body, $chainMatch, 0, $probe)) {
+                break;
+            }
+            $parenDepth = 0;
+            $p = $probe + strlen($chainMatch[0]) - 1;
+            while ($p < $len) {
+                if ($body[$p] === '(') {
+                    $parenDepth++;
+                } elseif ($body[$p] === ')') {
+                    $parenDepth--;
+                    if ($parenDepth === 0) {
+                        $p++;
+                        break;
+                    }
+                }
+                $p++;
+            }
+            $cursor = $p;
+        }
+        $afterArray = $cursor;
+
+        // Optional second argument: an inline css`...` template or an
+        // identifier bound with `let name = css`...`` earlier in the body
+        $cssTemplate = null;
+        $cursor = $afterArray;
+        while ($cursor < $len && (ctype_space($body[$cursor]) || $body[$cursor] === ',')) {
+            $cursor++;
+        }
+        $callEnd = $afterArray;
+        if (substr($body, $cursor, 4) === 'css`') {
+            $backtickStart = $cursor + 4;
+            $backtickEnd = findClosingBacktick(substr($body, $backtickStart));
+            if ($backtickEnd !== null) {
+                $cssTemplate = substr($body, $backtickStart, $backtickEnd);
+                $callEnd = $backtickStart + $backtickEnd;
+            }
+        } elseif (preg_match('/\G([A-Za-z_$][\w$]*)\s*[,)]/', $body, $identMatch, 0, $cursor)) {
+            $identifier = $identMatch[1];
+            if (preg_match(
+                '/(?:let|const|var)\s+' . preg_quote($identifier, '/') . '\s*=(?:\s|\/\/[^\n]*)*(?:css)?`/',
+                $body,
+                $declMatch,
+                PREG_OFFSET_CAPTURE,
+            )) {
+                $backtickStart = $declMatch[0][1] + strlen($declMatch[0][0]);
+                $backtickEnd = findClosingBacktick(substr($body, $backtickStart));
+                if ($backtickEnd !== null) {
+                    $cssTemplate = substr($body, $backtickStart, $backtickEnd);
+                    $callEnd = $cursor + strlen($identifier);
+                }
+            }
+        }
+
+        // Find toMatchInlineSnapshot after this call
+        $afterMatch = substr($body, $callEnd);
         if (preg_match('/\.toMatchInlineSnapshot\s*\(\s*`/s', $afterMatch, $snapshotMatch, PREG_OFFSET_CAPTURE)) {
             $backtickStart = $snapshotMatch[0][1] + strlen($snapshotMatch[0][0]);
             $remaining = substr($afterMatch, $backtickStart);
@@ -112,54 +181,68 @@ foreach ($tests as $test) {
                 $expectedCss = substr($remaining, 0, $backtickEnd);
                 $testCases[] = [
                     'name' => $test['name'],
-                    'type' => 'run',
+                    'type' => $cssTemplate !== null ? 'compileCss' : 'run',
                     'classes' => $classes,
-                    'css' => null,
+                    'css' => $cssTemplate !== null ? trim($cssTemplate) : null,
                     'expected' => trim($expectedCss),
                 ];
             }
         }
     }
 
-    // Pattern 2: await compileCss(css`...`, [...classes])
-    // This is more complex - need to extract the CSS template and classes
-    if (preg_match('/await compileCss\(\s*css`/s', $body)) {
-        // Find the CSS template
-        $cssStart = strpos($body, 'css`');
-        if ($cssStart !== false) {
-            $cssStart += 4; // Skip 'css`'
-            $cssContent = substr($body, $cssStart);
-            $cssEnd = findClosingBacktick($cssContent);
+    // Pattern 2: await compileCss(css`...`) or await compileCss(css`...`, [...classes])
+    $compileOffset = 0;
+    while (($compilePos = strpos($body, 'await compileCss(', $compileOffset)) !== false) {
+        $compileOffset = $compilePos + 17;
 
-            if ($cssEnd !== null) {
-                $cssTemplate = substr($cssContent, 0, $cssEnd);
+        $cssStart = strpos($body, 'css`', $compilePos);
+        if ($cssStart === false) {
+            continue;
+        }
+        $cssStart += 4;
+        $cssEnd = findClosingBacktick(substr($body, $cssStart));
+        if ($cssEnd === null) {
+            continue;
+        }
 
-                // Find the classes array after the CSS template
-                $afterCss = substr($body, $cssStart + $cssEnd);
-                // Look for ', [' pattern and extract bracket content properly
-                if (preg_match('/,\s*\[/', $afterCss, $arrayStartMatch, PREG_OFFSET_CAPTURE)) {
-                    $arrayStart = $arrayStartMatch[0][1] + strlen($arrayStartMatch[0][0]) - 1;
-                    $bracketContent = extractBracketContent(substr($afterCss, $arrayStart));
-                    $classes = $bracketContent !== null ? parseClassArray($bracketContent) : [];
+        $cssTemplate = substr($body, $cssStart, $cssEnd);
+        $afterCss = substr($body, $cssStart + $cssEnd);
 
-                    // Find toMatchInlineSnapshot
-                    if (preg_match('/\.toMatchInlineSnapshot\s*\(\s*`/s', $afterCss, $snapshotMatch, PREG_OFFSET_CAPTURE)) {
-                        $backtickStart = $snapshotMatch[0][1] + strlen($snapshotMatch[0][0]);
-                        $remaining = substr($afterCss, $backtickStart);
-                        $backtickEnd = findClosingBacktick($remaining);
+        // Optional candidates array (legacy compileCss(css, candidates) shape)
+        $classes = [];
+        if (preg_match('/\G`\s*,\s*\[/', $afterCss, $arrayStartMatch)) {
+            $arrayStart = strlen($arrayStartMatch[0]) - 1;
+            $bracketContent = extractBracketContent(substr($afterCss, $arrayStart));
+            if ($bracketContent !== null) {
+                $classes = parseClassArray($bracketContent);
+            }
+        }
 
-                        if ($backtickEnd !== null) {
-                            $expectedCss = substr($remaining, 0, $backtickEnd);
-                            $testCases[] = [
-                                'name' => $test['name'],
-                                'type' => 'compileCss',
-                                'classes' => $classes,
-                                'css' => trim($cssTemplate),
-                                'expected' => trim($expectedCss),
-                            ];
-                        }
-                    }
+        // Optional options argument: `{ polyfills: Polyfills.None }`
+        $polyfills = null;
+        if (preg_match('/\G`\s*,\s*\{\s*polyfills:\s*Polyfills\.None\b/', $afterCss)) {
+            $polyfills = 'none';
+        }
+
+        // Find toMatchInlineSnapshot
+        if (preg_match('/\.toMatchInlineSnapshot\s*\(\s*`/s', $afterCss, $snapshotMatch, PREG_OFFSET_CAPTURE)) {
+            $backtickStart = $snapshotMatch[0][1] + strlen($snapshotMatch[0][0]);
+            $remaining = substr($afterCss, $backtickStart);
+            $backtickEnd = findClosingBacktick($remaining);
+
+            if ($backtickEnd !== null) {
+                $expectedCss = substr($remaining, 0, $backtickEnd);
+                $case = [
+                    'name' => $test['name'],
+                    'type' => 'compileCss',
+                    'classes' => $classes,
+                    'css' => trim($cssTemplate),
+                    'expected' => trim($expectedCss),
+                ];
+                if ($polyfills !== null) {
+                    $case['polyfills'] = $polyfills;
                 }
+                $testCases[] = $case;
             }
         }
     }

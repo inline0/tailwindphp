@@ -111,8 +111,10 @@ class DirectivesTest extends TestCase
 
     public function test_theme_import(): void
     {
+        // TailwindCSS v4.3.3: default theme variables are only emitted when
+        // used, so reference one via the font-sans utility.
         $css = Tailwind::generate([
-            'content' => '<div class="flex">',
+            'content' => '<div class="flex font-sans">',
             'css' => '@import "tailwindcss/theme.css"; @import "tailwindcss/utilities.css";',
         ]);
         $this->assertStringContainsString('--font-sans:', $css);
@@ -121,7 +123,7 @@ class DirectivesTest extends TestCase
     public function test_theme_import_with_layer(): void
     {
         $css = Tailwind::generate([
-            'content' => '<div class="flex">',
+            'content' => '<div class="flex font-sans">',
             'css' => '@import "tailwindcss/theme.css" layer(theme); @import "tailwindcss/utilities.css";',
         ]);
         $this->assertStringContainsString('@layer theme', $css);
@@ -130,13 +132,14 @@ class DirectivesTest extends TestCase
 
     public function test_theme_import_without_utilities(): void
     {
+        // TailwindCSS v4.3.3: with no utilities compiled nothing references
+        // the default theme, so no variables (and no theme layer) are emitted.
         $css = Tailwind::generate([
             'content' => '<div class="flex">',
             'css' => '@import "tailwindcss/theme.css" layer(theme);',
         ]);
-        // Theme should load but no utilities generated
-        $this->assertStringContainsString('@layer theme', $css);
         $this->assertStringNotContainsString('display: flex', $css);
+        $this->assertStringNotContainsString('--font-sans:', $css);
     }
 
     // ==================================================
@@ -1169,8 +1172,10 @@ class DirectivesTest extends TestCase
             'content' => '<div class="flex">',
             'css' => '@import "tailwindcss";',
         ]);
-        $this->assertStringContainsString('::after', $css);
-        $this->assertStringContainsString('::before', $css);
+        // TailwindCSS v4.3.3: lightningcss downlevels ::before/::after to
+        // their single-colon legacy form; other pseudo-elements keep `::`
+        $this->assertStringContainsString(':after', $css);
+        $this->assertStringContainsString(':before', $css);
         $this->assertStringContainsString('::backdrop', $css);
         $this->assertStringContainsString('::file-selector-button', $css);
     }
@@ -1211,8 +1216,9 @@ class DirectivesTest extends TestCase
             'css' => '@import "tailwindcss";',
         ]);
         $this->assertStringContainsString('font-family:', $css);
-        $this->assertStringContainsString('ui-sans-serif', $css);
-        $this->assertStringContainsString('system-ui', $css);
+        // TailwindCSS v4.3.3 replaced the ui-sans-serif/system-ui stack
+        $this->assertStringContainsString('-apple-system', $css);
+        $this->assertStringContainsString('BlinkMacSystemFont', $css);
     }
 
     public function test_preflight_html_tap_highlight(): void
@@ -1624,7 +1630,8 @@ class DirectivesTest extends TestCase
             ',
         ]);
         $this->assertStringContainsString('box-sizing: border-box', $css);
-        $this->assertStringContainsString('background-color: white', $css);
+        // TailwindCSS v4.3.3: lightningcss shortens `white` to `#fff`
+        $this->assertStringContainsString('background-color: #fff', $css);
     }
 
     public function test_preflight_layer_order_preserved(): void

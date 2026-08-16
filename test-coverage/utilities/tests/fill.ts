@@ -10,14 +10,7 @@ import { compileCss, run } from './test-utils/run'
 
 test('fill', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-          --fill-blue-500: #3b82f6;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'fill-red-500',
         'fill-red-500/50',
@@ -38,6 +31,13 @@ test('fill', async () => {
         'fill-[#0088cc]/[0.5]',
         'fill-[#0088cc]/[50%]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+          --fill-blue-500: #3b82f6;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "

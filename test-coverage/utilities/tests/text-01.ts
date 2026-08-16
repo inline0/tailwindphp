@@ -58,14 +58,14 @@ test('line-clamp', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['line-clamp-none'],
       css`
         @theme {
           --line-clamp-none: 0;
         }
         @tailwind utilities;
       `,
-      ['line-clamp-none'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -135,14 +135,14 @@ test('list', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['list-none'],
       css`
         @theme {
           --list-style-type-none: disc;
         }
         @tailwind utilities;
       `,
-      ['list-none'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -180,14 +180,14 @@ test('list-image', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['list-image-none'],
       css`
         @theme {
           --list-style-image-none: url(../foo.png);
         }
         @tailwind utilities;
       `,
-      ['list-image-none'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -269,16 +269,7 @@ test('text-align', async () => {
 
 test('font', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --font-sans:
-            ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-            'Segoe UI Symbol', 'Noto Color Emoji';
-          --font-weight-bold: 650;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // font-family
         'font-sans',
@@ -293,6 +284,15 @@ test('font', async () => {
         'font-[100]',
         'font-[number:var(--my-weight)]',
       ],
+      css`
+        @theme {
+          --font-sans:
+            ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+            'Segoe UI Symbol', 'Noto Color Emoji';
+          --font-weight-bold: 650;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -353,16 +353,7 @@ test('font', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme reference {
-          --font-sans:
-            ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-            'Segoe UI Symbol', 'Noto Color Emoji';
-          --font-weight-bold: 650;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'font',
         // font-family
@@ -382,6 +373,15 @@ test('font', async () => {
         'font-[100]/foo',
         'font-[number:var(--my-weight)]/foo',
       ],
+      css`
+        @theme reference {
+          --font-sans:
+            ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+            'Segoe UI Symbol', 'Noto Color Emoji';
+          --font-weight-bold: 650;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
@@ -541,7 +541,8 @@ test('text-decoration-line', async () => {
 
 test('leading', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['leading-tight', 'leading-6', 'leading-[var(--value)]'],
       css`
         @theme {
           --leading-tight: 1.25;
@@ -549,7 +550,6 @@ test('leading', async () => {
         }
         @tailwind utilities;
       `,
-      ['leading-tight', 'leading-6', 'leading-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -600,14 +600,14 @@ test('leading', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['leading-none'],
       css`
         @theme {
           --leading-none: 2;
         }
         @tailwind utilities;
       `,
-      ['leading-none'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -638,7 +638,8 @@ test('leading', async () => {
 
 test('tracking', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['tracking-normal', 'tracking-wide', 'tracking-[var(--value)]', '-tracking-[var(--value)]'],
       css`
         @theme {
           --tracking-normal: 0em;
@@ -646,7 +647,6 @@ test('tracking', async () => {
         }
         @tailwind utilities;
       `,
-      ['tracking-normal', 'tracking-wide', 'tracking-[var(--value)]', '-tracking-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "

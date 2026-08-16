@@ -72,14 +72,14 @@ test('col', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['col-auto'],
       css`
         @theme {
           --grid-column-auto: 5;
         }
         @tailwind utilities;
       `,
-      ['col-auto'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -96,13 +96,7 @@ test('col', async () => {
 
 test('col-start', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --grid-column-start-custom: 1 column-start;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'col-start-auto',
         'col-start-4',
@@ -111,6 +105,12 @@ test('col-start', async () => {
         '-col-start-4',
         'col-start-custom',
       ],
+      css`
+        @theme {
+          --grid-column-start-custom: 1 column-start;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -157,14 +157,14 @@ test('col-start', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['col-start-auto'],
       css`
         @theme {
           --grid-column-start-auto: 7;
         }
         @tailwind utilities;
       `,
-      ['col-start-auto'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -181,14 +181,14 @@ test('col-start', async () => {
 
 test('col-end', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['col-end-auto', 'col-end-4', 'col-end-99', 'col-end-[123]', '-col-end-4', 'col-end-custom'],
       css`
         @theme {
           --grid-column-end-custom: 1 column-end;
         }
         @tailwind utilities;
       `,
-      ['col-end-auto', 'col-end-4', 'col-end-99', 'col-end-[123]', '-col-end-4', 'col-end-custom'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -235,14 +235,14 @@ test('col-end', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['col-end-auto'],
       css`
         @theme {
           --grid-column-end-auto: 3;
         }
         @tailwind utilities;
       `,
-      ['col-end-auto'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -328,14 +328,14 @@ test('row', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['row-auto'],
       css`
         @theme {
           --grid-row-auto: 9;
         }
         @tailwind utilities;
       `,
-      ['row-auto'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -352,13 +352,7 @@ test('row', async () => {
 
 test('row-start', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --grid-row-start-custom: 1 row-start;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'row-start-auto',
         'row-start-4',
@@ -367,6 +361,12 @@ test('row-start', async () => {
         '-row-start-4',
         'row-start-custom',
       ],
+      css`
+        @theme {
+          --grid-row-start-custom: 1 row-start;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -413,14 +413,14 @@ test('row-start', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['row-start-auto'],
       css`
         @theme {
           --grid-row-start-auto: 11;
         }
         @tailwind utilities;
       `,
-      ['row-start-auto'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -437,14 +437,14 @@ test('row-start', async () => {
 
 test('row-end', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['row-end-auto', 'row-end-4', 'row-end-99', 'row-end-[123]', '-row-end-4', 'row-end-custom'],
       css`
         @theme {
           --grid-row-end-custom: 1 row-end;
         }
         @tailwind utilities;
       `,
-      ['row-end-auto', 'row-end-4', 'row-end-99', 'row-end-[123]', '-row-end-4', 'row-end-custom'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -491,14 +491,14 @@ test('row-end', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['row-end-auto'],
       css`
         @theme {
           --grid-row-end-auto: 13;
         }
         @tailwind utilities;
       `,
-      ['row-end-auto'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -564,15 +564,28 @@ test('color-scheme', async () => {
 
 test('auto-cols', async () => {
   expect(
-    await run([
-      'auto-cols-auto',
-      'auto-cols-min',
-      'auto-cols-max',
-      'auto-cols-fr',
-      'auto-cols-[2fr]',
-    ]),
+    await run(
+      [
+        'auto-cols-auto',
+        'auto-cols-min',
+        'auto-cols-max',
+        'auto-cols-fr',
+        'auto-cols-[2fr]',
+        'auto-cols-12',
+      ],
+      css`
+        @tailwind utilities;
+        @theme {
+          --spacing: 0.25rem;
+        }
+      `,
+    ),
   ).toMatchInlineSnapshot(`
     "
+    .auto-cols-12 {
+      grid-auto-columns: calc(var(--spacing) * 12);
+    }
+
     .auto-cols-\\[2fr\\] {
       grid-auto-columns: 2fr;
     }
@@ -592,6 +605,10 @@ test('auto-cols', async () => {
     .auto-cols-min {
       grid-auto-columns: min-content;
     }
+
+    :root, :host {
+      --spacing: .25rem;
+    }
     "
   `)
   expect(
@@ -608,14 +625,14 @@ test('auto-cols', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['auto-cols-auto'],
       css`
         @theme {
           --grid-auto-columns-auto: 2fr;
         }
         @tailwind utilities;
       `,
-      ['auto-cols-auto'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -681,15 +698,28 @@ test('grid-flow', async () => {
 
 test('auto-rows', async () => {
   expect(
-    await run([
-      'auto-rows-auto',
-      'auto-rows-min',
-      'auto-rows-max',
-      'auto-rows-fr',
-      'auto-rows-[2fr]',
-    ]),
+    await run(
+      [
+        'auto-rows-auto',
+        'auto-rows-min',
+        'auto-rows-max',
+        'auto-rows-fr',
+        'auto-rows-[2fr]',
+        'auto-rows-12',
+      ],
+      css`
+        @tailwind utilities;
+        @theme {
+          --spacing: 0.25rem;
+        }
+      `,
+    ),
   ).toMatchInlineSnapshot(`
     "
+    .auto-rows-12 {
+      grid-auto-rows: calc(var(--spacing) * 12);
+    }
+
     .auto-rows-\\[2fr\\] {
       grid-auto-rows: 2fr;
     }
@@ -709,6 +739,10 @@ test('auto-rows', async () => {
     .auto-rows-min {
       grid-auto-rows: min-content;
     }
+
+    :root, :host {
+      --spacing: .25rem;
+    }
     "
   `)
   expect(
@@ -725,14 +759,14 @@ test('auto-rows', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['auto-rows-auto'],
       css`
         @theme {
           --grid-auto-rows-auto: 2fr;
         }
         @tailwind utilities;
       `,
-      ['auto-rows-auto'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -798,14 +832,14 @@ test('grid-cols', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['grid-cols-none'],
       css`
         @theme {
           --grid-template-columns-none: 200px 1fr;
         }
         @tailwind utilities;
       `,
-      ['grid-cols-none'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -871,14 +905,14 @@ test('grid-rows', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['grid-rows-none'],
       css`
         @theme {
           --grid-template-rows-none: 200px 1fr;
         }
         @tailwind utilities;
       `,
-      ['grid-rows-none'],
     ),
   ).toMatchInlineSnapshot(`
     "

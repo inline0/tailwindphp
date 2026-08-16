@@ -36,6 +36,8 @@ use function TailwindPHP\Utils\isPositiveInteger;
  */
 function registerFlexboxUtilities(UtilityBuilder $builder): void
 {
+    $theme = $builder->getTheme();
+
     // Flex Direction
     $builder->staticUtility('flex-row', [['flex-direction', 'row']]);
     $builder->staticUtility('flex-row-reverse', [['flex-direction', 'row-reverse']]);
@@ -310,6 +312,16 @@ function registerFlexboxUtilities(UtilityBuilder $builder): void
     // Auto Columns
     $builder->functionalUtility('auto-cols', [
         'themeKeys' => ['--grid-auto-columns'],
+        'handleBareValue' => function ($value) use ($theme) {
+            if ($theme->resolve(null, ['--spacing']) === null) {
+                return null;
+            }
+            if (!\TailwindPHP\Utils\isValidSpacingMultiplier($value['value'])) {
+                return null;
+            }
+
+            return "--spacing({$value['value']})";
+        },
         'handle' => function ($value, $dataType) {
             return [decl('grid-auto-columns', $value)];
         },
@@ -324,6 +336,16 @@ function registerFlexboxUtilities(UtilityBuilder $builder): void
     // Auto Rows
     $builder->functionalUtility('auto-rows', [
         'themeKeys' => ['--grid-auto-rows'],
+        'handleBareValue' => function ($value) use ($theme) {
+            if ($theme->resolve(null, ['--spacing']) === null) {
+                return null;
+            }
+            if (!\TailwindPHP\Utils\isValidSpacingMultiplier($value['value'])) {
+                return null;
+            }
+
+            return "--spacing({$value['value']})";
+        },
         'handle' => function ($value, $dataType) {
             return [decl('grid-auto-rows', $value)];
         },

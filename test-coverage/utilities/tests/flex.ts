@@ -137,14 +137,14 @@ test('flex-grow', async () => {
 
 test('flex-basis', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['basis-auto', 'basis-full', 'basis-xl', 'basis-11/12', 'basis-[123px]'],
       css`
         @theme {
           --container-xl: 36rem;
         }
         @tailwind utilities;
       `,
-      ['basis-auto', 'basis-full', 'basis-xl', 'basis-11/12', 'basis-[123px]'],
     ),
   ).toMatchInlineSnapshot(`
     "

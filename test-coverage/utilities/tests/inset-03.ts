@@ -10,13 +10,7 @@ import { compileCss, run } from './test-utils/run'
 
 test('inset-ring', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // ring color
         'inset-ring-red-500',
@@ -54,6 +48,12 @@ test('inset-ring', async () => {
         'inset-ring-[12px]',
         'inset-ring-[length:var(--my-width)]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "

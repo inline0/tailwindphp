@@ -9,7 +9,8 @@
  * Supported test types:
  *   - utilities (default)
  *   - variants
- *   - index
+ *
+ * index.test.ts is handled by extract-index-tests.php (JSON output), not here.
  *
  * This script parses TypeScript test files and extracts individual tests
  * into separate .ts files grouped by category. Files over 1000 lines are split.
@@ -108,18 +109,6 @@ $testConfigs = [
             'inert' => ['inert'],
         ],
     ],
-    'index' => [
-        'inputFile' => 'index.test.ts',
-        'outputDir' => $baseDir . '/test-coverage/index/tests',
-        'categoryPatterns' => [
-            'compilation' => ['compile', 'build', 'extract'],
-            'parsing' => ['parse', 'candidate'],
-            'theme' => ['theme', 'config'],
-            'layers' => ['layer', '@layer'],
-            'apply' => ['@apply', 'apply'],
-            'import' => ['@import', 'import'],
-        ],
-    ],
 ];
 
 // Get test type from command line
@@ -160,46 +149,87 @@ $totalLines = count($lines);
 
 echo "Processing $totalLines lines from {$config['inputFile']}\n";
 
-// Parse tests - look for test('name', async () => { ... })
+// Parse tests - look for test('name', async () => { ... }) at any indentation.
+// Tests may be nested inside describe('...') blocks; those are tracked with an
+// indentation-based stack so nested tests are extracted too (they were
+// previously skipped entirely because the match was anchored to column 0).
 $tests = [];
+$describeStack = [];
 $currentTest = null;
 $braceDepth = 0;
 $inTest = false;
 $testContent = [];
+$testIndent = 0;
+
+/**
+ * Strip up to $indent leading spaces so nested tests are extracted flush with
+ * column 0 like top-level tests. Lines with less indentation (blank lines)
+ * are left alone.
+ */
+function dedentLine(string $line, int $indent): string
+{
+    if ($indent === 0) {
+        return $line;
+    }
+
+    $leading = strspn($line, ' ');
+
+    return substr($line, min($leading, $indent));
+}
 
 for ($i = 0; $i < $totalLines; $i++) {
     $line = $lines[$i];
 
-    // Check for test start
-    if (preg_match("/^test\(['\"](.+?)['\"]/", $line, $matches)) {
-        $currentTest = [
-            'name' => $matches[1],
-            'startLine' => $i + 1,
-            'content' => [],
-        ];
-        $inTest = true;
-        $braceDepth = 0;
-        $testContent = [$line];
+    if (!$inTest) {
+        // Track describe blocks for naming context
+        if (preg_match("/^(\s*)describe\(['\"](.+?)['\"]/", $line, $matches)) {
+            $describeStack[] = [
+                'name' => $matches[2],
+                'indent' => strlen($matches[1]),
+            ];
+            continue;
+        }
 
-        // Count braces on this line
-        $braceDepth += substr_count($line, '{') - substr_count($line, '}');
+        // Pop describes that close at (or above) their own indentation
+        if (!empty($describeStack) && preg_match('/^(\s*)\}\)/', $line, $matches)) {
+            $indent = strlen($matches[1]);
+            while (!empty($describeStack) && end($describeStack)['indent'] >= $indent) {
+                array_pop($describeStack);
+            }
+            continue;
+        }
+
+        // Check for test start (top-level or nested inside describe blocks)
+        if (preg_match("/^(\s*)test\(['\"](.+?)['\"]/", $line, $matches)) {
+            $describePrefix = implode(' > ', array_column($describeStack, 'name'));
+            $currentTest = [
+                'name' => ($describePrefix !== '' ? $describePrefix . ' > ' : '') . $matches[2],
+                'startLine' => $i + 1,
+                'content' => [],
+            ];
+            $inTest = true;
+            $testIndent = strlen($matches[1]);
+            $testContent = [dedentLine($line, $testIndent)];
+
+            // Count braces on this line
+            $braceDepth = substr_count($line, '{') - substr_count($line, '}');
+        }
+
         continue;
     }
 
-    if ($inTest) {
-        $testContent[] = $line;
-        $braceDepth += substr_count($line, '{') - substr_count($line, '}');
+    $testContent[] = dedentLine($line, $testIndent);
+    $braceDepth += substr_count($line, '{') - substr_count($line, '}');
 
-        // Check if test ended
-        if ($braceDepth <= 0 && preg_match('/^\}\)/', trim($line))) {
-            $currentTest['endLine'] = $i + 1;
-            $currentTest['content'] = implode("\n", $testContent);
-            $currentTest['lineCount'] = count($testContent);
-            $tests[] = $currentTest;
-            $inTest = false;
-            $currentTest = null;
-            $testContent = [];
-        }
+    // Check if test ended
+    if ($braceDepth <= 0 && preg_match('/^\}\)/', trim($line))) {
+        $currentTest['endLine'] = $i + 1;
+        $currentTest['content'] = implode("\n", $testContent);
+        $currentTest['lineCount'] = count($testContent);
+        $tests[] = $currentTest;
+        $inTest = false;
+        $currentTest = null;
+        $testContent = [];
     }
 }
 

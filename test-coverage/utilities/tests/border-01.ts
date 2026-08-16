@@ -32,14 +32,14 @@ test('border-collapse', async () => {
 
 test('border-spacing', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['border-spacing-1', 'border-spacing-[123px]'],
       css`
         @theme {
           --spacing-1: 0.25rem;
         }
         @tailwind utilities;
       `,
-      ['border-spacing-1', 'border-spacing-[123px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -94,14 +94,14 @@ test('border-spacing', async () => {
 
 test('border-spacing-x', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['border-spacing-x-1', 'border-spacing-x-[123px]'],
       css`
         @theme {
           --spacing-1: 0.25rem;
         }
         @tailwind utilities;
       `,
-      ['border-spacing-x-1', 'border-spacing-x-[123px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -154,14 +154,14 @@ test('border-spacing-x', async () => {
 
 test('border-spacing-y', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['border-spacing-y-1', 'border-spacing-y-[123px]'],
       css`
         @theme {
           --spacing-1: 0.25rem;
         }
         @tailwind utilities;
       `,
-      ['border-spacing-y-1', 'border-spacing-y-[123px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -214,7 +214,8 @@ test('border-spacing-y', async () => {
 
 test('rounded', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded', 'rounded-full', 'rounded-none', 'rounded-sm', 'rounded-[4px]'],
       css`
         @theme {
           --radius-sm: 0.125rem;
@@ -222,7 +223,6 @@ test('rounded', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded', 'rounded-full', 'rounded-none', 'rounded-sm', 'rounded-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -253,14 +253,14 @@ test('rounded', async () => {
     "
   `)
   expect(
-    await compileCss(
+    await run(
+      ['rounded-full'],
       css`
         @theme {
           --radius-full: 99999px;
         }
         @tailwind utilities;
       `,
-      ['rounded-full'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -291,7 +291,8 @@ test('rounded', async () => {
 
 test('rounded-s', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-s', 'rounded-s-full', 'rounded-s-none', 'rounded-s-sm', 'rounded-s-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -301,7 +302,6 @@ test('rounded-s', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-s', 'rounded-s-full', 'rounded-s-none', 'rounded-s-sm', 'rounded-s-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -356,7 +356,8 @@ test('rounded-s', async () => {
 
 test('rounded-e', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-e', 'rounded-e-full', 'rounded-e-none', 'rounded-e-sm', 'rounded-e-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -366,7 +367,6 @@ test('rounded-e', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-e', 'rounded-e-full', 'rounded-e-none', 'rounded-e-sm', 'rounded-e-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -421,7 +421,8 @@ test('rounded-e', async () => {
 
 test('rounded-t', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-t', 'rounded-t-full', 'rounded-t-none', 'rounded-t-sm', 'rounded-t-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -431,7 +432,6 @@ test('rounded-t', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-t', 'rounded-t-full', 'rounded-t-none', 'rounded-t-sm', 'rounded-t-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -486,7 +486,8 @@ test('rounded-t', async () => {
 
 test('rounded-r', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-r', 'rounded-r-full', 'rounded-r-none', 'rounded-r-sm', 'rounded-r-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -496,7 +497,6 @@ test('rounded-r', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-r', 'rounded-r-full', 'rounded-r-none', 'rounded-r-sm', 'rounded-r-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -551,7 +551,8 @@ test('rounded-r', async () => {
 
 test('rounded-b', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-b', 'rounded-b-full', 'rounded-b-none', 'rounded-b-sm', 'rounded-b-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -561,7 +562,6 @@ test('rounded-b', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-b', 'rounded-b-full', 'rounded-b-none', 'rounded-b-sm', 'rounded-b-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -616,7 +616,8 @@ test('rounded-b', async () => {
 
 test('rounded-l', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-l', 'rounded-l-full', 'rounded-l-none', 'rounded-l-sm', 'rounded-l-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -626,7 +627,6 @@ test('rounded-l', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-l', 'rounded-l-full', 'rounded-l-none', 'rounded-l-sm', 'rounded-l-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -681,7 +681,8 @@ test('rounded-l', async () => {
 
 test('rounded-ss', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-ss', 'rounded-ss-full', 'rounded-ss-none', 'rounded-ss-sm', 'rounded-ss-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -691,7 +692,6 @@ test('rounded-ss', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-ss', 'rounded-ss-full', 'rounded-ss-none', 'rounded-ss-sm', 'rounded-ss-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -741,7 +741,8 @@ test('rounded-ss', async () => {
 
 test('rounded-se', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-se', 'rounded-se-full', 'rounded-se-none', 'rounded-se-sm', 'rounded-se-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -751,7 +752,6 @@ test('rounded-se', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-se', 'rounded-se-full', 'rounded-se-none', 'rounded-se-sm', 'rounded-se-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -801,7 +801,8 @@ test('rounded-se', async () => {
 
 test('rounded-ee', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-ee', 'rounded-ee-full', 'rounded-ee-none', 'rounded-ee-sm', 'rounded-ee-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -811,7 +812,6 @@ test('rounded-ee', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-ee', 'rounded-ee-full', 'rounded-ee-none', 'rounded-ee-sm', 'rounded-ee-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -861,7 +861,8 @@ test('rounded-ee', async () => {
 
 test('rounded-es', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-es', 'rounded-es-full', 'rounded-es-none', 'rounded-es-sm', 'rounded-es-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -871,7 +872,6 @@ test('rounded-es', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-es', 'rounded-es-full', 'rounded-es-none', 'rounded-es-sm', 'rounded-es-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -921,7 +921,8 @@ test('rounded-es', async () => {
 
 test('rounded-tl', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-tl', 'rounded-tl-full', 'rounded-tl-none', 'rounded-tl-sm', 'rounded-tl-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -931,7 +932,6 @@ test('rounded-tl', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-tl', 'rounded-tl-full', 'rounded-tl-none', 'rounded-tl-sm', 'rounded-tl-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "

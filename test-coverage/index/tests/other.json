@@ -1,5 +1,12 @@
 [
     {
+        "name": "should be possible to apply a custom utility",
+        "type": "compileCss",
+        "classes": [],
+        "css": "@utility bar {\n          &:before {\n            content: 'bar';\n          }\n        }\n\n        .foo {\n          \/* Baz is defined after this rule, but should work *\/\n          @apply bar baz;\n        }\n\n        @utility baz {\n          &:after {\n            content: 'baz';\n          }\n        }\n\n        @tailwind utilities;",
+        "expected": "\"\n      .foo:before {\n        content: \"bar\";\n      }\n\n      .foo:after {\n        content: \"baz\";\n      }\n      \""
+    },
+    {
         "name": "should recursively apply with custom `@utility`, which is used before it is defined",
         "type": "compileCss",
         "classes": [
@@ -76,6 +83,52 @@
         "expected": "\"\n      :root, :host {\n        --spacing-1: 1px;\n        --spacing-2: 2px;\n        --spacing-3: 3px;\n      }\n\n      .mx-3 {\n        margin-inline: var(--spacing-3);\n      }\n\n      .ms-1 {\n        margin-inline-start: var(--spacing-1);\n      }\n\n      .me-2 {\n        margin-inline-end: var(--spacing-2);\n      }\n\n      .scroll-mx-3 {\n        scroll-margin-inline: var(--spacing-3);\n      }\n\n      .scroll-ms-1 {\n        scroll-margin-inline-start: var(--spacing-1);\n      }\n\n      .scroll-me-2 {\n        scroll-margin-inline-end: var(--spacing-2);\n      }\n\n      .scroll-px-3 {\n        scroll-padding-inline: var(--spacing-3);\n      }\n\n      .scroll-ps-1 {\n        scroll-padding-inline-start: var(--spacing-1);\n      }\n\n      .scroll-pe-2 {\n        scroll-padding-inline-end: var(--spacing-2);\n      }\n\n      .px-3 {\n        padding-inline: var(--spacing-3);\n      }\n\n      .ps-1 {\n        padding-inline-start: var(--spacing-1);\n      }\n\n      .pe-2 {\n        padding-inline-end: var(--spacing-2);\n      }\n      \""
     },
     {
+        "name": "should move variants to the end while sorting",
+        "type": "run",
+        "classes": [
+            "pointer-events-none",
+            "flex",
+            "hover:flex",
+            "focus:pointer-events-none"
+        ],
+        "css": null,
+        "expected": "\"\n      .pointer-events-none {\n        pointer-events: none;\n      }\n\n      .flex {\n        display: flex;\n      }\n\n      @media (hover: hover) {\n        .hover\\\\:flex:hover {\n          display: flex;\n        }\n      }\n\n      .focus\\\\:pointer-events-none:focus {\n        pointer-events: none;\n      }\n      \""
+    },
+    {
+        "name": "should sort variants and stacked variants by variant position",
+        "type": "run",
+        "classes": [
+            "flex",
+            "hover:flex",
+            "focus:flex",
+            "disabled:flex",
+            "hover:focus:flex"
+        ],
+        "css": null,
+        "expected": "\"\n      .flex {\n        display: flex;\n      }\n\n      @media (hover: hover) {\n        .hover\\\\:flex:hover {\n          display: flex;\n        }\n      }\n\n      .focus\\\\:flex:focus {\n        display: flex;\n      }\n\n      @media (hover: hover) {\n        .hover\\\\:focus\\\\:flex:hover:focus {\n          display: flex;\n        }\n      }\n\n      .disabled\\\\:flex:disabled {\n        display: flex;\n      }\n      \""
+    },
+    {
+        "name": "should order group-* and peer-* variants based on the sort order of the group and peer variant but also based on the variant they are wrapping",
+        "type": "run",
+        "classes": [
+            "hover:flex",
+            "group-hover:flex",
+            "group-focus:flex",
+            "peer-hover:flex",
+            "peer-focus:flex",
+            "group-hover:peer-hover:flex",
+            "group-hover:peer-focus:flex",
+            "peer-hover:group-hover:flex",
+            "peer-hover:group-focus:flex",
+            "group-focus:peer-hover:flex",
+            "group-focus:peer-focus:flex",
+            "peer-focus:group-hover:flex",
+            "peer-focus:group-focus:flex"
+        ],
+        "css": null,
+        "expected": "\"\n      @media (hover: hover) {\n        .group-hover\\\\:flex:is(:where(.group):hover *) {\n          display: flex;\n        }\n      }\n\n      .group-focus\\\\:flex:is(:where(.group):focus *) {\n        display: flex;\n      }\n\n      @media (hover: hover) {\n        .peer-hover\\\\:flex:is(:where(.peer):hover ~ *) {\n          display: flex;\n        }\n\n        @media (hover: hover) {\n          .group-hover\\\\:peer-hover\\\\:flex:is(:where(.group):hover *):is(:where(.peer):hover ~ *), .peer-hover\\\\:group-hover\\\\:flex:is(:where(.peer):hover ~ *):is(:where(.group):hover *) {\n            display: flex;\n          }\n        }\n\n        .group-focus\\\\:peer-hover\\\\:flex:is(:where(.group):focus *):is(:where(.peer):hover ~ *), .peer-hover\\\\:group-focus\\\\:flex:is(:where(.peer):hover ~ *):is(:where(.group):focus *) {\n          display: flex;\n        }\n      }\n\n      .peer-focus\\\\:flex:is(:where(.peer):focus ~ *) {\n        display: flex;\n      }\n\n      @media (hover: hover) {\n        .group-hover\\\\:peer-focus\\\\:flex:is(:where(.group):hover *):is(:where(.peer):focus ~ *), .peer-focus\\\\:group-hover\\\\:flex:is(:where(.peer):focus ~ *):is(:where(.group):hover *) {\n          display: flex;\n        }\n      }\n\n      .group-focus\\\\:peer-focus\\\\:flex:is(:where(.group):focus *):is(:where(.peer):focus ~ *), .peer-focus\\\\:group-focus\\\\:flex:is(:where(.peer):focus ~ *):is(:where(.group):focus *) {\n        display: flex;\n      }\n\n      @media (hover: hover) {\n        .hover\\\\:flex:hover {\n          display: flex;\n        }\n      }\n      \""
+    },
+    {
         "name": "should not take undefined values into account when sorting",
         "type": "compileCss",
         "classes": [
@@ -117,7 +170,7 @@
         "name": "keyframes are generated when used in user CSS",
         "type": "compileCss",
         "classes": [],
-        "css": "@theme {\n            @keyframes used {\n              to {\n                opacity: 1;\n              }\n            }\n\n            @keyframes unused {\n              to {\n                opacity: 0;\n              }\n            }\n          }\n\n          .foo {\n            animation: used 1s infinite;\n          }\n\n          @tailwind utilities;",
+        "css": "@theme {\n          @keyframes used {\n            to {\n              opacity: 1;\n            }\n          }\n\n          @keyframes unused {\n            to {\n              opacity: 0;\n            }\n          }\n        }\n\n        .foo {\n          animation: used 1s infinite;\n        }\n\n        @tailwind utilities;",
         "expected": "\"\n      .foo {\n        animation: 1s infinite used;\n      }\n\n      @keyframes used {\n        to {\n          opacity: 1;\n        }\n      }\n      \""
     },
     {
@@ -227,13 +280,249 @@
         "expected": "\"\n      :root, :host {\n        --color-potato: #ac855b;\n        --color-tomato: tomato;\n      }\n\n      .bg-potato {\n        background-color: var(--color-potato);\n      }\n\n      .bg-tomato {\n        background-color: var(--color-tomato);\n      }\n      \""
     },
     {
-        "name": "built-in variants can be overridden while keeping their order",
+        "name": "`default` theme values can be overridden by plugin theme values",
         "type": "compileCss",
         "classes": [
-            "rtl"
+            "text-red",
+            "text-orange"
         ],
-        "css": "@custom-variant dark (&:is([data-theme='dark'] *));\n          @layer utilities {\n            @tailwind utilities;\n          }",
-        "expected": "\"\n      @layer utilities {\n        .rtl\\\\:flex:where(:dir(rtl), [dir=\"rtl\"], [dir=\"rtl\"] *), .dark\\\\:flex:is([data-theme=\"dark\"] *) {\n          display: flex;\n        }\n\n        @starting-style {\n          .starting\\\\:flex {\n            display: flex;\n          }\n        }\n      }\n      \""
+        "css": "@theme default {\n            --color-red: red;\n          }\n          @theme {\n            --color-orange: orange;\n          }\n          @plugin \"my-plugin\";\n          @tailwind utilities;",
+        "expected": "\"\n      :root, :host {\n        --color-orange: orange;\n      }\n\n      .text-orange {\n        color: var(--color-orange);\n      }\n\n      .text-red {\n        color: tomato;\n      }\n      \""
+    },
+    {
+        "name": "`default` theme values can be overridden by config theme values",
+        "type": "compileCss",
+        "classes": [
+            "text-red",
+            "text-orange"
+        ],
+        "css": "@theme default {\n            --color-red: red;\n          }\n          @theme {\n            --color-orange: orange;\n          }\n          @config \".\/my-config.js\";\n          @tailwind utilities;",
+        "expected": "\"\n      :root, :host {\n        --color-orange: orange;\n      }\n\n      .text-orange {\n        color: var(--color-orange);\n      }\n\n      .text-red {\n        color: tomato;\n      }\n      \""
+    },
+    {
+        "name": "@plugin can accept options",
+        "type": "compileCss",
+        "classes": [
+            "text-primary"
+        ],
+        "css": "@tailwind utilities;\n          @plugin \"my-plugin\" {\n            color: red;\n          }",
+        "expected": "\"\n      .text-primary {\n        color: red;\n      }\n      \""
+    },
+    {
+        "name": "addVariant with string selector",
+        "type": "compileCss",
+        "classes": [
+            "hocus:underline",
+            "group-hocus:flex"
+        ],
+        "css": "@plugin \"my-plugin\";\n          @layer utilities {\n            @tailwind utilities;\n          }",
+        "expected": "\"\n      @layer utilities {\n        .group-hocus\\\\:flex:is(:is(:where(.group):hover, :where(.group):focus) *) {\n          display: flex;\n        }\n\n        .hocus\\\\:underline:hover, .hocus\\\\:underline:focus {\n          text-decoration-line: underline;\n        }\n      }\n      \""
+    },
+    {
+        "name": "addVariant with array of selectors",
+        "type": "compileCss",
+        "classes": [
+            "hocus:underline",
+            "group-hocus:flex"
+        ],
+        "css": "@plugin \"my-plugin\";\n          @layer utilities {\n            @tailwind utilities;\n          }",
+        "expected": "\"\n      @layer utilities {\n        .group-hocus\\\\:flex:is(:where(.group):hover *), .group-hocus\\\\:flex:is(:where(.group):focus *) {\n          display: flex;\n        }\n\n        .hocus\\\\:underline:hover, .hocus\\\\:underline:focus {\n          text-decoration-line: underline;\n        }\n      }\n      \""
+    },
+    {
+        "name": "addVariant with object syntax and @slot",
+        "type": "compileCss",
+        "classes": [
+            "hocus:underline",
+            "group-hocus:flex"
+        ],
+        "css": "@plugin \"my-plugin\";\n          @layer utilities {\n            @tailwind utilities;\n          }",
+        "expected": "\"\n      @layer utilities {\n        .group-hocus\\\\:flex:is(:where(.group):hover *), .group-hocus\\\\:flex:is(:where(.group):focus *) {\n          display: flex;\n        }\n\n        .hocus\\\\:underline:hover, .hocus\\\\:underline:focus {\n          text-decoration-line: underline;\n        }\n      }\n      \""
+    },
+    {
+        "name": "addVariant with object syntax, media, nesting and multiple @slot",
+        "type": "compileCss",
+        "classes": [
+            "hocus:underline",
+            "group-hocus:flex"
+        ],
+        "css": "@plugin \"my-plugin\";\n          @layer utilities {\n            @tailwind utilities;\n          }",
+        "expected": "\"\n      @layer utilities {\n        @media (hover: hover) {\n          .group-hocus\\\\:flex:is(:where(.group):hover *) {\n            display: flex;\n          }\n        }\n\n        .group-hocus\\\\:flex:is(:where(.group):focus *) {\n          display: flex;\n        }\n\n        @media (hover: hover) {\n          .hocus\\\\:underline:hover {\n            text-decoration-line: underline;\n          }\n        }\n\n        .hocus\\\\:underline:focus {\n          text-decoration-line: underline;\n        }\n      }\n      \""
+    },
+    {
+        "name": "@slot is preserved when used as a custom property value",
+        "type": "compileCss",
+        "classes": [
+            "hocus:underline"
+        ],
+        "css": "@plugin \"my-plugin\";\n          @layer utilities {\n            @tailwind utilities;\n          }",
+        "expected": "\"\n      @layer utilities {\n        .hocus\\\\:underline {\n          --custom-property: @slot;\n        }\n\n        .hocus\\\\:underline:hover, .hocus\\\\:underline:focus {\n          text-decoration-line: underline;\n        }\n      }\n      \""
+    },
+    {
+        "name": "always includes the candidate",
+        "type": "compileCss",
+        "classes": [],
+        "css": "@source inline(\"underline\");\n          @tailwind utilities;",
+        "expected": "\"\n        .underline {\n          text-decoration-line: underline;\n        }\n        \""
+    },
+    {
+        "name": "applies brace expansion",
+        "type": "compileCss",
+        "classes": [],
+        "css": "@theme {\n            --color-red-50: oklch(0.971 0.013 17.38);\n            --color-red-100: oklch(0.936 0.032 17.717);\n            --color-red-200: oklch(0.885 0.062 18.334);\n            --color-red-300: oklch(0.808 0.114 19.571);\n            --color-red-400: oklch(0.704 0.191 22.216);\n            --color-red-500: oklch(0.637 0.237 25.331);\n            --color-red-600: oklch(0.577 0.245 27.325);\n            --color-red-700: oklch(0.505 0.213 27.518);\n            --color-red-800: oklch(0.444 0.177 26.899);\n            --color-red-900: oklch(0.396 0.141 25.723);\n            --color-red-950: oklch(0.258 0.092 26.042);\n          }\n          @source inline(\"bg-red-{50,{100..900..100},950}\");\n          @tailwind utilities;",
+        "expected": "\"\n        :root, :host {\n          --color-red-50: oklch(97.1% .013 17.38);\n          --color-red-100: oklch(93.6% .032 17.717);\n          --color-red-200: oklch(88.5% .062 18.334);\n          --color-red-300: oklch(80.8% .114 19.571);\n          --color-red-400: oklch(70.4% .191 22.216);\n          --color-red-500: oklch(63.7% .237 25.331);\n          --color-red-600: oklch(57.7% .245 27.325);\n          --color-red-700: oklch(50.5% .213 27.518);\n          --color-red-800: oklch(44.4% .177 26.899);\n          --color-red-900: oklch(39.6% .141 25.723);\n          --color-red-950: oklch(25.8% .092 26.042);\n        }\n\n        .bg-red-50 {\n          background-color: var(--color-red-50);\n        }\n\n        .bg-red-100 {\n          background-color: var(--color-red-100);\n        }\n\n        .bg-red-200 {\n          background-color: var(--color-red-200);\n        }\n\n        .bg-red-300 {\n          background-color: var(--color-red-300);\n        }\n\n        .bg-red-400 {\n          background-color: var(--color-red-400);\n        }\n\n        .bg-red-500 {\n          background-color: var(--color-red-500);\n        }\n\n        .bg-red-600 {\n          background-color: var(--color-red-600);\n        }\n\n        .bg-red-700 {\n          background-color: var(--color-red-700);\n        }\n\n        .bg-red-800 {\n          background-color: var(--color-red-800);\n        }\n\n        .bg-red-900 {\n          background-color: var(--color-red-900);\n        }\n\n        .bg-red-950 {\n          background-color: var(--color-red-950);\n        }\n        \""
+    },
+    {
+        "name": "adds multiple inline sources separated by spaces",
+        "type": "compileCss",
+        "classes": [],
+        "css": "@theme {\n            --color-red-100: oklch(0.936 0.032 17.717);\n            --color-red-200: oklch(0.885 0.062 18.334);\n          }\n          @source inline(\"block bg-red-{100..200..100}\");\n          @tailwind utilities;",
+        "expected": "\"\n        :root, :host {\n          --color-red-100: oklch(93.6% .032 17.717);\n          --color-red-200: oklch(88.5% .062 18.334);\n        }\n\n        .block {\n          display: block;\n        }\n\n        .bg-red-100 {\n          background-color: var(--color-red-100);\n        }\n\n        .bg-red-200 {\n          background-color: var(--color-red-200);\n        }\n        \""
+    },
+    {
+        "name": "works with whitespace around the argument",
+        "type": "compileCss",
+        "classes": [],
+        "css": "\/* prettier-ignore *\/\n          @source inline( \"underline\" );\n          @tailwind utilities;",
+        "expected": "\"\n        .underline {\n          text-decoration-line: underline;\n        }\n        \""
+    },
+    {
+        "name": "works with newlines around the argument",
+        "type": "compileCss",
+        "classes": [],
+        "css": "\/* prettier-ignore *\/\n          @source inline(\n            \"underline\"\n          );\n          @tailwind utilities;",
+        "expected": "\"\n        .underline {\n          text-decoration-line: underline;\n        }\n        \""
+    },
+    {
+        "name": "selector variant",
+        "type": "compileCss",
+        "classes": [
+            "hocus:underline",
+            "group-hocus:flex"
+        ],
+        "css": "@custom-variant hocus (&:hover, &:focus);\n\n            @layer utilities {\n              @tailwind utilities;\n            }",
+        "expected": "\"\n        @layer utilities {\n          .group-hocus\\\\:flex:is(:is(:where(.group):hover, :where(.group):focus) *) {\n            display: flex;\n          }\n\n          .hocus\\\\:underline:hover, .hocus\\\\:underline:focus {\n            text-decoration-line: underline;\n          }\n        }\n        \""
+    },
+    {
+        "name": "at-rule variant",
+        "type": "compileCss",
+        "classes": [
+            "any-hover:hover:underline"
+        ],
+        "css": "@custom-variant any-hover (@media (any-hover: hover));\n\n            @layer utilities {\n              @tailwind utilities;\n            }",
+        "expected": "\"\n        @layer utilities {\n          @media (any-hover: hover) {\n            @media (hover: hover) {\n              .any-hover\\\\:hover\\\\:underline:hover {\n                text-decoration-line: underline;\n              }\n            }\n          }\n        }\n        \""
+    },
+    {
+        "name": "style-rules and at-rules",
+        "type": "compileCss",
+        "classes": [
+            "cant-hover:focus:underline"
+        ],
+        "css": "@custom-variant cant-hover (&:not(:hover), &:not(:active), @media not (any-hover: hover), @media not (pointer: fine));\n\n            @layer utilities {\n              @tailwind utilities;\n            }",
+        "expected": "\"\n        @layer utilities {\n          :is(.cant-hover\\\\:focus\\\\:underline:not(:hover), .cant-hover\\\\:focus\\\\:underline:not(:active)):focus {\n            text-decoration-line: underline;\n          }\n\n          @media not all and (any-hover: hover) {\n            .cant-hover\\\\:focus\\\\:underline:focus {\n              text-decoration-line: underline;\n            }\n          }\n\n          @media not all and (pointer: fine) {\n            .cant-hover\\\\:focus\\\\:underline:focus {\n              text-decoration-line: underline;\n            }\n          }\n        }\n        \""
+    },
+    {
+        "name": "selector with @slot",
+        "type": "compileCss",
+        "classes": [
+            "selected:underline",
+            "group-selected:underline"
+        ],
+        "css": "@custom-variant selected {\n              &[data-selected] {\n                @slot;\n              }\n            }\n\n            @layer utilities {\n              @tailwind utilities;\n            }",
+        "expected": "\"\n        @layer utilities {\n          .group-selected\\\\:underline:is(:where(.group)[data-selected] *), .selected\\\\:underline[data-selected] {\n            text-decoration-line: underline;\n          }\n        }\n        \""
+    },
+    {
+        "name": "grouped selectors with @slot",
+        "type": "compileCss",
+        "classes": [
+            "hocus:underline",
+            "group-hocus:underline"
+        ],
+        "css": "@custom-variant hocus {\n              &:hover,\n              &:focus {\n                @slot;\n              }\n            }\n\n            @layer utilities {\n              @tailwind utilities;\n            }",
+        "expected": "\"\n        @layer utilities {\n          .group-hocus\\\\:underline:is(:is(:where(.group):hover, :where(.group):focus) *), .hocus\\\\:underline:hover, .hocus\\\\:underline:focus {\n            text-decoration-line: underline;\n          }\n        }\n        \""
+    },
+    {
+        "name": "multiple selectors with @slot",
+        "type": "compileCss",
+        "classes": [
+            "hocus:underline",
+            "group-hocus:underline"
+        ],
+        "css": "@custom-variant hocus {\n              &:hover {\n                @slot;\n              }\n\n              &:focus {\n                @slot;\n              }\n            }\n\n            @layer utilities {\n              @tailwind utilities;\n            }",
+        "expected": "\"\n        @layer utilities {\n          .group-hocus\\\\:underline:is(:where(.group):hover *), .group-hocus\\\\:underline:is(:where(.group):focus *), .hocus\\\\:underline:hover, .hocus\\\\:underline:focus {\n            text-decoration-line: underline;\n          }\n        }\n        \""
+    },
+    {
+        "name": "nested selector with @slot",
+        "type": "compileCss",
+        "classes": [
+            "custom-before:underline"
+        ],
+        "css": "@custom-variant custom-before {\n              & {\n                --has-before: 1;\n                &::before {\n                  @slot;\n                }\n              }\n            }\n\n            @layer utilities {\n              @tailwind utilities;\n            }",
+        "expected": "\"\n        @layer utilities {\n          .custom-before\\\\:underline {\n            --has-before: 1;\n          }\n\n          .custom-before\\\\:underline:before {\n            text-decoration-line: underline;\n          }\n        }\n        \""
+    },
+    {
+        "name": "grouped nested selectors with @slot",
+        "type": "compileCss",
+        "classes": [
+            "custom-before:underline"
+        ],
+        "css": "@custom-variant custom-before {\n              & {\n                --has-before: 1;\n                &::before {\n                  &:hover,\n                  &:focus {\n                    @slot;\n                  }\n                }\n              }\n            }\n\n            @layer utilities {\n              @tailwind utilities;\n            }",
+        "expected": "\"\n        @layer utilities {\n          .custom-before\\\\:underline {\n            --has-before: 1;\n          }\n\n          .custom-before\\\\:underline:before:hover, .custom-before\\\\:underline:before:focus {\n            text-decoration-line: underline;\n          }\n        }\n        \""
+    },
+    {
+        "name": "nested multiple selectors with @slot",
+        "type": "compileCss",
+        "classes": [
+            "hocus:underline",
+            "group-hocus:underline"
+        ],
+        "css": "@custom-variant hocus {\n              &:hover {\n                @media (hover: hover) {\n                  @slot;\n                }\n              }\n\n              &:focus {\n                @slot;\n              }\n            }\n\n            @layer utilities {\n              @tailwind utilities;\n            }",
+        "expected": "\"\n        @layer utilities {\n          @media (hover: hover) {\n            .group-hocus\\\\:underline:is(:where(.group):hover *) {\n              text-decoration-line: underline;\n            }\n          }\n\n          .group-hocus\\\\:underline:is(:where(.group):focus *) {\n            text-decoration-line: underline;\n          }\n\n          @media (hover: hover) {\n            .hocus\\\\:underline:hover {\n              text-decoration-line: underline;\n            }\n          }\n\n          .hocus\\\\:underline:focus {\n            text-decoration-line: underline;\n          }\n        }\n        \""
+    },
+    {
+        "name": "selector nested under at-rule with @slot",
+        "type": "compileCss",
+        "classes": [
+            "hocus:underline",
+            "group-hocus:underline"
+        ],
+        "css": "@custom-variant hocus {\n              @media (hover: hover) {\n                &:hover {\n                  @slot;\n                }\n              }\n            }\n\n            @layer utilities {\n              @tailwind utilities;\n            }",
+        "expected": "\"\n        @layer utilities {\n          @media (hover: hover) {\n            .group-hocus\\\\:underline:is(:where(.group):hover *), .hocus\\\\:underline:hover {\n              text-decoration-line: underline;\n            }\n          }\n        }\n        \""
+    },
+    {
+        "name": "at-rule with @slot",
+        "type": "compileCss",
+        "classes": [
+            "any-hover:underline"
+        ],
+        "css": "@custom-variant any-hover {\n              @media (any-hover: hover) {\n                @slot;\n              }\n            }\n\n            @layer utilities {\n              @tailwind utilities;\n            }",
+        "expected": "\"\n        @layer utilities {\n          @media (any-hover: hover) {\n            .any-hover\\\\:underline {\n              text-decoration-line: underline;\n            }\n          }\n        }\n        \""
+    },
+    {
+        "name": "multiple at-rules with @slot",
+        "type": "compileCss",
+        "classes": [
+            "desktop:underline"
+        ],
+        "css": "@custom-variant desktop {\n              @media (any-hover: hover) {\n                @slot;\n              }\n\n              @media (pointer: fine) {\n                @slot;\n              }\n            }\n\n            @layer utilities {\n              @tailwind utilities;\n            }",
+        "expected": "\"\n        @layer utilities {\n          @media (any-hover: hover) {\n            .desktop\\\\:underline {\n              text-decoration-line: underline;\n            }\n          }\n\n          @media (pointer: fine) {\n            .desktop\\\\:underline {\n              text-decoration-line: underline;\n            }\n          }\n        }\n        \""
+    },
+    {
+        "name": "nested at-rules with @slot",
+        "type": "compileCss",
+        "classes": [
+            "custom-variant:underline"
+        ],
+        "css": "@custom-variant custom-variant {\n              @media (orientation: landscape) {\n                @media screen {\n                  @slot;\n                }\n\n                @media print {\n                  display: none;\n                }\n              }\n            }\n\n            @layer utilities {\n              @tailwind utilities;\n            }",
+        "expected": "\"\n        @layer utilities {\n          @media (orientation: landscape) {\n            @media screen {\n              .custom-variant\\\\:underline {\n                text-decoration-line: underline;\n              }\n            }\n\n            @media print {\n              .custom-variant\\\\:underline {\n                display: none;\n              }\n            }\n          }\n        }\n        \""
+    },
+    {
+        "name": "at-rule and selector with @slot",
+        "type": "compileCss",
+        "classes": [
+            "custom-dark:underline"
+        ],
+        "css": "@custom-variant custom-dark {\n              @media (prefers-color-scheme: dark) {\n                @slot;\n              }\n              &:is(.dark *) {\n                @slot;\n              }\n            }\n\n            @layer utilities {\n              @tailwind utilities;\n            }",
+        "expected": "\"\n        @layer utilities {\n          @media (prefers-color-scheme: dark) {\n            .custom-dark\\\\:underline {\n              text-decoration-line: underline;\n            }\n          }\n\n          .custom-dark\\\\:underline:is(.dark *) {\n            text-decoration-line: underline;\n          }\n        }\n        \""
     },
     {
         "name": "at-rule-only variants cannot be used with compound variants",
@@ -316,5 +605,215 @@
         ],
         "css": "@custom-variant foo {\n            @variant hover {\n              @variant bar {\n                @slot;\n              }\n            }\n          }\n\n          @custom-variant bar {\n            @variant focus {\n              @variant baz {\n                @slot;\n              }\n            }\n          }\n\n          @custom-variant baz {\n            @variant active {\n              @variant foo {\n                @slot;\n              }\n            }\n          }\n\n          \/* Break the circle *\/\n          @custom-variant foo ([data-broken-circle] &);\n\n          @tailwind utilities;",
         "expected": "\"\n      [data-broken-circle] .baz\\\\:flex:active {\n        display: flex;\n      }\n      \""
+    },
+    {
+        "name": "@utility can handle escape sequences correctly",
+        "type": "compileCss",
+        "classes": [
+            "push-1\/2",
+            "push-50%"
+        ],
+        "css": "@layer utilities {\n            @tailwind utilities;\n          }\n\n          @utility push-1\\\/2 {\n            right: 50%;\n          }\n\n          @utility push-50\\% {\n            right: 50%;\n          }",
+        "expected": "\"\n      @layer utilities {\n        .push-1\\\\\/2, .push-50\\\\% {\n          right: 50%;\n        }\n      }\n      \""
+    },
+    {
+        "name": "@utility name cannot contain multiple `\/` characters",
+        "type": "compileCss",
+        "classes": [
+            "ui\/button"
+        ],
+        "css": "@utility ui\/button {\n            display: inline-flex;\n            background: blue;\n          }\n          @tailwind utilities;",
+        "expected": "\"\n      .ui\\\\\/button {\n        background: #00f;\n        display: inline-flex;\n      }\n      \""
+    },
+    {
+        "name": "addBase",
+        "type": "compileCss",
+        "classes": [
+            "underline"
+        ],
+        "css": "@plugin \"my-plugin\";\n        @layer base, utilities;\n        @layer utilities {\n          @tailwind utilities;\n        }",
+        "expected": "\"\n    @layer base {\n      body {\n        font-feature-settings: \"tnum\";\n      }\n    }\n\n    @layer utilities {\n      .underline {\n        text-decoration-line: underline;\n      }\n    }\n    \""
+    },
+    {
+        "name": "JS APIs support @variant",
+        "type": "compileCss",
+        "classes": [
+            "underline",
+            "foo",
+            "bar-one"
+        ],
+        "css": "@plugin \"my-plugin\";\n        @layer base, utilities;\n        @layer utilities {\n          @tailwind utilities;\n        }",
+        "expected": "\"\n    @layer base {\n      @media (prefers-color-scheme: dark) {\n        body {\n          color: red;\n        }\n      }\n    }\n\n    @layer utilities {\n      .underline {\n        text-decoration-line: underline;\n      }\n\n      @media (prefers-color-scheme: dark) {\n        .bar-one {\n          --bar: 1;\n        }\n\n        .foo {\n          --foo: foo;\n        }\n      }\n    }\n    \""
+    },
+    {
+        "name": "recursively removes styles",
+        "type": "compileCss",
+        "classes": [],
+        "css": "@reference '.\/foo\/bar.css';\n\n          .bar {\n            @apply md:hocus:foo;\n          }",
+        "expected": "\"\n      @media (min-width: 768px) {\n        .bar:hover, .bar:focus {\n          color: red;\n        }\n      }\n      \""
+    },
+    {
+        "name": "removes all @keyframes, even those contributed by JavasScript plugins",
+        "type": "compileCss",
+        "classes": [
+            "animate-spin",
+            "match-utility-initial",
+            "match-components-initial"
+        ],
+        "css": "@media reference {\n            @layer theme, base, components, utilities;\n            @layer theme {\n              @theme {\n                --animate-spin: spin 1s linear infinite;\n                --animate-ping: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;\n                @keyframes spin {\n                  to {\n                    transform: rotate(360deg);\n                  }\n                }\n              }\n            }\n            @layer base {\n              @keyframes ping {\n                75%,\n                100% {\n                  transform: scale(2);\n                  opacity: 0;\n                }\n              }\n            }\n            @plugin \"my-plugin\";\n          }\n\n          .bar {\n            @apply animate-spin;\n          }",
+        "expected": "\"\n      .bar {\n        animation: var(--animate-spin, spin 1s linear infinite);\n      }\n\n      @keyframes spin {\n        to {\n          transform: rotate(360deg);\n        }\n      }\n      \""
+    },
+    {
+        "name": "removes styles when the import resolver was handled outside of Tailwind CSS",
+        "type": "compileCss",
+        "classes": [],
+        "css": "@media reference {\n          @layer theme {\n            @theme {\n              --breakpoint-md: 48rem;\n            }\n            .foo {\n              color: red;\n            }\n          }\n          @utility foo {\n            color: red;\n          }\n          @custom-variant hocus (&:hover, &:focus);\n        }\n\n        .bar {\n          @apply md:hocus:foo;\n        }",
+        "expected": "\"\n      @media (min-width: 48rem) {\n        .bar:hover, .bar:focus {\n          color: red;\n        }\n      }\n      \""
+    },
+    {
+        "name": "should convert legacy body-less `@variant` as a `@custom-variant`",
+        "type": "compileCss",
+        "classes": [
+            "hocus:underline"
+        ],
+        "css": "@variant hocus (&:hover, &:focus);\n          @tailwind utilities;",
+        "expected": "\"\n      .hocus\\\\:underline:hover, .hocus\\\\:underline:focus {\n        text-decoration-line: underline;\n      }\n      \""
+    },
+    {
+        "name": "should convert legacy `@variant` with `@slot` as a `@custom-variant`",
+        "type": "compileCss",
+        "classes": [
+            "hocus:underline"
+        ],
+        "css": "@variant hocus {\n            &:hover {\n              @slot;\n            }\n\n            &:focus {\n              @slot;\n            }\n          }\n          @tailwind utilities;",
+        "expected": "\"\n      .hocus\\\\:underline:hover, .hocus\\\\:underline:focus {\n        text-decoration-line: underline;\n      }\n      \""
+    },
+    {
+        "name": "should be possible to use `@variant` in your CSS",
+        "type": "compileCss",
+        "classes": [],
+        "css": ".btn {\n          background: black;\n\n          @variant dark {\n            background: white;\n          }\n        }\n\n        @variant hover {\n          @variant landscape {\n            .btn2 {\n              color: red;\n            }\n          }\n        }\n\n        @variant hover {\n          .foo {\n            color: red;\n          }\n          @variant landscape {\n            .bar {\n              color: blue;\n            }\n          }\n          .baz {\n            @variant portrait {\n              color: green;\n            }\n          }\n        }\n\n        @media something {\n          @variant landscape {\n            @page {\n              color: red;\n            }\n          }\n        }",
+        "expected": "\"\n      .btn {\n        background: #000;\n      }\n\n      @media (prefers-color-scheme: dark) {\n        .btn {\n          background: #fff;\n        }\n      }\n\n      @media (hover: hover) {\n        @media (orientation: landscape) {\n          :scope:hover .btn2 {\n            color: red;\n          }\n        }\n\n        :scope:hover .foo {\n          color: red;\n        }\n\n        @media (orientation: landscape) {\n          :scope:hover .bar {\n            color: #00f;\n          }\n        }\n\n        @media (orientation: portrait) {\n          :scope:hover .baz {\n            color: green;\n          }\n        }\n      }\n\n      @media something {\n        @media (orientation: landscape) {\n          @page {\n            color: red;\n          }\n        }\n      }\n      \""
+    },
+    {
+        "name": "should be possible to use `@variant` in your CSS with a `@custom-variant` that is defined later",
+        "type": "compileCss",
+        "classes": [],
+        "css": ".btn {\n          background: black;\n\n          @variant hocus {\n            background: white;\n          }\n        }\n\n        @custom-variant hocus (&:hover, &:focus);",
+        "expected": "\"\n      .btn {\n        background: #000;\n      }\n\n      .btn:hover, .btn:focus {\n        background: #fff;\n      }\n      \""
+    },
+    {
+        "name": "should be possible to use nested `@variant` rules",
+        "type": "compileCss",
+        "classes": [
+            "disabled:focus:underline"
+        ],
+        "css": ".btn {\n            background: black;\n\n            @variant disabled {\n              @variant focus {\n                background: white;\n              }\n            }\n          }\n          @tailwind utilities;",
+        "expected": "\"\n      .btn {\n        background: #000;\n      }\n\n      .btn:disabled:focus {\n        background: #fff;\n      }\n\n      .disabled\\\\:focus\\\\:underline:disabled:focus {\n        text-decoration-line: underline;\n      }\n      \""
+    },
+    {
+        "name": "should handle variants containing a `,` inside",
+        "type": "compileCss",
+        "classes": [],
+        "css": ".btn {\n            background: black;\n\n            @variant [&:is(:hover,:focus)], disabled {\n              background: red;\n            }\n          }\n          @tailwind utilities;",
+        "expected": "\"\n        .btn {\n          background: #000;\n        }\n\n        .btn:is(:hover, :focus), .btn:disabled {\n          background: red;\n        }\n        \""
+    },
+    {
+        "name": "should handle stacked variants",
+        "type": "compileCss",
+        "classes": [],
+        "css": ".btn {\n            background: black;\n\n            @variant hover:focus {\n              background: red;\n            }\n          }\n          @tailwind utilities;",
+        "expected": "\"\n        .btn {\n          background: #000;\n        }\n\n        @media (hover: hover) {\n          .btn:hover:focus {\n            background: red;\n          }\n        }\n        \""
+    },
+    {
+        "name": "should handle stacked variants & comma-separated variants",
+        "type": "compileCss",
+        "classes": [],
+        "css": ".btn {\n            background: black;\n\n            @variant hover:focus, disabled {\n              background: red;\n            }\n          }\n          @tailwind utilities;",
+        "expected": "\"\n        .btn {\n          background: #000;\n        }\n\n        @media (hover: hover) {\n          .btn:hover:focus {\n            background: red;\n          }\n        }\n\n        .btn:disabled {\n          background: red;\n        }\n        \""
+    },
+    {
+        "name": "should handle variants containing a `:` inside",
+        "type": "compileCss",
+        "classes": [],
+        "css": ".btn {\n            background: black;\n\n            @variant [&:is(:hover,:focus)]:disabled, aria-disabled:hover {\n              background: red;\n            }\n          }\n          @tailwind utilities;",
+        "expected": "\"\n        .btn {\n          background: #000;\n        }\n\n        .btn:is(:hover, :focus):disabled {\n          background: red;\n        }\n\n        @media (hover: hover) {\n          .btn[aria-disabled=\"true\"]:hover {\n            background: red;\n          }\n        }\n        \""
+    },
+    {
+        "name": "should be possible to use `@variant` with a funky looking variants",
+        "type": "compileCss",
+        "classes": [],
+        "css": "@theme inline reference {\n          --container-md: 768px;\n        }\n\n        .btn {\n          background: black;\n\n          @variant @md {\n            @variant [&.foo] {\n              background: white;\n            }\n          }\n        }",
+        "expected": "\"\n      .btn {\n        background: #000;\n      }\n\n      @container (min-width: 768px) {\n        .btn.foo {\n          background: #fff;\n        }\n      }\n      \""
+    },
+    {
+        "name": "works for color values in the first and second position",
+        "type": "compileCss",
+        "classes": [],
+        "css": "@theme {\n          --color-red-500: oklch(63.7% 0.237 25.331);\n          --color-orange-500: oklch(70.5% 0.213 47.604);\n        }\n        @tailwind utilities;\n        .mixed {\n          color: color-mix(in lch, var(--color-red-500) 50%, var(--color-orange-500));\n        }",
+        "expected": "\"\n      :root, :host {\n        --color-red-500: oklch(63.7% .237 25.331);\n        --color-orange-500: oklch(70.5% .213 47.604);\n      }\n\n      .mixed {\n        color: #fc4d1b;\n      }\n\n      @supports (color: color-mix(in lab, red, red)) {\n        .mixed {\n          color: color-mix(in lch, var(--color-red-500) 50%, var(--color-orange-500));\n        }\n      }\n      \""
+    },
+    {
+        "name": "works for nested `color-mix(\u2026)` calls",
+        "type": "compileCss",
+        "classes": [],
+        "css": "@theme {\n          --color-red-500: oklch(63.7% 0.237 25.331);\n        }\n        @tailwind utilities;\n        .stacked {\n          color: color-mix(\n            in lch,\n            color-mix(in lch, var(--color-red-500) 50%, transparent) 50%,\n            transparent\n          );\n        }",
+        "expected": "\"\n      :root, :host {\n        --color-red-500: oklch(63.7% .237 25.331);\n      }\n\n      .stacked {\n        color: lch(55.5764% 89.7903 33.1932 \/ .25098);\n      }\n\n      @supports (color: color-mix(in lab, red, red)) {\n        .stacked {\n          color: color-mix(in lch, color-mix(in lch, var(--color-red-500) 50%, transparent) 50%, transparent);\n        }\n      }\n      \""
+    },
+    {
+        "name": "works with multiple `color-mix(\u2026)` functions in one declaration",
+        "type": "compileCss",
+        "classes": [],
+        "css": "@theme {\n          --color-red-500: oklch(63.7% 0.237 25.331);\n          --color-orange-500: oklch(70.5% 0.213 47.604);\n        }\n        @tailwind utilities;\n        .gradient {\n          background: linear-gradient(\n            90deg,\n            color-mix(in oklab, var(--color-red-500) 50%, transparent) 0%,\n            color-mix(in oklab, var(--color-orange-500) 50%, transparent) 0%,\n            100%\n          );\n        }",
+        "expected": "\"\n      :root, :host {\n        --color-red-500: oklch(63.7% .237 25.331);\n        --color-orange-500: oklch(70.5% .213 47.604);\n      }\n\n      .gradient {\n        background: linear-gradient(90deg, #fb2c3680 0%, #fe6e0080 0%, 100%);\n      }\n\n      @supports (color: color-mix(in lab, red, red)) {\n        .gradient {\n          background: linear-gradient(90deg, color-mix(in oklab, var(--color-red-500) 50%, transparent) 0%, color-mix(in oklab, var(--color-orange-500) 50%, transparent) 0%, 100%);\n        }\n      }\n      \""
+    },
+    {
+        "name": "works with no spaces after the `var(\u2026)`",
+        "type": "compileCss",
+        "classes": [],
+        "css": "@theme {\n            --color-red-500: oklch(63.7% 0.237 25.331);\n          }\n          @tailwind utilities;\n          .text-red-500\\\/50 {\n            color: color-mix(in oklab,var(--color-red-500)50%,transparent);\n          }",
+        "expected": "\"\n      :root, :host {\n        --color-red-500: oklch(63.7% .237 25.331);\n      }\n\n      .text-red-500\\\\\/50 {\n        color: #fb2c3680;\n      }\n\n      @supports (color: color-mix(in lab, red, red)) {\n        .text-red-500\\\\\/50 {\n          color: color-mix(in oklab,var(--color-red-500)50%,transparent);\n        }\n      }\n      \""
+    },
+    {
+        "name": "uses the first color value as the fallback when the `color-mix(\u2026)` function contains currentcolor",
+        "type": "run",
+        "classes": [
+            "text-current\/50"
+        ],
+        "css": null,
+        "expected": "\"\n      .text-current\\\\\/50 {\n        color: currentColor;\n      }\n\n      @supports (color: color-mix(in lab, red, red)) {\n        .text-current\\\\\/50 {\n          color: color-mix(in oklab, currentcolor 50%, transparent);\n        }\n      }\n      \""
+    },
+    {
+        "name": "does not create a fallback when all color values are statically analyzable (lightningcss will flatten this)",
+        "type": "compileCss",
+        "classes": [
+            "text-red-500\/50"
+        ],
+        "css": "@theme inline {\n            --color-red-500: oklch(63.7% 0.237 25.331);\n          }\n          @tailwind utilities;",
+        "expected": "\"\n      .text-red-500\\\\\/50 {\n        color: oklab(63.7% .214 .101 \/ .5);\n      }\n      \""
+    },
+    {
+        "name": "does not apply optimizations when already inside a @supports (color: color-mix... block",
+        "type": "compileCss",
+        "classes": [
+            "mixed"
+        ],
+        "css": "@tailwind utilities;\n          @utility mixed {\n            @supports (color: color-mix(in lab, red, red)) {\n              background: color-mix(in oklab, var(--color-1), var(--color-2) 0%);\n            }\n          }",
+        "expected": "\"\n      @supports (color: color-mix(in lab, red, red)) {\n        .mixed {\n          background: color-mix(in oklab, var(--color-1), var(--color-2) 0%);\n        }\n      }\n      \""
+    },
+    {
+        "name": "emits fallbacks",
+        "type": "compileCss",
+        "classes": [],
+        "css": "@tailwind utilities;\n\n        @property --no-inherit-no-value {\n          syntax: '*';\n          inherits: false;\n        }\n        @property --no-inherit-value {\n          syntax: '*';\n          inherits: false;\n          initial-value: red;\n        }\n        @property --inherit-no-value {\n          syntax: '*';\n          inherits: true;\n        }\n        @property --inherit-value {\n          syntax: '*';\n          inherits: true;\n          initial-value: red;\n        }",
+        "expected": "\"\n      @layer properties {\n        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {\n          :root, :host {\n            --inherit-no-value: initial;\n            --inherit-value: red;\n          }\n\n          *, :before, :after, ::backdrop {\n            --no-inherit-no-value: initial;\n            --no-inherit-value: red;\n          }\n        }\n      }\n\n      @property --no-inherit-no-value {\n        syntax: \"*\";\n        inherits: false\n      }\n\n      @property --no-inherit-value {\n        syntax: \"*\";\n        inherits: false;\n        initial-value: red;\n      }\n\n      @property --inherit-no-value {\n        syntax: \"*\";\n        inherits: true\n      }\n\n      @property --inherit-value {\n        syntax: \"*\";\n        inherits: true;\n        initial-value: red;\n      }\n      \""
+    },
+    {
+        "name": "emitting fallbacks can be disabled (necessary for CSS modules)",
+        "type": "compileCss",
+        "classes": [],
+        "css": "@tailwind utilities;\n\n          @property --no-inherit-no-value {\n            syntax: '*';\n            inherits: false;\n          }\n          @property --no-inherit-value {\n            syntax: '*';\n            inherits: false;\n            initial-value: red;\n          }\n          @property --inherit-no-value {\n            syntax: '*';\n            inherits: true;\n          }\n          @property --inherit-value {\n            syntax: '*';\n            inherits: true;\n            initial-value: red;\n          }",
+        "expected": "\"\n      @property --no-inherit-no-value {\n        syntax: \"*\";\n        inherits: false\n      }\n\n      @property --no-inherit-value {\n        syntax: \"*\";\n        inherits: false;\n        initial-value: red;\n      }\n\n      @property --inherit-no-value {\n        syntax: \"*\";\n        inherits: true\n      }\n\n      @property --inherit-value {\n        syntax: \"*\";\n        inherits: true;\n        initial-value: red;\n      }\n      \"",
+        "polyfills": "none"
     }
 ]

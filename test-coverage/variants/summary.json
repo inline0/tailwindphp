@@ -1,11 +1,11 @@
 {
     "sourceFile": "tailwindcss\/packages\/tailwindcss\/src\/variants.test.ts",
-    "sourceLines": 2632,
+    "sourceLines": 2892,
     "totalTests": 91,
     "categories": {
         "other": {
             "tests": 30,
-            "lines": 1025,
+            "lines": 1083,
             "files": 2,
             "testNames": [
                 "*",
@@ -42,7 +42,7 @@
         },
         "pseudo-class": {
             "tests": 36,
-            "lines": 607,
+            "lines": 680,
             "files": 1,
             "testNames": [
                 "first-letter",
@@ -85,7 +85,7 @@
         },
         "pseudo-element": {
             "tests": 7,
-            "lines": 102,
+            "lines": 116,
             "files": 1,
             "testNames": [
                 "marker",
@@ -99,7 +99,7 @@
         },
         "open": {
             "tests": 1,
-            "lines": 9,
+            "lines": 11,
             "files": 1,
             "testNames": [
                 "open"
@@ -107,7 +107,7 @@
         },
         "inert": {
             "tests": 1,
-            "lines": 8,
+            "lines": 10,
             "files": 1,
             "testNames": [
                 "inert"
@@ -115,7 +115,7 @@
         },
         "rtl-ltr": {
             "tests": 2,
-            "lines": 16,
+            "lines": 20,
             "files": 1,
             "testNames": [
                 "ltr",
@@ -124,7 +124,7 @@
         },
         "reduced-motion": {
             "tests": 2,
-            "lines": 20,
+            "lines": 24,
             "files": 1,
             "testNames": [
                 "motion-safe",
@@ -133,7 +133,7 @@
         },
         "dark-mode": {
             "tests": 1,
-            "lines": 10,
+            "lines": 12,
             "files": 1,
             "testNames": [
                 "dark"
@@ -141,7 +141,7 @@
         },
         "starting": {
             "tests": 1,
-            "lines": 10,
+            "lines": 12,
             "files": 1,
             "testNames": [
                 "starting"
@@ -149,7 +149,7 @@
         },
         "print": {
             "tests": 1,
-            "lines": 10,
+            "lines": 12,
             "files": 1,
             "testNames": [
                 "print"
@@ -157,7 +157,7 @@
         },
         "breakpoints": {
             "tests": 3,
-            "lines": 175,
+            "lines": 181,
             "files": 1,
             "testNames": [
                 "max-*",
@@ -167,7 +167,7 @@
         },
         "supports": {
             "tests": 1,
-            "lines": 73,
+            "lines": 75,
             "files": 1,
             "testNames": [
                 "supports"
@@ -175,7 +175,7 @@
         },
         "not": {
             "tests": 1,
-            "lines": 350,
+            "lines": 423,
             "files": 1,
             "testNames": [
                 "not"
@@ -183,7 +183,7 @@
         },
         "aria": {
             "tests": 1,
-            "lines": 29,
+            "lines": 31,
             "files": 1,
             "testNames": [
                 "aria"
@@ -191,7 +191,7 @@
         },
         "data": {
             "tests": 1,
-            "lines": 43,
+            "lines": 54,
             "files": 1,
             "testNames": [
                 "data"
@@ -199,7 +199,7 @@
         },
         "portrait-landscape": {
             "tests": 2,
-            "lines": 20,
+            "lines": 24,
             "files": 1,
             "testNames": [
                 "portrait",

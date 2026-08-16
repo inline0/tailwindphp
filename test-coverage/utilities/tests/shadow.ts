@@ -10,16 +10,7 @@ import { compileCss, run } from './test-utils/run'
 
 test('shadow', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-          --box-shadow-color-blue-500: #3b82f6;
-          --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-          --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // Shadows
         'shadow-sm',
@@ -32,6 +23,7 @@ test('shadow', async () => {
         'shadow-[shadow:var(--value)]',
 
         'shadow-sm/25',
+        'shadow-sm/12.5',
         'shadow-[12px_12px_#0088cc]/25',
         'shadow-[12px_12px_var(--value)]/25',
         'shadow-[10px_10px]/25',
@@ -60,6 +52,15 @@ test('shadow', async () => {
         'shadow-[color:var(--value)]/[0.5]',
         'shadow-[color:var(--value)]/[50%]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+          --box-shadow-color-blue-500: #3b82f6;
+          --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+          --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -122,6 +123,12 @@ test('shadow', async () => {
     .shadow-\\[12px_12px_\\#0088cc\\]\\/25 {
       --tw-shadow-alpha: 25%;
       --tw-shadow: 12px 12px var(--tw-shadow-color, oklab(59.9824% -.067 -.124 / .25));
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+
+    .shadow-sm\\/12\\.5 {
+      --tw-shadow-alpha: 12.5%;
+      --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, oklab(0% 0 0 / .125)), 0 1px 2px -1px var(--tw-shadow-color, oklab(0% 0 0 / .125));
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 

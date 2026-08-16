@@ -10,14 +10,7 @@ import { compileCss, run } from './test-utils/run'
 
 test('outline', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-          --outline-color-blue-500: #3b82f6;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'outline',
         'outline-hidden',
@@ -67,6 +60,13 @@ test('outline', async () => {
         'outline-[length:var(--my-width)]',
         'outline-[percentage:var(--my-width)]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+          --outline-color-blue-500: #3b82f6;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -318,14 +318,14 @@ test('outline', async () => {
     "
   `)
   expect(
-    await compileCss(
+    await run(
+      ['outline'],
       css`
         @theme {
           --default-outline-width: 2px;
         }
         @tailwind utilities;
       `,
-      ['outline'],
     ),
   ).toMatchInlineSnapshot(`
     "

@@ -10,11 +10,13 @@ import { compileCss, run } from './test-utils/run'
 
 test('print', async () => {
   expect(await run(['print:flex'])).toMatchInlineSnapshot(`
-    "@media print {
+    "
+    @media print {
       .print\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
   expect(await run(['print/foo:flex'])).toEqual('')
 })

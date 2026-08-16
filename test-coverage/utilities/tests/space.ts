@@ -10,14 +10,27 @@ import { compileCss, run } from './test-utils/run'
 
 test('space-x', async () => {
   expect(
-    await compileCss(
+    await run(
+      [
+        'space-x-0',
+        'space-x-[0]',
+        'space-x-[0px]',
+        '-space-x-0',
+        'space-x-[-0]',
+        'space-x-[-0px]',
+        'space-x-1',
+        '-space-x-1',
+        'space-x-4',
+        'space-x-[4px]',
+        '-space-x-4',
+      ],
       css`
         @theme {
+          --spacing: 0.25rem;
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['space-x-4', 'space-x-[4px]', '-space-x-4'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -30,7 +43,19 @@ test('space-x', async () => {
     }
 
     :root, :host {
+      --spacing: .25rem;
       --spacing-4: 1rem;
+    }
+
+    :where(.-space-x-0 > :not(:last-child)) {
+      --tw-space-x-reverse: 0;
+      margin-inline: 0;
+    }
+
+    :where(.-space-x-1 > :not(:last-child)) {
+      --tw-space-x-reverse: 0;
+      margin-inline-start: calc(calc(var(--spacing) * -1) * var(--tw-space-x-reverse));
+      margin-inline-end: calc(calc(var(--spacing) * -1) * calc(1 - var(--tw-space-x-reverse)));
     }
 
     :where(.-space-x-4 > :not(:last-child)) {
@@ -39,10 +64,26 @@ test('space-x', async () => {
       margin-inline-end: calc(calc(var(--spacing-4) * -1) * calc(1 - var(--tw-space-x-reverse)));
     }
 
+    :where(.space-x-0 > :not(:last-child)) {
+      --tw-space-x-reverse: 0;
+      margin-inline: 0;
+    }
+
+    :where(.space-x-1 > :not(:last-child)) {
+      --tw-space-x-reverse: 0;
+      margin-inline-start: calc(var(--spacing) * var(--tw-space-x-reverse));
+      margin-inline-end: calc(var(--spacing) * calc(1 - var(--tw-space-x-reverse)));
+    }
+
     :where(.space-x-4 > :not(:last-child)) {
       --tw-space-x-reverse: 0;
       margin-inline-start: calc(var(--spacing-4) * var(--tw-space-x-reverse));
       margin-inline-end: calc(var(--spacing-4) * calc(1 - var(--tw-space-x-reverse)));
+    }
+
+    :where(.space-x-\\[-0\\] > :not(:last-child)), :where(.space-x-\\[-0px\\] > :not(:last-child)), :where(.space-x-\\[0\\] > :not(:last-child)), :where(.space-x-\\[0px\\] > :not(:last-child)) {
+      --tw-space-x-reverse: 0;
+      margin-inline: 0;
     }
 
     :where(.space-x-\\[4px\\] > :not(:last-child)) {
@@ -63,14 +104,27 @@ test('space-x', async () => {
 
 test('space-y', async () => {
   expect(
-    await compileCss(
+    await run(
+      [
+        'space-y-0',
+        'space-y-[0]',
+        'space-y-[0px]',
+        '-space-y-0',
+        'space-y-[-0]',
+        'space-y-[-0px]',
+        'space-y-1',
+        '-space-y-1',
+        'space-y-4',
+        'space-y-[4px]',
+        '-space-y-4',
+      ],
       css`
         @theme {
+          --spacing: 0.25rem;
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['space-y-4', 'space-y-[4px]', '-space-y-4'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -83,7 +137,19 @@ test('space-y', async () => {
     }
 
     :root, :host {
+      --spacing: .25rem;
       --spacing-4: 1rem;
+    }
+
+    :where(.-space-y-0 > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
+      margin-block: 0;
+    }
+
+    :where(.-space-y-1 > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
+      margin-block-start: calc(calc(var(--spacing) * -1) * var(--tw-space-y-reverse));
+      margin-block-end: calc(calc(var(--spacing) * -1) * calc(1 - var(--tw-space-y-reverse)));
     }
 
     :where(.-space-y-4 > :not(:last-child)) {
@@ -92,10 +158,26 @@ test('space-y', async () => {
       margin-block-end: calc(calc(var(--spacing-4) * -1) * calc(1 - var(--tw-space-y-reverse)));
     }
 
+    :where(.space-y-0 > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
+      margin-block: 0;
+    }
+
+    :where(.space-y-1 > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
+      margin-block-start: calc(var(--spacing) * var(--tw-space-y-reverse));
+      margin-block-end: calc(var(--spacing) * calc(1 - var(--tw-space-y-reverse)));
+    }
+
     :where(.space-y-4 > :not(:last-child)) {
       --tw-space-y-reverse: 0;
       margin-block-start: calc(var(--spacing-4) * var(--tw-space-y-reverse));
       margin-block-end: calc(var(--spacing-4) * calc(1 - var(--tw-space-y-reverse)));
+    }
+
+    :where(.space-y-\\[-0\\] > :not(:last-child)), :where(.space-y-\\[-0px\\] > :not(:last-child)), :where(.space-y-\\[0\\] > :not(:last-child)), :where(.space-y-\\[0px\\] > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
+      margin-block: 0;
     }
 
     :where(.space-y-\\[4px\\] > :not(:last-child)) {

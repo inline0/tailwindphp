@@ -587,7 +587,7 @@ function registerFiltersUtilities(UtilityBuilder $builder): void
         if ($modifier !== null) {
             if ($modifier['kind'] === 'arbitrary') {
                 $alpha = $modifier['value'];
-            } elseif (isPositiveInteger($modifier['value'])) {
+            } elseif (isValidOpacityValue($modifier['value'])) {
                 $alpha = "{$modifier['value']}%";
             }
         }

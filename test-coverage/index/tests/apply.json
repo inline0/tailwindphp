@@ -7,11 +7,32 @@
         "expected": "\"\n      .foo {\n        padding: calc(var(--spacing, .25rem) * 2);\n      }\n      \""
     },
     {
+        "name": "should replace @apply with the correct result",
+        "type": "compileCss",
+        "classes": [],
+        "css": "@theme {\n          --color-red-200: #fecaca;\n          --color-red-500: #ef4444;\n          --color-blue-500: #3b82f6;\n          --color-green-200: #bbf7d0;\n          --color-green-500: #22c55e;\n          --breakpoint-md: 768px;\n          --animate-spin: spin 1s linear infinite;\n\n          @keyframes spin {\n            to {\n              transform: rotate(360deg);\n            }\n          }\n        }\n\n        @tailwind utilities;\n\n        .foo {\n          @apply underline bg-red-500 hover:bg-blue-500 md:bg-green-500 animate-spin translate-x-full;\n\n          &:hover:focus {\n            @apply bg-red-200 md:bg-green-200;\n          }\n        }",
+        "expected": "\"\n      @layer properties {\n        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {\n          *, :before, :after, ::backdrop {\n            --tw-translate-x: 0;\n            --tw-translate-y: 0;\n            --tw-translate-z: 0;\n          }\n        }\n      }\n\n      :root, :host {\n        --color-red-200: #fecaca;\n        --color-red-500: #ef4444;\n        --color-blue-500: #3b82f6;\n        --color-green-200: #bbf7d0;\n        --color-green-500: #22c55e;\n        --animate-spin: spin 1s linear infinite;\n      }\n\n      .foo {\n        --tw-translate-x: 100%;\n        translate: var(--tw-translate-x) var(--tw-translate-y);\n        animation: var(--animate-spin);\n        background-color: var(--color-red-500);\n        text-decoration-line: underline;\n      }\n\n      @media (hover: hover) {\n        .foo:hover {\n          background-color: var(--color-blue-500);\n        }\n      }\n\n      @media (min-width: 768px) {\n        .foo {\n          background-color: var(--color-green-500);\n        }\n      }\n\n      .foo:hover:focus {\n        background-color: var(--color-red-200);\n      }\n\n      @media (min-width: 768px) {\n        .foo:hover:focus {\n          background-color: var(--color-green-200);\n        }\n      }\n\n      @property --tw-translate-x {\n        syntax: \"*\";\n        inherits: false;\n        initial-value: 0;\n      }\n\n      @property --tw-translate-y {\n        syntax: \"*\";\n        inherits: false;\n        initial-value: 0;\n      }\n\n      @property --tw-translate-z {\n        syntax: \"*\";\n        inherits: false;\n        initial-value: 0;\n      }\n\n      @keyframes spin {\n        to {\n          transform: rotate(360deg);\n        }\n      }\n      \""
+    },
+    {
         "name": "should replace @apply with the correct result inside imported stylesheets",
         "type": "compileCss",
         "classes": [],
         "css": "@import '.\/bar.css';\n          @tailwind utilities;",
         "expected": "\"\n      .foo {\n        text-decoration-line: underline;\n      }\n      \""
+    },
+    {
+        "name": "should @apply in order the utilities would be sorted in if they were used in HTML",
+        "type": "compileCss",
+        "classes": [],
+        "css": "@tailwind utilities;\n\n        .foo {\n          @apply content-[\"a\"] content-[\"b\"];\n        }\n\n        .bar {\n          @apply content-[\"b\"] content-[\"a\"];\n        }",
+        "expected": "\"\n      @layer properties {\n        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {\n          *, :before, :after, ::backdrop {\n            --tw-content: \"\";\n          }\n        }\n      }\n\n      .foo, .bar {\n        --tw-content: \"b\";\n        content: var(--tw-content);\n      }\n\n      @property --tw-content {\n        syntax: \"*\";\n        inherits: false;\n        initial-value: \"\";\n      }\n      \""
+    },
+    {
+        "name": "@apply does not cache important state",
+        "type": "compileCss",
+        "classes": [],
+        "css": ".c1 {\n          @apply leading-none;\n        }\n        .c2 {\n          @apply leading-none!;\n        }\n        .c3 {\n          @apply leading-none;\n        }",
+        "expected": "\"\n      @layer properties {\n        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {\n          *, :before, :after, ::backdrop {\n            --tw-leading: initial;\n          }\n        }\n      }\n\n      .c1 {\n        --tw-leading: 1;\n        line-height: 1;\n      }\n\n      .c2 {\n        --tw-leading: 1 !important;\n        line-height: 1 !important;\n      }\n\n      .c3 {\n        --tw-leading: 1;\n        line-height: 1;\n      }\n\n      @property --tw-leading {\n        syntax: \"*\";\n        inherits: false\n      }\n      \""
     },
     {
         "name": "should not swallow @utility declarations when @apply is used in nested rules",

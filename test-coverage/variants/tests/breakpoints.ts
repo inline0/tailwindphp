@@ -10,7 +10,8 @@ import { compileCss, run } from './test-utils/run'
 
 test('max-*', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['max-lg:flex', 'max-sm:flex', 'max-md:flex'],
       css`
         @theme {
           /* Explicitly ordered in a strange way */
@@ -20,10 +21,10 @@ test('max-*', async () => {
         }
         @tailwind utilities;
       `,
-      ['max-lg:flex', 'max-sm:flex', 'max-md:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    "@media not all and (min-width: 1024px) {
+    "
+    @media not all and (min-width: 1024px) {
       .max-lg\\:flex {
         display: flex;
       }
@@ -39,10 +40,12 @@ test('max-*', async () => {
       .max-sm\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
   expect(
-    await compileCss(
+    await run(
+      ['max-lg/foo:flex', 'max-sm/foo:flex', 'max-md/foo:flex'],
       css`
         @theme reference {
           /* Explicitly ordered in a strange way */
@@ -52,14 +55,14 @@ test('max-*', async () => {
         }
         @tailwind utilities;
       `,
-      ['max-lg/foo:flex', 'max-sm/foo:flex', 'max-md/foo:flex'],
     ),
   ).toEqual('')
 })
 
 test('min-*', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['min-lg:flex', 'min-sm:flex', 'min-md:flex'],
       css`
         @theme {
           /* Explicitly ordered in a strange way */
@@ -69,10 +72,10 @@ test('min-*', async () => {
         }
         @tailwind utilities;
       `,
-      ['min-lg:flex', 'min-sm:flex', 'min-md:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    "@media (min-width: 640px) {
+    "
+    @media (min-width: 640px) {
       .min-sm\\:flex {
         display: flex;
       }
@@ -88,10 +91,12 @@ test('min-*', async () => {
       .min-lg\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
   expect(
-    await compileCss(
+    await run(
+      ['min-lg/foo:flex', 'min-sm/foo:flex', 'min-md/foo:flex'],
       css`
         @theme reference {
           /* Explicitly ordered in a strange way */
@@ -101,23 +106,13 @@ test('min-*', async () => {
         }
         @tailwind utilities;
       `,
-      ['min-lg/foo:flex', 'min-sm/foo:flex', 'min-md/foo:flex'],
     ),
   ).toEqual('')
 })
 
 test('min, max and unprefixed breakpoints', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          /* Explicitly ordered in a strange way */
-          --breakpoint-sm: 640px;
-          --breakpoint-lg: 1024px;
-          --breakpoint-md: 768px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'max-lg-sm-potato:flex',
         'min-lg-sm-potato:flex',
@@ -134,9 +129,19 @@ test('min, max and unprefixed breakpoints', async () => {
         'sm:flex',
         'lg:flex',
       ],
+      css`
+        @theme {
+          /* Explicitly ordered in a strange way */
+          --breakpoint-sm: 640px;
+          --breakpoint-lg: 1024px;
+          --breakpoint-md: 768px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
-    "@media not all and (min-width: 1024px) {
+    "
+    @media not all and (min-width: 1024px) {
       .max-lg\\:flex {
         display: flex;
       }
@@ -182,7 +187,8 @@ test('min, max and unprefixed breakpoints', async () => {
       .lg\\:flex, .min-lg\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
 })
 

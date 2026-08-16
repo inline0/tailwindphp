@@ -8,6 +8,7 @@ use function TailwindPHP\Ast\atRoot;
 use function TailwindPHP\Ast\decl;
 use function TailwindPHP\Utils\inferDataType;
 use function TailwindPHP\Utils\isPositiveInteger;
+use function TailwindPHP\Utils\isValidOpacityValue;
 use function TailwindPHP\Utils\replaceShadowColors;
 
 /**
@@ -209,7 +210,7 @@ function registerEffectsUtilities(UtilityBuilder $builder): void
         if ($modifier !== null) {
             if ($modifier['kind'] === 'arbitrary') {
                 $alpha = $modifier['value'];
-            } elseif (isPositiveInteger($modifier['value'])) {
+            } elseif (isValidOpacityValue($modifier['value'])) {
                 $alpha = "{$modifier['value']}%";
             }
         }
@@ -332,7 +333,7 @@ function registerEffectsUtilities(UtilityBuilder $builder): void
         if ($modifier !== null) {
             if ($modifier['kind'] === 'arbitrary') {
                 $alpha = $modifier['value'];
-            } elseif (isPositiveInteger($modifier['value'])) {
+            } elseif (isValidOpacityValue($modifier['value'])) {
                 $alpha = "{$modifier['value']}%";
             }
         }
@@ -402,7 +403,7 @@ function registerEffectsUtilities(UtilityBuilder $builder): void
 
                 return [
                     $boxShadowProperties(),
-                    decl('--tw-inset-shadow', $nullShadow),
+                    decl('--tw-inset-shadow', "inset {$nullShadow}"),
                     decl('box-shadow', $cssBoxShadowValue),
                 ];
             case 'inherit':

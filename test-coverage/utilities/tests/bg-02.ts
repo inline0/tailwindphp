@@ -10,14 +10,14 @@ import { compileCss, run } from './test-utils/run'
 
 test('bg-position', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['bg-position-[120px]', 'bg-position-[120px_120px]', 'bg-position-[var(--some-var)]'],
       css`
         @theme {
           --color-red-500: #ef4444;
         }
         @tailwind utilities;
       `,
-      ['bg-position-[120px]', 'bg-position-[120px_120px]', 'bg-position-[var(--some-var)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -51,14 +51,14 @@ test('bg-position', async () => {
 
 test('bg-size', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['bg-size-[120px]', 'bg-size-[120px_120px]', 'bg-size-[var(--some-var)]'],
       css`
         @theme {
           --color-red-500: #ef4444;
         }
         @tailwind utilities;
       `,
-      ['bg-size-[120px]', 'bg-size-[120px_120px]', 'bg-size-[var(--some-var)]'],
     ),
   ).toMatchInlineSnapshot(`
     "

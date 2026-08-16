@@ -10,30 +10,7 @@ import { compileCss, run } from './test-utils/run'
 
 test('not', async () => {
   expect(
-    await compileCss(
-      css`
-        @custom-variant hocus {
-          &:hover,
-          &:focus {
-            @slot;
-          }
-        }
-
-        @custom-variant device-hocus {
-          @media (hover: hover) {
-            &:hover,
-            &:focus {
-              @slot;
-            }
-          }
-        }
-
-        @theme {
-          --breakpoint-sm: 640px;
-        }
-
-        @tailwind utilities;
-      `,
+    await run(
       [
         'not-[:checked]:flex',
         'not-[@media_print]:flex',
@@ -115,9 +92,41 @@ test('not', async () => {
         'not-max-sm:flex',
         'not-max-[130px]:flex',
       ],
+      css`
+        @custom-variant hocus {
+          &:hover,
+          &:focus {
+            @slot;
+          }
+        }
+
+        @custom-variant device-hocus {
+          @media (hover: hover) {
+            &:hover,
+            &:focus {
+              @slot;
+            }
+          }
+        }
+
+        @theme {
+          --breakpoint-sm: 640px;
+        }
+
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
-    ".not-first\\:flex:not(:first-child), .not-last\\:flex:not(:last-child), .not-only\\:flex:not(:only-child), .not-odd\\:flex:not(:nth-child(odd)), .not-even\\:flex:not(:nth-child(2n)), .not-first-of-type\\:flex:not(:first-of-type), .not-last-of-type\\:flex:not(:last-of-type), .not-only-of-type\\:flex:not(:only-of-type), .not-visited\\:flex:not(:visited), .not-target\\:flex:not(:target), .not-open\\:flex:not(:is([open], :popover-open, :open)), .not-default\\:flex:not(:default), .not-checked\\:flex:not(:checked), .not-indeterminate\\:flex:not(:indeterminate), .not-placeholder-shown\\:flex:not(:placeholder-shown), .not-autofill\\:flex:not(:autofill), .not-optional\\:flex:not(:optional), .not-required\\:flex:not(:required), .not-valid\\:flex:not(:valid), .not-invalid\\:flex:not(:invalid), .not-in-range\\:flex:not(:in-range), .not-out-of-range\\:flex:not(:out-of-range), .not-read-only\\:flex:not(:read-only), .not-empty\\:flex:not(:empty), .not-focus-within\\:flex:not(:focus-within), .not-hover\\:flex:not(:hover) {
+    "
+    .not-first\\:flex:not(:first-child), .not-last\\:flex:not(:last-child), .not-only\\:flex:not(:only-child), .not-odd\\:flex:not(:nth-child(odd)), .not-even\\:flex:not(:nth-child(2n)), .not-first-of-type\\:flex:not(:first-of-type), .not-last-of-type\\:flex:not(:last-of-type), .not-only-of-type\\:flex:not(:only-of-type), .not-visited\\:flex:not(:visited), .not-target\\:flex:not(:target), .not-open\\:flex:not(:is([open], :popover-open, :open)), .not-default\\:flex:not(:default), .not-checked\\:flex:not(:checked), .not-indeterminate\\:flex:not(:indeterminate), .not-placeholder-shown\\:flex:not(:placeholder-shown) {
+      display: flex;
+    }
+
+    .not-autofill\\:flex:not(:autofill) {
+      display: flex;
+    }
+
+    .not-optional\\:flex:not(:optional), .not-required\\:flex:not(:required), .not-valid\\:flex:not(:valid), .not-invalid\\:flex:not(:invalid), .not-in-range\\:flex:not(:in-range), .not-out-of-range\\:flex:not(:out-of-range), .not-read-only\\:flex:not(:read-only), .not-empty\\:flex:not(:empty), .not-focus-within\\:flex:not(:focus-within), .not-hover\\:flex:not(:hover) {
       display: flex;
     }
 
@@ -265,11 +274,114 @@ test('not', async () => {
 
     .group-not-checked\\:flex:is(:where(.group):not(:checked) *), .group-not-hocus\\:flex:is(:where(.group):not(:hover, :focus) *), .group-not-hocus\\/parent-name\\:flex:is(:where(.group\\/parent-name):not(:hover, :focus) *), .group-not-\\[\\:checked\\]\\:flex:is(:where(.group):not(:checked) *), .group-not-\\[\\:checked\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name):not(:checked) *), .peer-not-checked\\:flex:is(:where(.peer):not(:checked) ~ *), .peer-not-hocus\\:flex:is(:where(.peer):not(:hover, :focus) ~ *), .peer-not-hocus\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):not(:hover, :focus) ~ *), .peer-not-\\[\\:checked\\]\\:flex:is(:where(.peer):not(:checked) ~ *), .peer-not-\\[\\:checked\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):not(:checked) ~ *) {
       display: flex;
-    }"
+    }
+    "
+  `)
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/20058
+  expect(
+    await run(
+      ['not-has-a:flex', 'not-has-b:flex', 'not-has-c:flex', 'not-has-d:flex'],
+      css`
+        @custom-variant has-a {
+          @container style(--a) {
+            @slot;
+          }
+        }
+
+        /* Already negated case */
+        @custom-variant has-b {
+          @container not style(--b) {
+            @slot;
+          }
+        }
+
+        /* Named @container */
+        @custom-variant has-c {
+          @container foo style(--c) {
+            @slot;
+          }
+        }
+
+        /* Named @container, that's already negated case */
+        @custom-variant has-d {
+          @container bar not style(--d) {
+            @slot;
+          }
+        }
+
+        @tailwind utilities;
+      `,
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    @container not style(--a) {
+      .not-has-a\\:flex {
+        display: flex;
+      }
+    }
+
+    @container style(--b) {
+      .not-has-b\\:flex {
+        display: flex;
+      }
+    }
+
+    @container foo not style(--c) {
+      .not-has-c\\:flex {
+        display: flex;
+      }
+    }
+
+    @container bar style(--d) {
+      .not-has-d\\:flex {
+        display: flex;
+      }
+    }
+    "
   `)
 
   expect(
-    await compileCss(
+    await run(
+      [
+        'not-[>img]:flex',
+        'not-[+img]:flex',
+        'not-[~img]:flex',
+        'not-[:checked]/foo:flex',
+        'not-[@media_screen,print]:flex',
+        'not-[@media_not_screen,print]:flex',
+        'not-[@media_not_screen,not_print]:flex',
+
+        'not-nested-at-rules:flex',
+        'not-nested-style-rules:flex',
+        'not-multiple-media-conditions:flex',
+        'not-starting:flex',
+
+        'not-parallel-style-rules:flex',
+        'not-parallel-at-rules:flex',
+        'not-parallel-mixed-rules:flex',
+
+        // The following built-in variants don't have not-* versions because
+        // there is no sensible negative version of them.
+
+        // These just don't make sense as not-*
+        'not-force:flex',
+        'not-*:flex',
+
+        // These contain pseudo-elements
+        'not-first-letter:flex',
+        'not-first-line:flex',
+        'not-marker:flex',
+        'not-selection:flex',
+        'not-file:flex',
+        'not-placeholder:flex',
+        'not-backdrop:flex',
+        'not-before:flex',
+        'not-after:flex',
+
+        // This is not a conditional at rule
+        'not-starting:flex',
+      ],
       css`
         @custom-variant nested-at-rules {
           @media foo {
@@ -316,45 +428,6 @@ test('not', async () => {
         }
         @tailwind utilities;
       `,
-      [
-        'not-[>img]:flex',
-        'not-[+img]:flex',
-        'not-[~img]:flex',
-        'not-[:checked]/foo:flex',
-        'not-[@media_screen,print]:flex',
-        'not-[@media_not_screen,print]:flex',
-        'not-[@media_not_screen,not_print]:flex',
-
-        'not-nested-at-rules:flex',
-        'not-nested-style-rules:flex',
-        'not-multiple-media-conditions:flex',
-        'not-starting:flex',
-
-        'not-parallel-style-rules:flex',
-        'not-parallel-at-rules:flex',
-        'not-parallel-mixed-rules:flex',
-
-        // The following built-in variants don't have not-* versions because
-        // there is no sensible negative version of them.
-
-        // These just don't make sense as not-*
-        'not-force:flex',
-        'not-*:flex',
-
-        // These contain pseudo-elements
-        'not-first-letter:flex',
-        'not-first-line:flex',
-        'not-marker:flex',
-        'not-selection:flex',
-        'not-file:flex',
-        'not-placeholder:flex',
-        'not-backdrop:flex',
-        'not-before:flex',
-        'not-after:flex',
-
-        // This is not a conditional at rule
-        'not-starting:flex',
-      ],
     ),
   ).toEqual('')
 })

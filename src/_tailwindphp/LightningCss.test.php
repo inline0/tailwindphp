@@ -584,7 +584,9 @@ class LightningCss extends TestCase
         $result = LightningCssOptimizer::transformNesting($ast);
 
         $this->assertCount(2, $result);
-        $this->assertSame('.editor-styles-wrapper *, .editor-styles-wrapper ::after, .editor-styles-wrapper ::before', $result[0]['selector']);
+        // ::before/::after are downleveled to their single-colon legacy form,
+        // matching lightningcss (TailwindCSS v4.3.3 output)
+        $this->assertSame('.editor-styles-wrapper *, .editor-styles-wrapper :after, .editor-styles-wrapper :before', $result[0]['selector']);
         $this->assertSame('.editor-styles-wrapper h1, .editor-styles-wrapper h2, .editor-styles-wrapper h3, .editor-styles-wrapper h4, .editor-styles-wrapper h5, .editor-styles-wrapper h6', $result[1]['selector']);
     }
 

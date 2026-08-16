@@ -148,14 +148,14 @@ test('object', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['object-center'],
       css`
         @theme {
           --object-position-center: top left;
         }
         @tailwind utilities;
       `,
-      ['object-center'],
     ),
   ).toMatchInlineSnapshot(`
     "

@@ -9,14 +9,15 @@ import { expect, test } from 'vitest'
 import { compileCss, run } from './test-utils/run'
 
 test('mask-t-to', async () => {
+  let input = css`
+    @theme {
+      --spacing: 0.25rem;
+    }
+    @tailwind utilities;
+  `
+
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-t-to-0',
         'mask-t-to-1.5',
@@ -29,6 +30,7 @@ test('mask-t-to', async () => {
         'mask-t-to-(color:--my-var)',
         'mask-t-to-(length:--my-var)',
       ],
+      input,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -84,7 +86,7 @@ test('mask-t-to', async () => {
       mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       --tw-mask-linear: var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top);
       --tw-mask-top: linear-gradient(to top, var(--tw-mask-top-from-color) var(--tw-mask-top-from-position), var(--tw-mask-top-to-color) var(--tw-mask-top-to-position));
-      --tw-mask-top-to-position: calc(var(--spacing) * 0);
+      --tw-mask-top-to-position: 0px;
       -webkit-mask-composite: source-in;
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
@@ -230,13 +232,7 @@ test('mask-t-to', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-t-to',
         'mask-t-to-2.8175',
@@ -267,19 +263,21 @@ test('mask-t-to', async () => {
         '-mask-l-from-[25%]/foo',
         '-mask-l-from-[-25%]/foo',
       ],
+      input,
     ),
   ).toEqual('')
 })
 
 test('mask-r-from', async () => {
+  let input = css`
+    @theme {
+      --spacing: 0.25rem;
+    }
+    @tailwind utilities;
+  `
+
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-r-from-0',
         'mask-r-from-1.5',
@@ -293,6 +291,7 @@ test('mask-r-from', async () => {
         'mask-r-from-(color:--my-var)',
         'mask-r-from-(length:--my-var)',
       ],
+      input,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -348,7 +347,7 @@ test('mask-r-from', async () => {
       mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       --tw-mask-linear: var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top);
       --tw-mask-right: linear-gradient(to right, var(--tw-mask-right-from-color) var(--tw-mask-right-from-position), var(--tw-mask-right-to-color) var(--tw-mask-right-to-position));
-      --tw-mask-right-from-position: calc(var(--spacing) * 0);
+      --tw-mask-right-from-position: 0px;
       -webkit-mask-composite: source-in;
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
@@ -494,13 +493,7 @@ test('mask-r-from', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-r-from',
         'mask-r-from-2.8175',
@@ -531,19 +524,21 @@ test('mask-r-from', async () => {
         '-mask-r-from-[25%]/foo',
         '-mask-r-from-[-25%]/foo',
       ],
+      input,
     ),
   ).toEqual('')
 })
 
 test('mask-r-to', async () => {
+  let input = css`
+    @theme {
+      --spacing: 0.25rem;
+    }
+    @tailwind utilities;
+  `
+
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-r-to-0',
         'mask-r-to-1.5',
@@ -557,6 +552,7 @@ test('mask-r-to', async () => {
         'mask-r-to-(color:--my-var)',
         'mask-r-to-(length:--my-var)',
       ],
+      input,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -612,7 +608,7 @@ test('mask-r-to', async () => {
       mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       --tw-mask-linear: var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top);
       --tw-mask-right: linear-gradient(to right, var(--tw-mask-right-from-color) var(--tw-mask-right-from-position), var(--tw-mask-right-to-color) var(--tw-mask-right-to-position));
-      --tw-mask-right-to-position: calc(var(--spacing) * 0);
+      --tw-mask-right-to-position: 0px;
       -webkit-mask-composite: source-in;
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
@@ -758,13 +754,7 @@ test('mask-r-to', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-r-to',
         'mask-r-to-2.8175',
@@ -795,6 +785,7 @@ test('mask-r-to', async () => {
         '-mask-r-to-[25%]/foo',
         '-mask-r-to-[-25%]/foo',
       ],
+      input,
     ),
   ).toEqual('')
 })

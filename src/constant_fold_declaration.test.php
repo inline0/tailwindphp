@@ -70,6 +70,7 @@ class constant_fold_declaration extends TestCase
             ['calc(3rem * 3dvw)'],
             ['calc(3rem * 2dvh)'],
             ['calc(5rem / 17px)'],
+            ['calc(1rem + 0px + var(--foo))'],
         ];
     }
 
@@ -97,6 +98,7 @@ class constant_fold_declaration extends TestCase
             ['calc(calc(var(--spacing, 0.25rem) * 32) * 0)'],
             ['calc(var(--spacing, 0.25rem) * -0)'],
             ['calc(-0px * -1)'],
+            ['calc(-1 * -0px)'],
 
             // Zeroes
             ['0px'],
@@ -123,6 +125,10 @@ class constant_fold_declaration extends TestCase
     public static function nonFoldableUnitsProvider(): array
     {
         return [
+            // Expressions keep the unit when they are nested inside calc()
+            ['calc(calc(0px * -1) + 1rem)', 'calc(0px + 1rem)'],
+            ['calc(calc(-1 * 0px) + 1rem)', 'calc(0px + 1rem)'],
+
             ['0deg', '0deg'],
             ['0rad', '0deg'],
             ['0%', '0%'],
@@ -151,5 +157,17 @@ class constant_fold_declaration extends TestCase
     public function should_not_constant_fold_when_dividing_by_zero(): void
     {
         $this->assertEquals('calc(123rem / 0)', constantFoldDeclaration('calc(123rem / 0)'));
+    }
+
+    #[Test]
+    public function should_not_constant_fold_when_a_computation_has_a_high_precision_result(): void
+    {
+        $this->assertEquals('calc(100% / 3.5)', constantFoldDeclaration('calc(100% / 3.5)'));
+    }
+
+    #[Test]
+    public function should_constant_fold_division_results_with_floating_point_error_after_scaling(): void
+    {
+        $this->assertEquals('0.29%', constantFoldDeclaration('calc(29% / 100)'));
     }
 }

@@ -53,6 +53,226 @@ test('field-sizing', async () => {
   ).toEqual('')
 })
 
+test('creates the right media queries and sorts it before width', async () => {
+  expect(
+    await run(
+      ['w-1/2', 'container', 'max-w-[var(--breakpoint-sm)]'],
+      css`
+        @theme {
+          --breakpoint-sm: 40rem;
+          --breakpoint-md: 48rem;
+          --breakpoint-lg: 64rem;
+          --breakpoint-xl: 80rem;
+          --breakpoint-2xl: 96rem;
+        }
+        @tailwind utilities;
+      `,
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    :root, :host {
+      --breakpoint-sm: 40rem;
+    }
+
+    .container {
+      width: 100%;
+    }
+
+    @media (min-width: 40rem) {
+      .container {
+        max-width: 40rem;
+      }
+    }
+
+    @media (min-width: 48rem) {
+      .container {
+        max-width: 48rem;
+      }
+    }
+
+    @media (min-width: 64rem) {
+      .container {
+        max-width: 64rem;
+      }
+    }
+
+    @media (min-width: 80rem) {
+      .container {
+        max-width: 80rem;
+      }
+    }
+
+    @media (min-width: 96rem) {
+      .container {
+        max-width: 96rem;
+      }
+    }
+
+    .w-1\\/2 {
+      width: 50%;
+    }
+
+    .max-w-\\[var\\(--breakpoint-sm\\)\\] {
+      max-width: var(--breakpoint-sm);
+    }
+    "
+  `)
+})
+
+test('sorts breakpoints based on unit and then in ascending aOrder', async () => {
+  expect(
+    await run(
+      ['container'],
+      css`
+        @theme reference {
+          --breakpoint-lg: 64rem;
+          --breakpoint-xl: 80rem;
+          --breakpoint-3xl: 1600px;
+          --breakpoint-sm: 40em;
+          --breakpoint-2xl: 96rem;
+          --breakpoint-xs: 30px;
+          --breakpoint-md: 48em;
+        }
+        @tailwind utilities;
+      `,
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    .container {
+      width: 100%;
+    }
+
+    @media (min-width: 40em) {
+      .container {
+        max-width: 40em;
+      }
+    }
+
+    @media (min-width: 48em) {
+      .container {
+        max-width: 48em;
+      }
+    }
+
+    @media (min-width: 30px) {
+      .container {
+        max-width: 30px;
+      }
+    }
+
+    @media (min-width: 1600px) {
+      .container {
+        max-width: 1600px;
+      }
+    }
+
+    @media (min-width: 64rem) {
+      .container {
+        max-width: 64rem;
+      }
+    }
+
+    @media (min-width: 80rem) {
+      .container {
+        max-width: 80rem;
+      }
+    }
+
+    @media (min-width: 96rem) {
+      .container {
+        max-width: 96rem;
+      }
+    }
+    "
+  `)
+})
+
+test('custom `@utility container` always follow the core utility ', async () => {
+  expect(
+    await run(
+      ['w-1/2', 'container', 'max-w-[var(--breakpoint-sm)]'],
+      css`
+        @theme {
+          --breakpoint-sm: 40rem;
+          --breakpoint-md: 48rem;
+          --breakpoint-lg: 64rem;
+          --breakpoint-xl: 80rem;
+          --breakpoint-2xl: 96rem;
+        }
+        @tailwind utilities;
+
+        @utility container {
+          margin-inline: auto;
+          padding-inline: 1rem;
+
+          @media (width >= theme(--breakpoint-sm)) {
+            padding-inline: 2rem;
+          }
+        }
+      `,
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    :root, :host {
+      --breakpoint-sm: 40rem;
+    }
+
+    .container {
+      width: 100%;
+    }
+
+    @media (min-width: 40rem) {
+      .container {
+        max-width: 40rem;
+      }
+    }
+
+    @media (min-width: 48rem) {
+      .container {
+        max-width: 48rem;
+      }
+    }
+
+    @media (min-width: 64rem) {
+      .container {
+        max-width: 64rem;
+      }
+    }
+
+    @media (min-width: 80rem) {
+      .container {
+        max-width: 80rem;
+      }
+    }
+
+    @media (min-width: 96rem) {
+      .container {
+        max-width: 96rem;
+      }
+    }
+
+    .container {
+      margin-inline: auto;
+      padding-inline: 1rem;
+    }
+
+    @media (min-width: 40rem) {
+      .container {
+        padding-inline: 2rem;
+      }
+    }
+
+    .w-1\\/2 {
+      width: 50%;
+    }
+
+    .max-w-\\[var\\(--breakpoint-sm\\)\\] {
+      max-width: var(--breakpoint-sm);
+    }
+    "
+  `)
+})
+
 test('--tw-scroll-snap-strictness', async () => {
   expect(await run(['snap-mandatory', 'snap-proximity'])).toMatchInlineSnapshot(`
     "
@@ -134,14 +354,7 @@ test('indent', async () => {
 
 test('decoration', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-          --text-decoration-color-blue-500: #3b82f6;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // text-decoration-color
         'decoration-red-500',
@@ -188,6 +401,13 @@ test('decoration', async () => {
         'decoration-[length:var(--my-thickness)]',
         'decoration-[percentage:var(--my-thickness)]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+          --text-decoration-color-blue-500: #3b82f6;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -603,14 +823,14 @@ test('contain', async () => {
 
 test('content', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['content-slash', 'content-["hello_world"]'],
       css`
         @theme {
           --content-slash: '/';
         }
         @tailwind utilities;
       `,
-      ['content-slash', 'content-["hello_world"]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -650,12 +870,7 @@ test('content', async () => {
 
 test('underline-offset', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'underline-offset-auto',
         'underline-offset-4',
@@ -665,6 +880,11 @@ test('underline-offset', async () => {
         'underline-offset-[var(--value)]',
         '-underline-offset-[var(--value)]',
       ],
+      css`
+        @theme {
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -714,14 +934,14 @@ test('underline-offset', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['underline-offset-auto'],
       css`
         @theme {
           --text-underline-offset-auto: 4px;
         }
         @tailwind utilities;
       `,
-      ['underline-offset-auto'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -734,54 +954,5 @@ test('underline-offset', async () => {
     }
     "
   `)
-})
-
-test('@container', async () => {
-  expect(
-    await run([
-      '@container',
-      '@container-normal',
-      '@container/sidebar',
-      '@container-normal/sidebar',
-      '@container-size',
-      '@container-size/sidebar',
-    ]),
-  ).toMatchInlineSnapshot(`
-    "
-    .\\@container-normal\\/sidebar {
-      container: sidebar;
-    }
-
-    .\\@container-size\\/sidebar {
-      container: sidebar / size;
-    }
-
-    .\\@container\\/sidebar {
-      container: sidebar / inline-size;
-    }
-
-    .\\@container {
-      container-type: inline-size;
-    }
-
-    .\\@container-normal {
-      container-type: normal;
-    }
-
-    .\\@container-size {
-      container-type: size;
-    }
-    "
-  `)
-  expect(
-    await run([
-      '-@container',
-      '-@container-normal',
-      '-@container/sidebar',
-      '-@container-normal/sidebar',
-      '-@container-size',
-      '-@container-size/sidebar',
-    ]),
-  ).toEqual('')
 })
 

@@ -10,14 +10,14 @@ import { compileCss, run } from './test-utils/run'
 
 test('margin', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['m-auto', 'm-4', 'm-[4px]', '-m-4', '-m-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['m-auto', 'm-4', 'm-[4px]', '-m-4', '-m-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -53,14 +53,7 @@ test('margin', async () => {
 
 test('mx', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-          --spacing-big: 100rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mx-auto',
         'mx-1',
@@ -74,6 +67,13 @@ test('mx', async () => {
         'mx-[var(--my-var)]',
         '-mx-[var(--my-var)]',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -99,7 +99,7 @@ test('mx', async () => {
     }
 
     .mx-1 {
-      margin-inline: calc(var(--spacing) * 1);
+      margin-inline: var(--spacing);
     }
 
     .mx-4 {
@@ -141,14 +141,7 @@ test('mx', async () => {
 
 test('my', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-          --spacing-big: 100rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'my-1',
         'my-99',
@@ -162,6 +155,13 @@ test('my', async () => {
         'my-[var(--my-var)]',
         '-my-[var(--my-var)]',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -191,7 +191,7 @@ test('my', async () => {
     }
 
     .my-1 {
-      margin-block: calc(var(--spacing) * 1);
+      margin-block: var(--spacing);
     }
 
     .my-2\\.5 {
@@ -229,14 +229,7 @@ test('my', async () => {
 
 test('mt', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-          --spacing-big: 100rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mt-1',
         'mt-99',
@@ -250,6 +243,13 @@ test('mt', async () => {
         'mt-[var(--my-var)]',
         '-mt-[var(--my-var)]',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -279,7 +279,7 @@ test('mt', async () => {
     }
 
     .mt-1 {
-      margin-top: calc(var(--spacing) * 1);
+      margin-top: var(--spacing);
     }
 
     .mt-2\\.5 {
@@ -317,14 +317,7 @@ test('mt', async () => {
 
 test('ms', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-          --spacing-big: 100rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'ms-1',
         'ms-99',
@@ -338,6 +331,13 @@ test('ms', async () => {
         'ms-[var(--my-var)]',
         '-ms-[var(--my-var)]',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -367,7 +367,7 @@ test('ms', async () => {
     }
 
     .ms-1 {
-      margin-inline-start: calc(var(--spacing) * 1);
+      margin-inline-start: var(--spacing);
     }
 
     .ms-2\\.5 {
@@ -405,14 +405,7 @@ test('ms', async () => {
 
 test('me', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-          --spacing-big: 100rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'me-1',
         'me-99',
@@ -426,6 +419,13 @@ test('me', async () => {
         'me-[var(--my-var)]',
         '-me-[var(--my-var)]',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -455,7 +455,7 @@ test('me', async () => {
     }
 
     .me-1 {
-      margin-inline-end: calc(var(--spacing) * 1);
+      margin-inline-end: var(--spacing);
     }
 
     .me-2\\.5 {
@@ -493,14 +493,7 @@ test('me', async () => {
 
 test('mbs', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-          --spacing-big: 100rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mbs-1',
         'mbs-99',
@@ -514,6 +507,13 @@ test('mbs', async () => {
         'mbs-[var(--my-var)]',
         '-mbs-[var(--my-var)]',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -543,7 +543,7 @@ test('mbs', async () => {
     }
 
     .mbs-1 {
-      margin-block-start: calc(var(--spacing) * 1);
+      margin-block-start: var(--spacing);
     }
 
     .mbs-2\\.5 {
@@ -581,14 +581,7 @@ test('mbs', async () => {
 
 test('mbe', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-          --spacing-big: 100rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mbe-1',
         'mbe-99',
@@ -602,6 +595,13 @@ test('mbe', async () => {
         'mbe-[var(--my-var)]',
         '-mbe-[var(--my-var)]',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -631,7 +631,7 @@ test('mbe', async () => {
     }
 
     .mbe-1 {
-      margin-block-end: calc(var(--spacing) * 1);
+      margin-block-end: var(--spacing);
     }
 
     .mbe-2\\.5 {
@@ -669,14 +669,7 @@ test('mbe', async () => {
 
 test('mr', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-          --spacing-big: 100rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mr-1',
         'mr-99',
@@ -690,6 +683,13 @@ test('mr', async () => {
         'mr-[var(--my-var)]',
         '-mr-[var(--my-var)]',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -719,7 +719,7 @@ test('mr', async () => {
     }
 
     .mr-1 {
-      margin-right: calc(var(--spacing) * 1);
+      margin-right: var(--spacing);
     }
 
     .mr-2\\.5 {
@@ -757,14 +757,7 @@ test('mr', async () => {
 
 test('mb', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-          --spacing-big: 100rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mb-1',
         'mb-99',
@@ -778,6 +771,13 @@ test('mb', async () => {
         'mb-[var(--my-var)]',
         '-mb-[var(--my-var)]',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -807,7 +807,7 @@ test('mb', async () => {
     }
 
     .mb-1 {
-      margin-bottom: calc(var(--spacing) * 1);
+      margin-bottom: var(--spacing);
     }
 
     .mb-2\\.5 {
@@ -845,14 +845,7 @@ test('mb', async () => {
 
 test('ml', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-          --spacing-big: 100rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'ml-1',
         'ml-99',
@@ -866,6 +859,13 @@ test('ml', async () => {
         'ml-[var(--my-var)]',
         '-ml-[var(--my-var)]',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -895,7 +895,7 @@ test('ml', async () => {
     }
 
     .ml-1 {
-      margin-left: calc(var(--spacing) * 1);
+      margin-left: var(--spacing);
     }
 
     .ml-2\\.5 {

@@ -16,5 +16,12 @@
         ],
         "css": "@import 'tailwindcss' theme(inline);",
         "expected": "\"\n      .bg-tomato {\n        background-color: #e10c04;\n      }\n      \""
+    },
+    {
+        "name": "supports `@import ",
+        "type": "compileCss",
+        "classes": [],
+        "css": "@import '.\/foo\/bar.css' reference;\n\n          .bar {\n            @apply md:hocus:foo;\n          }",
+        "expected": "\"\n      @media (min-width: 768px) {\n        .bar:hover, .bar:focus {\n          color: red;\n        }\n      }\n      \""
     }
 ]

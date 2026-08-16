@@ -89,14 +89,14 @@ test('origin', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['origin-top'],
       css`
         @theme {
           --transform-origin-top: 10px 20px;
         }
         @tailwind utilities;
       `,
-      ['origin-top'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -271,14 +271,14 @@ test('translate-x', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['translate-x-full', '-translate-x-full', 'translate-x-px', '-translate-x-[var(--value)]'],
       css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-      ['translate-x-full', '-translate-x-full', 'translate-x-px', '-translate-x-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -419,14 +419,14 @@ test('translate-y', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['translate-y-full', '-translate-y-full', 'translate-y-px', '-translate-y-[var(--value)]'],
       css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-      ['translate-y-full', '-translate-y-full', 'translate-y-px', '-translate-y-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "

@@ -10,7 +10,8 @@ import { compileCss, run } from './test-utils/run'
 
 test('marker', async () => {
   expect(await run(['marker:flex'])).toMatchInlineSnapshot(`
-    ".marker\\:flex ::marker {
+    "
+    .marker\\:flex ::marker {
       display: flex;
     }
 
@@ -24,54 +25,64 @@ test('marker', async () => {
 
     .marker\\:flex::-webkit-details-marker {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['marker/foo:flex'])).toEqual('')
 })
 
 test('selection', async () => {
   expect(await run(['selection:flex'])).toMatchInlineSnapshot(`
-    ".selection\\:flex ::selection {
+    "
+    .selection\\:flex ::selection {
       display: flex;
     }
 
     .selection\\:flex::selection {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['selection/foo:flex'])).toEqual('')
 })
 
 test('file', async () => {
   expect(await run(['file:flex'])).toMatchInlineSnapshot(`
-    ".file\\:flex::file-selector-button {
+    "
+    .file\\:flex::file-selector-button {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['file/foo:flex'])).toEqual('')
 })
 
 test('placeholder', async () => {
   expect(await run(['placeholder:flex'])).toMatchInlineSnapshot(`
-    ".placeholder\\:flex::placeholder {
+    "
+    .placeholder\\:flex::placeholder {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['placeholder/foo:flex'])).toEqual('')
 })
 
 test('backdrop', async () => {
   expect(await run(['backdrop:flex'])).toMatchInlineSnapshot(`
-    ".backdrop\\:flex::backdrop {
+    "
+    .backdrop\\:flex::backdrop {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['backdrop/foo:flex'])).toEqual('')
 })
 
 test('before', async () => {
   expect(await run(['before:flex'])).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-content: "";
@@ -88,14 +99,16 @@ test('before', async () => {
       syntax: "*";
       inherits: false;
       initial-value: "";
-    }"
+    }
+    "
   `)
   expect(await run(['before/foo:flex'])).toEqual('')
 })
 
 test('after', async () => {
   expect(await run(['after:flex'])).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-content: "";
@@ -112,7 +125,8 @@ test('after', async () => {
       syntax: "*";
       inherits: false;
       initial-value: "";
-    }"
+    }
+    "
   `)
   expect(await run(['after/foo:flex'])).toEqual('')
 })

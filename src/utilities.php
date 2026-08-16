@@ -796,27 +796,27 @@ class UtilityBuilder
             'supportsNegative' => $supportsNegative,
             'defaultValue' => null,
             'handleBareValue' => function ($value) use ($theme) {
-                // Fallback: if no theme value found, use calc(var(--spacing) * N)
-                $multiplier = $theme->resolve(null, ['--spacing']);
-                if ($multiplier === null) {
+                // Bare values emit a `--spacing(N)` marker that the CSS
+                // function substitution pass resolves against the theme
+                // (v4.3.3 behavior; enables the 0/1 spacing optimizations)
+                if ($theme->resolve(null, ['--spacing']) === null) {
                     return null;
                 }
                 if (!isValidSpacingMultiplier($value['value'])) {
                     return null;
                 }
 
-                return "calc({$multiplier} * {$value['value']})";
+                return "--spacing({$value['value']})";
             },
             'handleNegativeBareValue' => function ($value) use ($theme) {
-                $multiplier = $theme->resolve(null, ['--spacing']);
-                if ($multiplier === null) {
+                if ($theme->resolve(null, ['--spacing']) === null) {
                     return null;
                 }
                 if (!isValidSpacingMultiplier($value['value'])) {
                     return null;
                 }
 
-                return "calc({$multiplier} * -{$value['value']})";
+                return "--spacing(-{$value['value']})";
             },
             'staticValues' => $staticValues,
             'handle' => $handle,

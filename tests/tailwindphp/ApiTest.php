@@ -403,7 +403,9 @@ class ApiTest extends TestCase
 
     public function test_computed_value_various_spacing(): void
     {
-        $this->assertSame('0.25rem', Tailwind::computedValue('p-1'));
+        // TailwindCSS v4.3.3: `p-1` resolves to the --spacing multiplier
+        // itself (`var(--spacing)`), whose theme value is `.25rem`.
+        $this->assertSame('.25rem', Tailwind::computedValue('p-1'));
         $this->assertSame('0.5rem', Tailwind::computedValue('p-2'));
         $this->assertSame('0.75rem', Tailwind::computedValue('p-3'));
         $this->assertSame('1rem', Tailwind::computedValue('p-4'));
@@ -979,14 +981,15 @@ class ApiTest extends TestCase
         $props = tw::properties('inset-0');
 
         $this->assertArrayHasKey('inset', $props);
-        $this->assertSame('calc(var(--spacing) * 0)', $props['inset']);
+        // TailwindCSS v4.3.3: a zero spacing multiplier resolves to `0px`
+        $this->assertSame('0px', $props['inset']);
     }
 
     public function test_computed_properties_inset_0(): void
     {
         $props = tw::computedProperties('inset-0');
 
-        $this->assertSame('0rem', $props['inset']);
+        $this->assertSame('0px', $props['inset']);
     }
 
     // ==================================================
@@ -1105,7 +1108,8 @@ class ApiTest extends TestCase
     {
         // color-mix should be evaluated to oklch with alpha
         $value = tw::computedValue('bg-red-500/50');
-        $this->assertSame('oklch(63.7% .237 25.331 / .5)', $value);
+        // TailwindCSS v4.3.3: the in-oklab color-mix flattens to oklab()
+        $this->assertSame('oklab(63.7% .214 .101 / .5)', $value);
     }
 
     public function test_computed_value_color_without_opacity(): void
@@ -1138,7 +1142,8 @@ class ApiTest extends TestCase
     public function test_computed_properties_color_with_opacity(): void
     {
         $props = tw::computedProperties('bg-red-500/50');
-        $this->assertSame('oklch(63.7% .237 25.331 / .5)', $props['background-color']);
+        // TailwindCSS v4.3.3: the in-oklab color-mix flattens to oklab()
+        $this->assertSame('oklab(63.7% .214 .101 / .5)', $props['background-color']);
     }
 
     public function test_computed_properties_multiple_optimized(): void
@@ -1173,6 +1178,7 @@ class ApiTest extends TestCase
     {
         $compiler = tw::compile();
         $value = $compiler->computedValue('bg-green-500/25');
-        $this->assertSame('oklch(72.3% .219 149.579 / .25)', $value);
+        // TailwindCSS v4.3.3: the in-oklab color-mix flattens to oklab()
+        $this->assertSame('oklab(72.3% -.189 .11 / .25)', $value);
     }
 }

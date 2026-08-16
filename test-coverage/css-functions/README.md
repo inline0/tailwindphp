@@ -6,10 +6,10 @@ Tests extracted from `tailwindcss/packages/tailwindcss/src/css-functions.test.ts
 
 | Metric | Value |
 |--------|-------|
-| Source File Lines | 1490 |
-| Original Tests | 63 |
-| Extracted Cases | 63 |
-| Output tests | 55 |
+| Source File Lines | 1574 |
+| Original Tests | 67 |
+| Extracted Cases | 67 |
+| Output tests | 59 |
 | Error tests | 8 |
 
 ## Test Categories
@@ -18,7 +18,7 @@ Tests extracted from `tailwindcss/packages/tailwindcss/src/css-functions.test.ts
 |----------|-------|
 | alpha | 4 |
 | other | 42 |
-| spacing | 5 |
+| spacing | 9 |
 | theme | 12 |
 
 ## CSS Functions Tested

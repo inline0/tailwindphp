@@ -7,9 +7,16 @@ namespace TailwindPHP\SelectorParser;
 /**
  * Selector Parser - Parses CSS selectors into an AST.
  *
- * Port of: packages/tailwindcss/src/selector-parser.ts
+ * Port of: packages/tailwindcss/src/selector-parser.ts (pre-v4.3.1 shape)
  *
- * @port-deviation:none This is a direct 1:1 port with no significant deviations.
+ * @port-deviation:version TailwindCSS v4.3.1 rewrote this parser into a richer
+ * AST (list/complex/compound nodes) specifically to power the new
+ * `handleNesting()` pass in ast.ts, which flattens CSS nesting inside the
+ * TypeScript engine instead of delegating to lightningcss. TailwindPHP
+ * implements the equivalent nesting flattening in
+ * src/_tailwindphp/LightningCss.php (including the `:is()` wrapping of grouped
+ * parent selectors), so this module keeps the pre-rewrite shape; it currently
+ * has no consumers in src/ outside its unit tests.
  */
 
 const SP_AMPERSAND = 0x26;

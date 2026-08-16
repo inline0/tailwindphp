@@ -89,14 +89,14 @@ test('perspective-origin', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['perspective-origin-top'],
       css`
         @theme {
           --perspective-origin-top: 10px 20px;
         }
         @tailwind utilities;
       `,
-      ['perspective-origin-top'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -114,7 +114,8 @@ test('perspective-origin', async () => {
 
 test('perspective', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['perspective-normal', 'perspective-dramatic', 'perspective-none', 'perspective-[456px]'],
       css`
         @theme {
           --perspective-dramatic: 100px;
@@ -122,7 +123,6 @@ test('perspective', async () => {
         }
         @tailwind utilities;
       `,
-      ['perspective-normal', 'perspective-dramatic', 'perspective-none', 'perspective-[456px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -162,14 +162,14 @@ test('perspective', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['perspective-none'],
       css`
         @theme {
           --perspective-none: 400px;
         }
         @tailwind utilities;
       `,
-      ['perspective-none'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -186,7 +186,8 @@ test('perspective', async () => {
 
 test('p', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['p-1', 'p-4', 'p-99', 'p-big', 'p-[4px]'],
       css`
         @theme {
           --spacing: 0.25rem;
@@ -194,7 +195,6 @@ test('p', async () => {
         }
         @tailwind utilities;
       `,
-      ['p-1', 'p-4', 'p-99', 'p-big', 'p-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -204,7 +204,7 @@ test('p', async () => {
     }
 
     .p-1 {
-      padding: calc(var(--spacing) * 1);
+      padding: var(--spacing);
     }
 
     .p-4 {
@@ -229,7 +229,8 @@ test('p', async () => {
 
 test('px', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['px-1', 'px-99', 'px-2.5', 'px-big', 'px-[4px]'],
       css`
         @theme {
           --spacing: 0.25rem;
@@ -237,7 +238,6 @@ test('px', async () => {
         }
         @tailwind utilities;
       `,
-      ['px-1', 'px-99', 'px-2.5', 'px-big', 'px-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -247,7 +247,7 @@ test('px', async () => {
     }
 
     .px-1 {
-      padding-inline: calc(var(--spacing) * 1);
+      padding-inline: var(--spacing);
     }
 
     .px-2\\.5 {
@@ -272,7 +272,8 @@ test('px', async () => {
 
 test('py', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['py-1', 'py-4', 'py-99', 'py-big', 'py-[4px]'],
       css`
         @theme {
           --spacing: 0.25rem;
@@ -280,7 +281,6 @@ test('py', async () => {
         }
         @tailwind utilities;
       `,
-      ['py-1', 'py-4', 'py-99', 'py-big', 'py-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -290,7 +290,7 @@ test('py', async () => {
     }
 
     .py-1 {
-      padding-block: calc(var(--spacing) * 1);
+      padding-block: var(--spacing);
     }
 
     .py-4 {
@@ -315,7 +315,8 @@ test('py', async () => {
 
 test('pt', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['pt-1', 'pt-4', 'pt-99', 'pt-big', 'pt-[4px]'],
       css`
         @theme {
           --spacing: 0.25rem;
@@ -323,7 +324,6 @@ test('pt', async () => {
         }
         @tailwind utilities;
       `,
-      ['pt-1', 'pt-4', 'pt-99', 'pt-big', 'pt-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -333,7 +333,7 @@ test('pt', async () => {
     }
 
     .pt-1 {
-      padding-top: calc(var(--spacing) * 1);
+      padding-top: var(--spacing);
     }
 
     .pt-4 {
@@ -358,7 +358,8 @@ test('pt', async () => {
 
 test('ps', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['ps-1', 'ps-4', 'ps-99', 'ps-big', 'ps-[4px]'],
       css`
         @theme {
           --spacing: 0.25rem;
@@ -366,7 +367,6 @@ test('ps', async () => {
         }
         @tailwind utilities;
       `,
-      ['ps-1', 'ps-4', 'ps-99', 'ps-big', 'ps-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -376,7 +376,7 @@ test('ps', async () => {
     }
 
     .ps-1 {
-      padding-inline-start: calc(var(--spacing) * 1);
+      padding-inline-start: var(--spacing);
     }
 
     .ps-4 {
@@ -401,7 +401,8 @@ test('ps', async () => {
 
 test('pe', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['pe-1', 'pe-4', 'pe-99', 'pe-big', 'pe-[4px]'],
       css`
         @theme {
           --spacing: 0.25rem;
@@ -409,7 +410,6 @@ test('pe', async () => {
         }
         @tailwind utilities;
       `,
-      ['pe-1', 'pe-4', 'pe-99', 'pe-big', 'pe-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -419,7 +419,7 @@ test('pe', async () => {
     }
 
     .pe-1 {
-      padding-inline-end: calc(var(--spacing) * 1);
+      padding-inline-end: var(--spacing);
     }
 
     .pe-4 {
@@ -444,7 +444,8 @@ test('pe', async () => {
 
 test('pbs', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['pbs-1', 'pbs-4', 'pbs-99', 'pbs-big', 'pbs-[4px]'],
       css`
         @theme {
           --spacing: 0.25rem;
@@ -452,7 +453,6 @@ test('pbs', async () => {
         }
         @tailwind utilities;
       `,
-      ['pbs-1', 'pbs-4', 'pbs-99', 'pbs-big', 'pbs-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -462,7 +462,7 @@ test('pbs', async () => {
     }
 
     .pbs-1 {
-      padding-block-start: calc(var(--spacing) * 1);
+      padding-block-start: var(--spacing);
     }
 
     .pbs-4 {
@@ -487,7 +487,8 @@ test('pbs', async () => {
 
 test('pbe', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['pbe-1', 'pbe-4', 'pbe-99', 'pbe-big', 'pbe-[4px]'],
       css`
         @theme {
           --spacing: 0.25rem;
@@ -495,7 +496,6 @@ test('pbe', async () => {
         }
         @tailwind utilities;
       `,
-      ['pbe-1', 'pbe-4', 'pbe-99', 'pbe-big', 'pbe-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -505,7 +505,7 @@ test('pbe', async () => {
     }
 
     .pbe-1 {
-      padding-block-end: calc(var(--spacing) * 1);
+      padding-block-end: var(--spacing);
     }
 
     .pbe-4 {
@@ -530,7 +530,8 @@ test('pbe', async () => {
 
 test('pr', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['pr-1', 'pr-4', 'pr-99', 'pr-big', 'pr-[4px]'],
       css`
         @theme {
           --spacing: 0.25rem;
@@ -538,7 +539,6 @@ test('pr', async () => {
         }
         @tailwind utilities;
       `,
-      ['pr-1', 'pr-4', 'pr-99', 'pr-big', 'pr-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -548,7 +548,7 @@ test('pr', async () => {
     }
 
     .pr-1 {
-      padding-right: calc(var(--spacing) * 1);
+      padding-right: var(--spacing);
     }
 
     .pr-4 {
@@ -573,7 +573,8 @@ test('pr', async () => {
 
 test('pb', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['pb-1', 'pb-4', 'pb-99', 'pb-big', 'pb-[4px]'],
       css`
         @theme {
           --spacing: 0.25rem;
@@ -581,7 +582,6 @@ test('pb', async () => {
         }
         @tailwind utilities;
       `,
-      ['pb-1', 'pb-4', 'pb-99', 'pb-big', 'pb-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -591,7 +591,7 @@ test('pb', async () => {
     }
 
     .pb-1 {
-      padding-bottom: calc(var(--spacing) * 1);
+      padding-bottom: var(--spacing);
     }
 
     .pb-4 {
@@ -616,7 +616,8 @@ test('pb', async () => {
 
 test('pl', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['pl-1', 'pl-4', 'pl-99', 'pl-big', 'pl-[4px]'],
       css`
         @theme {
           --spacing: 0.25rem;
@@ -624,7 +625,6 @@ test('pl', async () => {
         }
         @tailwind utilities;
       `,
-      ['pl-1', 'pl-4', 'pl-99', 'pl-big', 'pl-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -634,7 +634,7 @@ test('pl', async () => {
     }
 
     .pl-1 {
-      padding-left: calc(var(--spacing) * 1);
+      padding-left: var(--spacing);
     }
 
     .pl-4 {
@@ -659,13 +659,7 @@ test('pl', async () => {
 
 test('placeholder', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'placeholder-red-500',
         'placeholder-red-500/50',
@@ -685,6 +679,12 @@ test('placeholder', async () => {
         'placeholder-[#0088cc]/[0.5]',
         'placeholder-[#0088cc]/[50%]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "

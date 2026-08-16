@@ -10,14 +10,7 @@ import { compileCss, run } from './test-utils/run'
 
 test('stroke', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-          --stroke-blue-500: #3b82f6;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // Color
         'stroke-red-500',
@@ -59,6 +52,13 @@ test('stroke', async () => {
         'stroke-[length:var(--my-width)]',
         'stroke-[percentage:var(--my-width)]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+          --stroke-blue-500: #3b82f6;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "

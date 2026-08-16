@@ -10,14 +10,7 @@ import { compileCss, run } from './test-utils/run'
 
 test('ring', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-          --ring-color-blue-500: #3b82f6;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // ring color
         'ring-inset',
@@ -57,6 +50,13 @@ test('ring', async () => {
         'ring-[12px]',
         'ring-[length:var(--my-width)]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+          --ring-color-blue-500: #3b82f6;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -380,14 +380,14 @@ test('ring', async () => {
     "
   `)
   expect(
-    await compileCss(
+    await run(
+      ['ring'],
       css`
         @theme {
           --default-ring-width: 2px;
         }
         @tailwind utilities;
       `,
-      ['ring'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -537,14 +537,7 @@ test('ring', async () => {
 
 test('ring-offset', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-          --ring-offset-color-blue-500: #3b82f6;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // ring color
         'ring-offset-inset',
@@ -581,6 +574,13 @@ test('ring-offset', async () => {
         'ring-offset-[12px]',
         'ring-offset-[length:var(--my-width)]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+          --ring-offset-color-blue-500: #3b82f6;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "

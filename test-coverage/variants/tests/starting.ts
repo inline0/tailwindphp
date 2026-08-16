@@ -10,11 +10,13 @@ import { compileCss, run } from './test-utils/run'
 
 test('starting', async () => {
   expect(await run(['starting:opacity-0'])).toMatchInlineSnapshot(`
-    "@starting-style {
+    "
+    @starting-style {
       .starting\\:opacity-0 {
         opacity: 0;
       }
-    }"
+    }
+    "
   `)
   expect(await run(['starting/foo:flex'])).toEqual('')
 })

@@ -21,7 +21,8 @@ test('supports', async () => {
       'supports-[--test]:flex',
     ]),
   ).toMatchInlineSnapshot(`
-    "@supports (gap: var(--tw)) {
+    "
+    @supports (gap: var(--tw)) {
       .supports-gap\\:grid {
         display: grid;
       }
@@ -67,7 +68,8 @@ test('supports', async () => {
       .supports-\\[var\\(--test\\)\\]\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
   expect(
     await run([

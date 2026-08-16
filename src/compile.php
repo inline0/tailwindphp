@@ -79,7 +79,38 @@ function compileCandidates(
         $flags |= COMPILE_FLAG_RESPECT_IMPORTANT;
     }
 
-    $variantOrderMap = $designSystem->getVariantOrder();
+    // Build the variant order map the way design-system.ts getVariantOrder()
+    // does: sort every parsed variant in use with Variants::compare() and
+    // assign group indexes (variants that compare equal share an index). This
+    // ranks compound variants like `group-hover` vs `group-focus` by their
+    // inner variant instead of only by the shared `group` root. Parsed
+    // variants are arrays in PHP, so serialize() stands in for the object
+    // identity TypeScript keys the map with.
+    $variantsRegistry = $designSystem->getVariants();
+    $allVariants = [];
+    foreach ($matches as $candidates) {
+        foreach ($candidates as $candidate) {
+            foreach ($candidate['variants'] ?? [] as $variant) {
+                $allVariants[serialize($variant)] = $variant;
+            }
+        }
+    }
+
+    $sortedVariants = array_values($allVariants);
+    usort($sortedVariants, fn ($a, $z) => $variantsRegistry->compare($a, $z));
+
+    $variantOrderMap = [];
+    $prevVariant = null;
+    $variantIndex = 0;
+    foreach ($sortedVariants as $variant) {
+        // This variant is not the same order as the previous one, so it goes
+        // into a new group
+        if ($prevVariant !== null && $variantsRegistry->compare($prevVariant, $variant) !== 0) {
+            $variantIndex++;
+        }
+        $variantOrderMap[serialize($variant)] = $variantIndex;
+        $prevVariant = $variant;
+    }
 
     // Create the AST
     foreach ($matches as $rawCandidate => $candidates) {
@@ -101,13 +132,15 @@ function compileCandidates(
                 $node = $ruleInfo['node'];
                 $propertySort = $ruleInfo['propertySort'];
 
-                // Collect variant orders as sorted array (avoids bitmask overflow for 64+ variants)
+                // Track the variant order as a descending set of bit positions
+                // (the PHP stand-in for TypeScript's BigInt bitmask, which
+                // would overflow for 64+ variants)
                 $variantOrders = [];
                 foreach ($candidate['variants'] as $variant) {
-                    $root = $variant['root'] ?? null;
-                    $variantOrders[] = ($root !== null) ? ($variantOrderMap[$root] ?? 0) : 0;
+                    $variantOrders[$variantOrderMap[serialize($variant)] ?? 0] = true;
                 }
-                sort($variantOrders);
+                $variantOrders = array_keys($variantOrders);
+                rsort($variantOrders);
 
                 // Store sorting info with the node itself so it survives array operations
                 $node['__sorting'] = [
@@ -134,27 +167,25 @@ function compileCandidates(
             return 0;
         }
 
-        // Sort by variant order: max order first (responsive > non-responsive),
-        // then by count (compound variants after single), then lexicographic
+        // Sort by variant order first. The variants are descending bit
+        // positions of TypeScript's `1n << order` bitmask, so comparing the
+        // highest differing bit — and treating the mask that runs out of bits
+        // first as smaller — reproduces `aSorting.variants - zSorting.variants`.
         $aVariants = $aSorting['variants'];
         $zVariants = $zSorting['variants'];
 
-        $aMax = empty($aVariants) ? -1 : max($aVariants);
-        $zMax = empty($zVariants) ? -1 : max($zVariants);
-        if ($aMax !== $zMax) {
-            return $aMax - $zMax;
-        }
-
         $aCount = count($aVariants);
         $zCount = count($zVariants);
-        if ($aCount !== $zCount) {
-            return $aCount - $zCount;
-        }
+        $shared = min($aCount, $zCount);
 
-        for ($i = 0; $i < $aCount; $i++) {
+        for ($i = 0; $i < $shared; $i++) {
             if ($aVariants[$i] !== $zVariants[$i]) {
                 return $aVariants[$i] - $zVariants[$i];
             }
+        }
+
+        if ($aCount !== $zCount) {
+            return $aCount - $zCount;
         }
 
         // Get property orders, defaulting to empty arrays
@@ -386,7 +417,15 @@ function compileBaseUtility(array $candidate, object $designSystem): array
 
         $compiledNodes = $utility['compileFn']($candidate);
         if ($compiledNodes === null) {
-            return $asts;
+            // `null` means that the result is invalid for this plugin, but
+            // subsequent plugins registered under the same root may still
+            // produce CSS. For backwards compatibility with `matchUtilities`,
+            // plugins that declare arbitrary value types bail entirely.
+            if (!empty($utility['options']['types'])) {
+                return $asts;
+            }
+
+            continue;
         }
         if ($compiledNodes === false) {
             continue;
@@ -407,7 +446,11 @@ function compileBaseUtility(array $candidate, object $designSystem): array
 
         $compiledNodes = $utility['compileFn']($candidate);
         if ($compiledNodes === null) {
-            return $asts;
+            if (!empty($utility['options']['types'])) {
+                return $asts;
+            }
+
+            continue;
         }
         if ($compiledNodes === false) {
             continue;

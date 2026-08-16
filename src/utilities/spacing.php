@@ -75,17 +75,34 @@ function registerSpacingUtilities(UtilityBuilder $builder): void
         });
     }
 
+    // A zero-like value short-circuits the reverse calc() so `space-x-0`
+    // emits plain `margin-inline: 0` after lightningcss merging
+    $isZeroSpacingValue = function (string $value): bool {
+        if ($value === '--spacing(0)' || $value === '--spacing(-0)') {
+            return true;
+        }
+
+        $parsed = \TailwindPHP\Utils\Dimensions::get($value);
+        if ($parsed !== null && $parsed[0] == 0.0 && ($parsed[1] === null || \TailwindPHP\Utils\isLengthValue($value))) {
+            return true;
+        }
+
+        return false;
+    };
+
     // Space Between utilities
     // space-x-* uses margin-inline-start on all but first child
     // Returns atRoot for property + styleRule with :where selector
-    $builder->spacingUtility('space-x', ['--space', '--spacing'], function ($value) {
+    $builder->spacingUtility('space-x', ['--space', '--spacing'], function ($value) use ($isZeroSpacingValue) {
+        $zero = $isZeroSpacingValue($value);
+
         return [
             atRoot([property('--tw-space-x-reverse', '0')]),
             styleRule(':where(& > :not(:last-child))', [
                 decl('--tw-sort', 'row-gap'),
                 decl('--tw-space-x-reverse', '0'),
-                decl('margin-inline-start', "calc({$value} * var(--tw-space-x-reverse))"),
-                decl('margin-inline-end', "calc({$value} * calc(1 - var(--tw-space-x-reverse)))"),
+                decl('margin-inline-start', $zero ? '0' : "calc({$value} * var(--tw-space-x-reverse))"),
+                decl('margin-inline-end', $zero ? '0' : "calc({$value} * calc(1 - var(--tw-space-x-reverse)))"),
             ]),
         ];
     }, [
@@ -93,14 +110,16 @@ function registerSpacingUtilities(UtilityBuilder $builder): void
     ]);
 
     // space-y-* uses margin-block-start on all but first child
-    $builder->spacingUtility('space-y', ['--space', '--spacing'], function ($value) {
+    $builder->spacingUtility('space-y', ['--space', '--spacing'], function ($value) use ($isZeroSpacingValue) {
+        $zero = $isZeroSpacingValue($value);
+
         return [
             atRoot([property('--tw-space-y-reverse', '0')]),
             styleRule(':where(& > :not(:last-child))', [
                 decl('--tw-sort', 'column-gap'),
                 decl('--tw-space-y-reverse', '0'),
-                decl('margin-block-start', "calc({$value} * var(--tw-space-y-reverse))"),
-                decl('margin-block-end', "calc({$value} * calc(1 - var(--tw-space-y-reverse)))"),
+                decl('margin-block-start', $zero ? '0' : "calc({$value} * var(--tw-space-y-reverse))"),
+                decl('margin-block-end', $zero ? '0' : "calc({$value} * calc(1 - var(--tw-space-y-reverse)))"),
             ]),
         ];
     }, [

@@ -10,14 +10,14 @@ import { compileCss, run } from './test-utils/run'
 
 test('margin sort order', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['mb-4', 'me-4', 'mx-4', 'ml-4', 'ms-4', 'm-4', 'mr-4', 'mt-4', 'my-4'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['mb-4', 'me-4', 'mx-4', 'ml-4', 'ms-4', 'm-4', 'mr-4', 'mt-4', 'my-4'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -80,14 +80,7 @@ test('margin sort order', async () => {
 
 test('min-width', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --container-xl: 36rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'min-w-full',
         'min-w-auto',
@@ -98,6 +91,13 @@ test('min-width', async () => {
         'min-w-xl',
         'min-w-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --container-xl: 36rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -158,7 +158,8 @@ test('min-width', async () => {
 
 test('max-width', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['max-w-none', 'max-w-full', 'max-w-max', 'max-w-fit', 'max-w-4', 'max-w-xl', 'max-w-[4px]'],
       css`
         @theme {
           --spacing-4: 1rem;
@@ -166,7 +167,6 @@ test('max-width', async () => {
         }
         @tailwind utilities;
       `,
-      ['max-w-none', 'max-w-full', 'max-w-max', 'max-w-fit', 'max-w-4', 'max-w-xl', 'max-w-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -224,13 +224,7 @@ test('max-width', async () => {
 
 test('min-height', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'min-h-full',
         'min-h-auto',
@@ -245,6 +239,12 @@ test('min-height', async () => {
         'min-h-4',
         'min-h-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -324,13 +324,7 @@ test('min-height', async () => {
 
 test('max-height', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'max-h-none',
         'max-h-full',
@@ -345,6 +339,12 @@ test('max-height', async () => {
         'max-h-4',
         'max-h-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -425,14 +425,7 @@ test('max-height', async () => {
 
 test('min-inline-size', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --container-xl: 36rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'min-inline-full',
         'min-inline-auto',
@@ -443,6 +436,13 @@ test('min-inline-size', async () => {
         'min-inline-xl',
         'min-inline-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --container-xl: 36rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -503,14 +503,7 @@ test('min-inline-size', async () => {
 
 test('max-inline-size', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --container-xl: 36rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'max-inline-none',
         'max-inline-full',
@@ -520,6 +513,13 @@ test('max-inline-size', async () => {
         'max-inline-xl',
         'max-inline-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --container-xl: 36rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -577,13 +577,7 @@ test('max-inline-size', async () => {
 
 test('min-block-size', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'min-block-full',
         'min-block-auto',
@@ -598,6 +592,12 @@ test('min-block-size', async () => {
         'min-block-4',
         'min-block-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -677,13 +677,7 @@ test('min-block-size', async () => {
 
 test('max-block-size', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'max-block-none',
         'max-block-full',
@@ -698,6 +692,12 @@ test('max-block-size', async () => {
         'max-block-4',
         'max-block-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "

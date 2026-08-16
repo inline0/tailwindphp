@@ -10,13 +10,7 @@ import { compileCss, run } from './test-utils/run'
 
 test('from', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // --tw-gradient-from
         'from-red-500',
@@ -51,6 +45,12 @@ test('from', async () => {
         'from-[length:var(--my-position)]',
         'from-[percentage:var(--my-position)]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -395,13 +395,7 @@ test('from', async () => {
 
 test('via', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // --tw-gradient-stops
         'via-red-500',
@@ -436,6 +430,12 @@ test('via', async () => {
         'via-[length:var(--my-position)]',
         'via-[percentage:var(--my-position)]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "

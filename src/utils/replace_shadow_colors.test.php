@@ -145,4 +145,66 @@ class replace_shadow_colors extends TestCase
             $parsed,
         );
     }
+
+    /**
+     * Port of the v4.3.3 "should find the color regardless of its position"
+     * cartesian test: known lengths (raw numbers, calc(…), --spacing(…)) never
+     * count as colors, so the color is found in any of the shadow positions.
+     */
+    #[Test]
+    public function should_find_the_color_regardless_of_its_position(): void
+    {
+        $xs = ['calc(var(--spacing) * 1)', '1', '--spacing(1)'];
+        $ys = ['calc(var(--spacing) * 2)', '2', '--spacing(2)'];
+        $blurs = ['calc(var(--spacing) * 3)', '3', '--spacing(3)'];
+        $spreads = ['calc(var(--spacing) * 4)', '4', '--spacing(4)'];
+        $colors = ['black', 'rgb(0, 0, 0)', '#000', '--alpha(var(--color) / 50%)', 'var(--uknown-color)'];
+
+        foreach ($xs as $x) {
+            foreach ($ys as $y) {
+                foreach ($blurs as $blur) {
+                    foreach ($spreads as $spread) {
+                        foreach ($colors as $color) {
+                            $expectedColor = "var(--tw-shadow-color, {$color})";
+
+                            foreach ([
+                                "{$x} {$color} {$y} {$blur} {$spread}",
+                                "{$x} {$y} {$color} {$blur} {$spread}",
+                                "{$x} {$y} {$blur} {$color} {$spread}",
+                            ] as $input) {
+                                $this->assertEquals(
+                                    str_replace($color, $expectedColor, $input),
+                                    replaceShadowColors($input, fn ($c) => $this->simpleReplacer($c)),
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Port of the v4.3.3 "should find the color (%s)" cases: when using
+     * `var(…)` for the lengths we don't know their types, but a recognizable
+     * color (named, hex, color function, --alpha) is still found.
+     */
+    #[Test]
+    public function should_find_the_color_between_unknown_variables(): void
+    {
+        foreach (['black', '#000', 'rgb(0, 0, 0)', '--alpha(var(--color) / 50%)'] as $color) {
+            $expectedColor = "var(--tw-shadow-color, {$color})";
+
+            foreach ([
+                "var(--x) var(--y) {$color}",
+                "var(--x) var(--y) var(--blur) {$color}",
+                "var(--x) var(--y) var(--blur) var(--spread) {$color}",
+            ] as $input) {
+                $this->assertEquals(
+                    str_replace($color, $expectedColor, $input),
+                    replaceShadowColors($input, fn ($c) => $this->simpleReplacer($c)),
+                );
+            }
+        }
+    }
 }

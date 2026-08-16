@@ -10,14 +10,7 @@ import { compileCss, run } from './test-utils/run'
 
 test('caret', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-          --caret-color-blue-500: #3b82f6;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'caret-red-500',
         'caret-red-500/50',
@@ -38,6 +31,13 @@ test('caret', async () => {
         'caret-[#0088cc]/[0.5]',
         'caret-[#0088cc]/[50%]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+          --caret-color-blue-500: #3b82f6;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "

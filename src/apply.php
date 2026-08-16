@@ -184,25 +184,11 @@ function registerCssUtility(array $node, DesignSystem $designSystem): void
         return;
     }
 
-    $name = $node['params'];
-
-    // Get all nodes (declarations, nested rules, etc.)
-    $nodes = $node['nodes'] ?? [];
-
-    // Functional utilities end with -*
-    if (str_ends_with($name, '-*')) {
-        $utilityName = substr($name, 0, -2);
-        $designSystem->getUtilities()->functional($utilityName, function (array $candidate) use ($nodes) {
-            if (!isset($candidate['value'])) {
-                return null;
-            }
-
-            // Deep clone to avoid mutation
-            return array_map(fn ($child) => cloneUtilityNode($child), $nodes);
-        });
-    } else {
-        // Static utility - return all nodes (declarations, nested rules, etc.)
-        $designSystem->getUtilities()->static($name, fn () => array_map(fn ($child) => cloneUtilityNode($child), $nodes));
+    // Delegate to createCssUtility so functional utilities get the full
+    // `--value(…)` / `--modifier(…)` / `--default(…)` resolution engine.
+    $register = createCssUtility($node);
+    if ($register !== null) {
+        $register($designSystem);
     }
 }
 
@@ -392,6 +378,37 @@ function substituteApplyInNode(array &$ast, string $pathKey, DesignSystem $desig
     walk($current['nodes'], function (&$child) use ($designSystem) {
         if (!isset($child['kind']) || $child['kind'] !== 'at-rule' || $child['name'] !== '@apply') {
             return WalkAction::Continue;
+        }
+
+        // Categorize the applied names: dashed idents indicate CSS mixins
+        // (https://drafts.csswg.org/css-mixins-1/#apply-rule)
+        $parts = array_values(array_filter(preg_split('/\s+/', trim($child['params'])), fn ($p) => $p !== ''));
+        $normalIdents = [];
+        $dashedIdents = [];
+        foreach ($parts as $part) {
+            if (str_starts_with($part, '--')) {
+                $dashedIdents[] = $part;
+            } else {
+                $normalIdents[] = $part;
+            }
+        }
+
+        if (!empty($dashedIdents)) {
+            // An `@apply` consisting only of dashed idents is a CSS mixin;
+            // these are not utilities and must be emitted literally.
+            if (empty($normalIdents)) {
+                return WalkAction::Skip;
+            }
+
+            // Mixing mixins and our `@apply` behavior is invalid; the rules
+            // must be written separately.
+            $list = implode(' ', $dashedIdents);
+            throw new \Exception("You cannot use `@apply` with both mixins and utilities. Please move `@apply {$list}` into a separate rule.");
+        }
+
+        if (!empty($child['nodes']) && !empty($normalIdents)) {
+            $list = implode(' ', $normalIdents);
+            throw new \Exception("The rule `@apply {$list}` must not have a body.");
         }
 
         $newNodes = compileApplyAtRule($child, $designSystem);

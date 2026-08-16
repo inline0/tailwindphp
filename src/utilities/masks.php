@@ -232,7 +232,7 @@ function registerMaskUtilities(UtilityBuilder $builder): void
                         return null;
                     }
 
-                    return $positionHandler("calc({$multiplier} * {$namedValue})");
+                    return $positionHandler("--spacing({$namedValue})");
                 case 'percentage':
                     $numPart = substr($namedValue, 0, -1);
                     if (!isPositiveInteger($numPart)) {
@@ -269,12 +269,26 @@ function registerMaskUtilities(UtilityBuilder $builder): void
             if (!isPositiveInteger($value['value'])) {
                 return null;
             }
+            $valueAsNumber = (float) $value['value'];
+            if ($valueAsNumber == 0.0) {
+                return '0deg';
+            }
+            if ($valueAsNumber == 1.0) {
+                return '1deg';
+            }
 
             return "calc(1deg * {$value['value']})";
         },
         'handleNegativeBareValue' => function ($value) {
             if (!isPositiveInteger($value['value'])) {
                 return null;
+            }
+            $valueAsNumber = (float) $value['value'];
+            if ($valueAsNumber == 0.0) {
+                return '0deg';
+            }
+            if ($valueAsNumber == 1.0) {
+                return '-1deg';
             }
 
             return "calc(1deg * -{$value['value']})";
@@ -468,12 +482,26 @@ function registerMaskUtilities(UtilityBuilder $builder): void
             if (!isPositiveInteger($value['value'])) {
                 return null;
             }
+            $valueAsNumber = (float) $value['value'];
+            if ($valueAsNumber == 0.0) {
+                return '0deg';
+            }
+            if ($valueAsNumber == 1.0) {
+                return '1deg';
+            }
 
             return "calc(1deg * {$value['value']})";
         },
         'handleNegativeBareValue' => function ($value) {
             if (!isPositiveInteger($value['value'])) {
                 return null;
+            }
+            $valueAsNumber = (float) $value['value'];
+            if ($valueAsNumber == 0.0) {
+                return '0deg';
+            }
+            if ($valueAsNumber == 1.0) {
+                return '-1deg';
             }
 
             return "calc(1deg * -{$value['value']})";

@@ -49,14 +49,14 @@ test('z-index', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['z-auto'],
       css`
         @theme {
           --z-index-auto: 42;
         }
         @tailwind utilities;
       `,
-      ['z-auto'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -72,14 +72,7 @@ test('z-index', async () => {
 })
 
 test('zoom', async () => {
-  expect(
-    await compileCss(
-      css`
-        @tailwind utilities;
-      `,
-      ['zoom-50', 'zoom-100', 'zoom-[var(--zoom)]'],
-    ),
-  ).toMatchInlineSnapshot(`
+  expect(await run(['zoom-50', 'zoom-100', 'zoom-[var(--zoom)]'])).toMatchInlineSnapshot(`
     "
     .zoom-50 {
       zoom: 50%;

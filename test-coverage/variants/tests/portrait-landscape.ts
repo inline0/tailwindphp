@@ -10,22 +10,26 @@ import { compileCss, run } from './test-utils/run'
 
 test('portrait', async () => {
   expect(await run(['portrait:flex'])).toMatchInlineSnapshot(`
-    "@media (orientation: portrait) {
+    "
+    @media (orientation: portrait) {
       .portrait\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
   expect(await run(['portrait/foo:flex'])).toEqual('')
 })
 
 test('landscape', async () => {
   expect(await run(['landscape:flex'])).toMatchInlineSnapshot(`
-    "@media (orientation: landscape) {
+    "
+    @media (orientation: landscape) {
       .landscape\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
   expect(await run(['landscape/foo:flex'])).toEqual('')
 })

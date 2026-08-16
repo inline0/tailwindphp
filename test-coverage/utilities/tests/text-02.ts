@@ -10,18 +10,7 @@ import { compileCss, run } from './test-utils/run'
 
 test('text', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-          --color-red-500: #ef4444;
-          --text-color-blue-500: #3b82f6;
-          --text-sm: 0.875rem;
-          --text-sm--line-height: 1.25rem;
-          --leading-snug: 1.375;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // color
         'text-red-500',
@@ -51,15 +40,18 @@ test('text', async () => {
         'text-[color:var(--my-color)]/50',
         'text-[color:var(--my-color)]/[0.5]',
         'text-[color:var(--my-color)]/[50%]',
+        'text-[--alpha(red/20%)]',
 
         // font-size / line-height / letter-spacing / font-weight
         'text-sm',
+        'text-sm/0',
         'text-sm/6',
         'text-sm/none',
         'text-[10px]/none',
         'text-sm/snug',
         'text-sm/[4px]',
         'text-[12px]',
+        'text-[12px]/0',
         'text-[12px]/6',
         'text-[50%]',
         'text-[50%]/6',
@@ -74,7 +66,19 @@ test('text', async () => {
         'text-[clamp(1rem,2rem,3rem)]',
         'text-[clamp(1rem,var(--size),3rem)]',
         'text-[clamp(1rem,var(--size),3rem)]/9',
+        'text-[--spacing(2)]',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --color-red-500: #ef4444;
+          --text-color-blue-500: #3b82f6;
+          --text-sm: 0.875rem;
+          --text-sm--line-height: 1.25rem;
+          --leading-snug: 1.375;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -90,6 +94,11 @@ test('text', async () => {
     .text-\\[10px\\]\\/none {
       font-size: 10px;
       line-height: 1;
+    }
+
+    .text-\\[12px\\]\\/0 {
+      font-size: 12px;
+      line-height: 0;
     }
 
     .text-\\[12px\\]\\/6 {
@@ -122,6 +131,11 @@ test('text', async () => {
       line-height: var(--tw-leading, var(--text-sm--line-height));
     }
 
+    .text-sm\\/0 {
+      font-size: var(--text-sm);
+      line-height: 0;
+    }
+
     .text-sm\\/6 {
       font-size: var(--text-sm);
       line-height: calc(var(--spacing) * 6);
@@ -140,6 +154,10 @@ test('text', async () => {
     .text-sm\\/snug {
       font-size: var(--text-sm);
       line-height: var(--leading-snug);
+    }
+
+    .text-\\[--spacing\\(2\\)\\] {
+      font-size: calc(var(--spacing) * 2);
     }
 
     .text-\\[12px\\] {
@@ -180,6 +198,10 @@ test('text', async () => {
 
     .text-\\[\\#0088cc\\]\\/50, .text-\\[\\#0088cc\\]\\/\\[0\\.5\\], .text-\\[\\#0088cc\\]\\/\\[50\\%\\] {
       color: oklab(59.9824% -.067 -.124 / .5);
+    }
+
+    .text-\\[--alpha\\(red\\/20\\%\\)\\] {
+      color: oklab(62.7955% .224 .125 / .2);
     }
 
     .text-\\[color\\:var\\(--my-color\\)\\], .text-\\[color\\:var\\(--my-color\\)\\]\\/50 {
@@ -350,13 +372,7 @@ test('text', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme inline reference {
-          --text-sm: 0.875rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'text',
         // color
@@ -382,21 +398,19 @@ test('text', async () => {
         '-text-sm/[4px]',
         'text-[10px]/foo',
       ],
+      css`
+        @theme inline reference {
+          --text-sm: 0.875rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
 
 test('text-shadow', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-          --text-shadow-2xs: 0px 1px 0px rgb(0 0 0 / 0.1);
-          --text-shadow-sm: 0px 1px 2px rgb(0 0 0 / 0.06), 0px 2px 2px rgb(0 0 0 / 0.06);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // Shadows
         'text-shadow-2xs',
@@ -409,6 +423,7 @@ test('text-shadow', async () => {
         'text-shadow-[shadow:var(--value)]',
 
         'text-shadow-sm/25',
+        'text-shadow-sm/12.5',
         'text-shadow-[12px_12px_#0088cc]/25',
         'text-shadow-[12px_12px_var(--value)]/25',
         'text-shadow-[10px_10px]/25',
@@ -436,6 +451,14 @@ test('text-shadow', async () => {
         'text-shadow-[color:var(--value)]/[0.5]',
         'text-shadow-[color:var(--value)]/[50%]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+          --text-shadow-2xs: 0px 1px 0px rgb(0 0 0 / 0.1);
+          --text-shadow-sm: 0px 1px 2px rgb(0 0 0 / 0.06), 0px 2px 2px rgb(0 0 0 / 0.06);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -477,6 +500,11 @@ test('text-shadow', async () => {
     .text-shadow-\\[12px_12px_\\#0088cc\\]\\/25 {
       --tw-text-shadow-alpha: 25%;
       text-shadow: 12px 12px var(--tw-text-shadow-color, oklab(59.9824% -.067 -.124 / .25));
+    }
+
+    .text-shadow-sm\\/12\\.5 {
+      --tw-text-shadow-alpha: 12.5%;
+      text-shadow: 0px 1px 2px var(--tw-text-shadow-color, oklab(0% 0 0 / .125)), 0px 2px 2px var(--tw-text-shadow-color, oklab(0% 0 0 / .125));
     }
 
     .text-shadow-sm\\/25 {

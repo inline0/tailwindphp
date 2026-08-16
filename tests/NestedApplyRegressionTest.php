@@ -66,8 +66,10 @@ class NestedApplyRegressionTest extends TestCase
             'minify' => true,
         ]);
 
-        $this->assertStringContainsString('margin-top:calc(var(--spacing) * 0)', $css);
-        $this->assertStringContainsString('margin-bottom:calc(var(--spacing) * 0)', $css);
+        // As of TailwindCSS v4.3.3 a zero spacing multiplier resolves to a
+        // plain zero length instead of `calc(var(--spacing) * 0)`.
+        $this->assertStringContainsString('margin-top:0', $css);
+        $this->assertStringContainsString('margin-bottom:0', $css);
         $this->assertStringContainsString('#bug .child{display:block}', $css);
     }
 }

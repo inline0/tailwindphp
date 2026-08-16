@@ -96,7 +96,8 @@
     },
     "scripts": {
         "extract": [
-            "php test-coverage/extract-run-tests.php",
+            "php test-coverage/extract-run-tests.php utilities",
+            "php test-coverage/extract-run-tests.php variants",
             "php test-coverage/extract-index-tests.php",
             "php test-coverage/extract-css-functions-tests.php",
             "php test-coverage/extract-candidate-tests.php",

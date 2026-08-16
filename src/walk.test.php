@@ -333,6 +333,46 @@ class walk extends TestCase
         $this->assertEquals($expected, $visited);
     }
 
+    #[Test]
+    public function tracks_index_and_siblings_on_enter_and_exit(): void
+    {
+        $ast = $this->createAst();
+
+        $visited = [];
+        walk($ast, [
+            'enter' => function ($node, $ctx) use (&$visited) {
+                $this->assertSame($node, $ctx->siblings[$ctx->index]);
+                $visited[] = str_repeat('  ', $ctx->depth) . " Enter({$node['kind']} @ {$ctx->index})";
+            },
+            'exit' => function ($node, $ctx) use (&$visited) {
+                $this->assertSame($node, $ctx->siblings[$ctx->index]);
+                $visited[] = str_repeat('  ', $ctx->depth) . " Exit({$node['kind']} @ {$ctx->index})";
+            },
+        ]);
+
+        $expected = [
+            ' Enter(a @ 0)',
+            '   Enter(b @ 0)',
+            '     Enter(c @ 0)',
+            '     Exit(c @ 0)',
+            '   Exit(b @ 0)',
+            '   Enter(d @ 1)',
+            '     Enter(e @ 0)',
+            '       Enter(f @ 0)',
+            '       Exit(f @ 0)',
+            '     Exit(e @ 0)',
+            '   Exit(d @ 1)',
+            '   Enter(g @ 2)',
+            '     Enter(h @ 0)',
+            '     Exit(h @ 0)',
+            '   Exit(g @ 2)',
+            ' Exit(a @ 0)',
+            ' Enter(i @ 1)',
+            ' Exit(i @ 1)',
+        ];
+        $this->assertEquals($expected, $visited);
+    }
+
     // Real world use case test
 
     #[Test]

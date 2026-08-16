@@ -10,14 +10,7 @@ import { compileCss, run } from './test-utils/run'
 
 test('bottom', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --inset-shadowned: 1940px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'bottom-shadowned',
         'bottom-auto',
@@ -28,6 +21,13 @@ test('bottom', async () => {
         '-bottom-4',
         'bottom-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -70,14 +70,7 @@ test('bottom', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme reference {
-          --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'bottom-shadow-sm',
         'bottom',
@@ -93,20 +86,20 @@ test('bottom', async () => {
         '-bottom-4/foo',
         'bottom-[4px]/foo',
       ],
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
 
 test('left', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --inset-shadowned: 1940px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'left-shadowned',
         'left-auto',
@@ -120,6 +113,13 @@ test('left', async () => {
         // https://github.com/tailwindlabs/tailwindcss/issues/20010
         '-left-[(var(--my-var1)+var(--my-var2))]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -166,14 +166,7 @@ test('left', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme reference {
-          --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'left-shadow-sm',
         'left',
@@ -189,21 +182,20 @@ test('left', async () => {
         '-left-4/foo',
         'left-[4px]/foo',
       ],
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
 
 test('inset-shadow', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-          --inset-shadow: inset 0 2px 4px rgb(0 0 0 / 0.05);
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // Shadows
         'inset-shadow',
@@ -217,6 +209,7 @@ test('inset-shadow', async () => {
         'inset-shadow-[12px_12px_#0088cc,12px_12px_var(--value,#0088cc)]',
 
         'inset-shadow-sm/25',
+        'inset-shadow-sm/12.5',
         'inset-shadow-[12px_12px_#0088cc]/25',
         'inset-shadow-[12px_12px_var(--value)]/25',
         'inset-shadow-[10px_10px]/25',
@@ -245,6 +238,14 @@ test('inset-shadow', async () => {
         'inset-shadow-[color:var(--value)]/[0.5]',
         'inset-shadow-[color:var(--value)]/[50%]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+          --inset-shadow: inset 0 2px 4px rgb(0 0 0 / 0.05);
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -324,6 +325,12 @@ test('inset-shadow', async () => {
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
+    .inset-shadow-sm\\/12\\.5 {
+      --tw-inset-shadow-alpha: 12.5%;
+      --tw-inset-shadow: inset 0 1px 1px var(--tw-inset-shadow-color, oklab(0% 0 0 / .125));
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+
     .inset-shadow-sm\\/25 {
       --tw-inset-shadow-alpha: 25%;
       --tw-inset-shadow: inset 0 1px 1px var(--tw-inset-shadow-color, oklab(0% 0 0 / .25));
@@ -361,7 +368,7 @@ test('inset-shadow', async () => {
     }
 
     .inset-shadow-none {
-      --tw-inset-shadow: 0 0 #0000;
+      --tw-inset-shadow: inset 0 0 #0000;
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 

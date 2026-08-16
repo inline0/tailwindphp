@@ -1,7 +1,7 @@
 {
     "sourceFile": "tailwindcss\/packages\/tailwindcss\/src\/utilities.test.ts",
-    "sourceLines": 31299,
-    "totalTests": 290,
+    "sourceLines": 31510,
+    "totalTests": 355,
     "categories": {
         "accessibility": {
             "tests": 2,
@@ -21,12 +21,15 @@
             ]
         },
         "other": {
-            "tests": 10,
-            "lines": 767,
-            "files": 1,
+            "tests": 75,
+            "lines": 2899,
+            "files": 4,
             "testNames": [
                 "visibility",
                 "field-sizing",
+                "container > creates the right media queries and sorts it before width",
+                "container > sorts breakpoints based on unit and then in ascending aOrder",
+                "container > custom `@utility container` always follow the core utility ",
                 "--tw-scroll-snap-strictness",
                 "tab",
                 "indent",
@@ -34,7 +37,69 @@
                 "contain",
                 "content",
                 "underline-offset",
-                "@container"
+                "@container",
+                "spacing utilities > `--spacing: initial` disables the spacing multiplier",
+                "spacing utilities > `--spacing-*: initial` disables the spacing multiplier",
+                "spacing utilities > only multiples of 0.25 with no trailing zeroes are supported with the spacing multiplier",
+                "spacing utilities > spacing utilities must have a value",
+                "spacing utilities > --spacing-* variables take precedence over --container-* variables",
+                "custom utilities > custom static utility",
+                "custom utilities > custom static utility emit CSS variables if the utility is used",
+                "custom utilities > custom static utility (negative)",
+                "custom utilities > Multiple static utilities are merged",
+                "custom utilities > custom utilities support some special characters",
+                "custom utilities > can override specific versions of a functional utility with a static utility",
+                "custom utilities > can override the default value of a functional utility",
+                "custom utilities > custom utilities are sorted by used properties",
+                "custom utilities > custom utilities must use a valid name definitions",
+                "custom utilities > custom utilities work with `@apply`",
+                "custom utilities > referencing custom utilities in custom utilities via `@apply` should work",
+                "custom utilities > custom utilities with `@apply` causing circular dependencies should error",
+                "custom utilities > custom utilities with `@apply` causing circular dependencies should error (deeply nesting)",
+                "custom utilities > custom utilities with `@apply` causing circular dependencies should error (multiple levels)",
+                "custom utilities > functional utilities > functional utilities require a `--value(\u2026)`",
+                "custom utilities > functional utilities > functional utilities must resolve at least one `--value(\u2026)`",
+                "custom utilities > functional utilities > resolving values from `@theme`",
+                "custom utilities > functional utilities > functional utility with double-dash separator",
+                "custom utilities > functional utilities > resolving values from `@theme`, with `--example-*` syntax",
+                "custom utilities > functional utilities > resolving values from `@theme`, with `--example-\\\\*` syntax (prettier friendly)",
+                "custom utilities > functional utilities > resolving bare values",
+                "custom utilities > functional utilities > bare values with unsupported data types should result in a warning",
+                "custom utilities > functional utilities > resolve literal values",
+                "custom utilities > functional utilities > resolving bare values with constraints for integer, percentage, and ratio",
+                "custom utilities > functional utilities > resolving unsupported bare values",
+                "custom utilities > functional utilities > resolving arbitrary values",
+                "custom utilities > functional utilities > resolving any arbitrary values",
+                "custom utilities > functional utilities > resolving any arbitrary values (without space)",
+                "custom utilities > functional utilities > resolving any arbitrary values (with escaped `*`)",
+                "custom utilities > functional utilities > resolving theme, bare and arbitrary values all at once",
+                "custom utilities > functional utilities > in combination with calc to produce different data types of values",
+                "custom utilities > functional utilities > shorthand if resulting values are of the same type",
+                "custom utilities > functional utilities > negative values",
+                "custom utilities > functional utilities > using the same value multiple times",
+                "custom utilities > functional utilities > using `--spacing(\u2026)` shorthand",
+                "custom utilities > functional utilities > using `--spacing(\u2026)` shorthand (inline theme)",
+                "custom utilities > functional utilities > functional utilities can use `--default(\u2026)` in `--value(\u2026)`",
+                "custom utilities > functional utilities > functional utilities can use `--default(\u2026)` in complex expressions",
+                "custom utilities > functional utilities > functional utilities can use `--default(\u2026)` with `--modifier(\u2026)`",
+                "custom utilities > functional utilities > functional utilities can use `--default(\u2026)` in `--modifier(\u2026)`",
+                "custom utilities > functional utilities > functional utilities can use `--default(\u2026)` in `--value(\u2026)` and `--modifier(\u2026)`",
+                "custom utilities > functional utilities > modifiers",
+                "custom utilities > functional utilities > fractions",
+                "custom utilities > functional utilities > resolve theme values with sub-namespace (--text- * --line-height)",
+                "custom utilities > functional utilities > resolve theme values with sub-namespace (--text-\\\\* --line-height)",
+                "custom utilities > functional utilities > resolve theme values with sub-namespace (--value(--text --line-height))",
+                "custom utilities > functional utilities > resolve theme values with sub-namespace (--value(--text-*--line-height))",
+                "custom utilities > functional utilities > variables used in `@utility` will not be emitted if the utility is not used",
+                "custom utilities > functional utilities > variables used in `@utility` will be emitted if the utility is used",
+                "custom utilities > functional utilities > declaration nodes are only replaced\/removed once",
+                "custom utilities > resolve value based on `@theme`",
+                "custom utilities > resolve value based on `@theme reference`",
+                "custom utilities > resolve value based on `@theme inline`",
+                "custom utilities > resolve value based on `@theme inline reference`",
+                "custom utilities > sub namespaces can live in different @theme blocks (1)",
+                "custom utilities > sub namespaces can live in different @theme blocks (2)",
+                "custom utilities > multiple @utility definitions with the same name but different value types"
             ]
         },
         "position": {
@@ -47,7 +112,7 @@
         },
         "inset": {
             "tests": 13,
-            "lines": 1951,
+            "lines": 1957,
             "files": 3,
             "testNames": [
                 "inset",
@@ -75,7 +140,7 @@
         },
         "z-index": {
             "tests": 2,
-            "lines": 89,
+            "lines": 82,
             "files": 1,
             "testNames": [
                 "z-index",
@@ -92,7 +157,7 @@
         },
         "grid": {
             "tests": 12,
-            "lines": 873,
+            "lines": 907,
             "files": 1,
             "testNames": [
                 "col",
@@ -127,7 +192,7 @@
         },
         "margin": {
             "tests": 48,
-            "lines": 7724,
+            "lines": 7735,
             "files": 10,
             "testNames": [
                 "margin",
@@ -190,7 +255,7 @@
         },
         "text": {
             "tests": 18,
-            "lines": 1562,
+            "lines": 1590,
             "files": 2,
             "testNames": [
                 "line-clamp",
@@ -472,7 +537,7 @@
         },
         "space": {
             "tests": 4,
-            "lines": 152,
+            "lines": 234,
             "files": 1,
             "testNames": [
                 "space-x",
@@ -483,7 +548,7 @@
         },
         "divide": {
             "tests": 8,
-            "lines": 523,
+            "lines": 526,
             "files": 1,
             "testNames": [
                 "divide-x",
@@ -645,7 +710,7 @@
         },
         "filter": {
             "tests": 1,
-            "lines": 539,
+            "lines": 558,
             "files": 1,
             "testNames": [
                 "filter"
@@ -661,7 +726,7 @@
         },
         "transition": {
             "tests": 5,
-            "lines": 356,
+            "lines": 349,
             "files": 1,
             "testNames": [
                 "transition",
@@ -698,7 +763,7 @@
         },
         "shadow": {
             "tests": 1,
-            "lines": 474,
+            "lines": 481,
             "files": 1,
             "testNames": [
                 "shadow"

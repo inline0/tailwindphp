@@ -10,15 +10,7 @@ import { compileCss, run } from './test-utils/run'
 
 test('inset', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-          --inset-shadowned: 1940px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inset-auto',
         'inset-shadow-sm',
@@ -30,6 +22,14 @@ test('inset', async () => {
         '-inset-4',
         'inset-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -196,14 +196,7 @@ test('inset', async () => {
 
 test('inset-x', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --inset-shadowned: 1940px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inset-x-shadowned',
         'inset-x-auto',
@@ -214,6 +207,13 @@ test('inset-x', async () => {
         '-inset-x-4',
         'inset-x-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -256,14 +256,7 @@ test('inset-x', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme reference {
-          --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px #0000000d;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inset-x-shadow-sm',
         'inset-x',
@@ -279,20 +272,20 @@ test('inset-x', async () => {
         '-inset-x-4/foo',
         'inset-x-[4px]/foo',
       ],
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px #0000000d;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
 
 test('inset-y', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --inset-shadowned: 1940px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inset-y-shadowned',
         'inset-y-auto',
@@ -303,6 +296,13 @@ test('inset-y', async () => {
         '-inset-y-4',
         'inset-y-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -345,14 +345,7 @@ test('inset-y', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme reference {
-          --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inset-y-shadow-sm',
         'inset-y',
@@ -368,20 +361,20 @@ test('inset-y', async () => {
         '-inset-y-4/foo',
         'inset-y-[4px]/foo',
       ],
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
 
 test('inset-s', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --inset-shadowned: 1940px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inset-s-shadowned',
         'inset-s-auto',
@@ -392,6 +385,13 @@ test('inset-s', async () => {
         '-inset-s-4',
         'inset-s-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -434,14 +434,7 @@ test('inset-s', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme reference {
-          --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inset-s-shadow-sm',
         'inset-s',
@@ -457,20 +450,20 @@ test('inset-s', async () => {
         '-inset-s-4/foo',
         'inset-s-[4px]/foo',
       ],
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
 
 test('inset-e', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --inset-shadowned: 1940px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inset-e-shadowned',
         'inset-e-auto',
@@ -481,6 +474,13 @@ test('inset-e', async () => {
         '-inset-e-4',
         'inset-e-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -523,14 +523,7 @@ test('inset-e', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme reference {
-          --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inset-e-shadow-sm',
         'inset-e',
@@ -546,20 +539,20 @@ test('inset-e', async () => {
         '-inset-e-4/foo',
         'inset-e-[4px]/foo',
       ],
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
 
 test('inset-bs', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --inset-shadowned: 1940px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inset-bs-shadowned',
         'inset-bs-auto',
@@ -570,6 +563,13 @@ test('inset-bs', async () => {
         '-inset-bs-4',
         'inset-bs-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -612,14 +612,7 @@ test('inset-bs', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme reference {
-          --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inset-bs-shadow-sm',
         'inset-bs',
@@ -635,20 +628,20 @@ test('inset-bs', async () => {
         '-inset-bs-4/foo',
         'inset-bs-[4px]/foo',
       ],
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
 
 test('inset-be', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --inset-shadowned: 1940px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inset-be-shadowned',
         'inset-be-auto',
@@ -659,6 +652,13 @@ test('inset-be', async () => {
         '-inset-be-4',
         'inset-be-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -701,14 +701,7 @@ test('inset-be', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme reference {
-          --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inset-be-shadow-sm',
         'inset-be',
@@ -724,21 +717,20 @@ test('inset-be', async () => {
         '-inset-be-4/foo',
         'inset-be-[4px]/foo',
       ],
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
 
 test('top', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --inset-shadowned: 1940px;
-        }
-        @tailwind utilities;
-      `,
-
+    await run(
       [
         'top-shadowned',
         'top-auto',
@@ -749,6 +741,13 @@ test('top', async () => {
         '-top-4',
         'top-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -791,14 +790,7 @@ test('top', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme reference {
-          --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'top-shadow-sm',
         'top',
@@ -814,20 +806,20 @@ test('top', async () => {
         '-top-4/foo',
         'top-[4px]/foo',
       ],
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
 
 test('right', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --inset-shadowned: 1940px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'right-shadowned',
         'right-auto',
@@ -838,6 +830,13 @@ test('right', async () => {
         '-right-4',
         'right-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -880,14 +879,7 @@ test('right', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme reference {
-          --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'right-shadow-sm',
         'right',
@@ -903,6 +895,13 @@ test('right', async () => {
         '-right-4/foo',
         'right-[4px]/foo',
       ],
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })

@@ -6,22 +6,22 @@ Tests extracted from `tailwindcss/packages/tailwindcss/src/index.test.ts`
 
 | Metric | Value |
 |--------|-------|
-| Source File Lines | 7030 |
-| Original Tests | 208 |
-| Extracted Cases | 80 |
-| run() tests | 13 |
-| compileCss() tests | 67 |
+| Source File Lines | 7045 |
+| Original Tests | 211 |
+| Extracted Cases | 149 |
+| run() tests | 18 |
+| compileCss() tests | 131 |
 
 ## Test Categories
 
 | Category | Cases |
 |----------|-------|
-| apply | 5 |
+| apply | 8 |
 | arbitrary | 9 |
-| css-variables | 8 |
-| import | 2 |
+| css-variables | 17 |
+| import | 3 |
 | important | 3 |
-| other | 31 |
+| other | 87 |
 | prefix | 3 |
 | tailwind-directive | 3 |
 | theme | 16 |

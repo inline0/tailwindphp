@@ -70,14 +70,14 @@ test('order', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['order-first'],
       css`
         @theme {
           --order-first: 1;
         }
         @tailwind utilities;
       `,
-      ['order-first'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -92,14 +92,14 @@ test('order', async () => {
   `)
 
   expect(
-    await compileCss(
+    await run(
+      ['order-last'],
       css`
         @theme {
           --order-last: -1;
         }
         @tailwind utilities;
       `,
-      ['order-last'],
     ),
   ).toMatchInlineSnapshot(`
     "

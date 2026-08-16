@@ -10,7 +10,8 @@ import { compileCss, run } from './test-utils/run'
 
 test('rounded-tr', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-tr', 'rounded-tr-full', 'rounded-tr-none', 'rounded-tr-sm', 'rounded-tr-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -20,7 +21,6 @@ test('rounded-tr', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-tr', 'rounded-tr-full', 'rounded-tr-none', 'rounded-tr-sm', 'rounded-tr-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -70,7 +70,8 @@ test('rounded-tr', async () => {
 
 test('rounded-br', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-br', 'rounded-br-full', 'rounded-br-none', 'rounded-br-sm', 'rounded-br-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -80,7 +81,6 @@ test('rounded-br', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-br', 'rounded-br-full', 'rounded-br-none', 'rounded-br-sm', 'rounded-br-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -130,7 +130,8 @@ test('rounded-br', async () => {
 
 test('rounded-bl', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-bl', 'rounded-bl-full', 'rounded-bl-none', 'rounded-bl-sm', 'rounded-bl-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -140,7 +141,6 @@ test('rounded-bl', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-bl', 'rounded-bl-full', 'rounded-bl-none', 'rounded-bl-sm', 'rounded-bl-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -251,14 +251,14 @@ test('border-style', async () => {
 
 test('border with custom default border width', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['border'],
       css`
         @theme {
           --default-border-width: 2px;
         }
         @tailwind utilities;
       `,
-      ['border'],
     ),
   ).toMatchInlineSnapshot(`
     "

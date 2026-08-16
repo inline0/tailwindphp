@@ -117,7 +117,7 @@
         "name": "keyframes outside of `@theme are always preserved",
         "type": "compileCss",
         "classes": [],
-        "css": "@theme {\n            @keyframes used {\n              to {\n                opacity: 1;\n              }\n            }\n          }\n\n          @keyframes unused {\n            to {\n              opacity: 0;\n            }\n          }\n\n          .foo {\n            animation: used 1s infinite;\n          }\n\n          @tailwind utilities;",
+        "css": "@theme {\n          @keyframes used {\n            to {\n              opacity: 1;\n            }\n          }\n        }\n\n        @keyframes unused {\n          to {\n            opacity: 0;\n          }\n        }\n\n        .foo {\n          animation: used 1s infinite;\n        }\n\n        @tailwind utilities;",
         "expected": "\"\n      @keyframes unused {\n        to {\n          opacity: 0;\n        }\n      }\n\n      .foo {\n        animation: 1s infinite used;\n      }\n\n      @keyframes used {\n        to {\n          opacity: 1;\n        }\n      }\n      \""
     },
     {

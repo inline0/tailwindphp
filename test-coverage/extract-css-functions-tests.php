@@ -102,7 +102,19 @@ foreach ($tests as $test) {
     // Check for classes array - the array can contain brackets like [500] so we need
     // to find the matching closing bracket properly
     $classes = [];
-    if (preg_match('/,\s*\[/s', $afterCss, $arrayStartMatch, PREG_OFFSET_CAPTURE)) {
+
+    // New helper order: run([classes], input) — candidates are run()'s first
+    // argument (the CSS may be inline or bound to a variable earlier)
+    if (preg_match('/\brun\(\s*\[/s', $body, $arrayStartMatch, PREG_OFFSET_CAPTURE)) {
+        $arrayStart = $arrayStartMatch[0][1] + strlen($arrayStartMatch[0][0]);
+        $arrayContent = extractBracketContent(substr($body, $arrayStart - 1));
+        if ($arrayContent !== null) {
+            $classes = parseClassArray($arrayContent);
+        }
+    }
+
+    // Old helper order: compileCss(css`...`, [classes])
+    if (empty($classes) && preg_match('/,\s*\[/s', $afterCss, $arrayStartMatch, PREG_OFFSET_CAPTURE)) {
         $arrayStart = $arrayStartMatch[0][1] + strlen($arrayStartMatch[0][0]);
         $arrayContent = extractBracketContent(substr($afterCss, $arrayStart - 1));
         if ($arrayContent !== null) {

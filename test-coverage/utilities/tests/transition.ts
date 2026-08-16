@@ -10,7 +10,17 @@ import { compileCss, run } from './test-utils/run'
 
 test('transition', async () => {
   expect(
-    await compileCss(
+    await run(
+      [
+        'transition',
+        'transition-none',
+        'transition-all',
+        'transition-transform',
+        'transition-shadow',
+        'transition-colors',
+        'transition-opacity',
+        'transition-[var(--value)]',
+      ],
       css`
         @theme {
           --default-transition-timing-function: ease;
@@ -22,16 +32,6 @@ test('transition', async () => {
         }
         @tailwind utilities;
       `,
-      [
-        'transition',
-        'transition-none',
-        'transition-all',
-        'transition-transform',
-        'transition-shadow',
-        'transition-colors',
-        'transition-opacity',
-        'transition-[var(--value)]',
-      ],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -90,7 +90,8 @@ test('transition', async () => {
   `)
 
   expect(
-    await compileCss(
+    await run(
+      ['transition', 'transition-all', 'transition-colors'],
       css`
         @theme inline {
           --default-transition-timing-function: ease;
@@ -98,7 +99,6 @@ test('transition', async () => {
         }
         @tailwind utilities;
       `,
-      ['transition', 'transition-all', 'transition-colors'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -122,14 +122,7 @@ test('transition', async () => {
     "
   `)
 
-  expect(
-    await compileCss(
-      css`
-        @tailwind utilities;
-      `,
-      ['transition-all'],
-    ),
-  ).toMatchInlineSnapshot(`
+  expect(await run(['transition-all'])).toMatchInlineSnapshot(`
     "
     .transition-all {
       transition-property: all;
@@ -158,14 +151,14 @@ test('transition', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['transition-colors'],
       css`
         @theme {
           --transition-property-colors: transform;
         }
         @tailwind utilities;
       `,
-      ['transition-colors'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -275,7 +268,8 @@ test('duration', async () => {
 
 test('ease', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['ease-in', 'ease-out', 'ease-[var(--value)]'],
       css`
         @theme {
           --ease-in: cubic-bezier(0.4, 0, 1, 1);
@@ -283,7 +277,6 @@ test('ease', async () => {
         }
         @tailwind utilities;
       `,
-      ['ease-in', 'ease-out', 'ease-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -333,14 +326,14 @@ test('ease', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['ease-linear'],
       css`
         @theme {
           --ease-linear: steps(4);
         }
         @tailwind utilities;
       `,
-      ['ease-linear'],
     ),
   ).toMatchInlineSnapshot(`
     "

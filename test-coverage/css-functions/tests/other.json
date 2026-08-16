@@ -121,16 +121,16 @@
     {
         "name": "theme(fontFamily.sans) (css)",
         "type": "output",
-        "inputCss": "@theme default reference {\n                --font-family-sans:\n                  ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji,\n                  Segoe UI Symbol, Noto Color Emoji;\n              }\n              .fam {\n                font-family: theme(fontFamily.sans);\n              }",
+        "inputCss": "@theme default reference {\n                --font-family-sans:\n                  -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Noto Sans,\n                  Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol,\n                  Noto Color Emoji;\n              }\n              .fam {\n                font-family: theme(fontFamily.sans);\n              }",
         "classes": [],
-        "expected": "\"\n            .fam {\n              font-family: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;\n            }\n            \""
+        "expected": "\"\n            .fam {\n              font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Noto Sans, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;\n            }\n            \""
     },
     {
         "name": "theme(fontFamily.sans) (config)",
         "type": "output",
-        "inputCss": "@config \".\/my-config.js\";\n              .fam {\n                font-family: theme(fontFamily.sans);\n              }",
+        "inputCss": "@config \".\/my-config.js\";\n                .fam {\n                  font-family: theme(fontFamily.sans);\n                }",
         "classes": [],
-        "expected": "\"\n            .fam {\n              font-family: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;\n            }\n            \""
+        "expected": "\"\n            .fam {\n              font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Noto Sans, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;\n            }\n            \""
     },
     {
         "name": "theme(colors.unknown.500)",
@@ -221,7 +221,7 @@
     {
         "name": "values that don",
         "type": "output",
-        "inputCss": "@tailwind utilities;\n            @theme reference {\n              --radius-sm: 2rem;\n            }",
+        "inputCss": "@tailwind utilities;\n        @theme reference {\n          --radius-sm: 2rem;\n        }",
         "classes": [
             "rounded-[theme(--radius-sm)]",
             "rounded-[theme(i.do.not.exist)]",
@@ -267,15 +267,19 @@
     {
         "name": "CSS theme functions in plugins are properly evaluated",
         "type": "output",
-        "inputCss": "@layer base, utilities;\n        @plugin \"my-plugin\";\n        @theme reference {\n          --color-red: oklch(62% 0.25 30);\n          --color-orange: oklch(79% 0.17 70);\n          --color-blue: oklch(45% 0.31 264);\n          --color-pink: oklch(87% 0.07 7);\n        }\n        @layer utilities {\n          @tailwind utilities;\n        }",
-        "classes": [],
+        "inputCss": "@layer base, utilities;\n          @plugin \"my-plugin\";\n          @theme reference {\n            --color-red: oklch(62% 0.25 30);\n            --color-orange: oklch(79% 0.17 70);\n            --color-blue: oklch(45% 0.31 264);\n            --color-pink: oklch(87% 0.07 7);\n          }\n          @layer utilities {\n            @tailwind utilities;\n          }",
+        "classes": [
+            "my-utility"
+        ],
         "expected": "\"\n      @layer base {\n        .my-base-rule {\n          color: oklch(62% .25 30);\n          background-color: oklch(45% .31 264);\n          border-color: oklab(87% .069 .008 \/ .1);\n          outline-color: oklab(79% .058 .159 \/ .15);\n        }\n      }\n\n      @layer utilities {\n        .my-utility {\n          color: oklch(62% .25 30);\n        }\n      }\n      \""
     },
     {
         "name": "CSS theme functions in config files are properly evaluated",
         "type": "output",
-        "inputCss": "@layer base, utilities;\n        @config \".\/my-config.js\";\n        @theme reference {\n          --color-red: red;\n          --color-orange: orange;\n        }\n        @layer utilities {\n          @tailwind utilities;\n        }",
-        "classes": [],
+        "inputCss": "@layer base, utilities;\n          @config \".\/my-config.js\";\n          @theme reference {\n            --color-red: red;\n            --color-orange: orange;\n          }\n          @layer utilities {\n            @tailwind utilities;\n          }",
+        "classes": [
+            "my-utility"
+        ],
         "expected": "\"\n      @layer base {\n        .my-base-rule {\n          color: orange;\n          background: red;\n        }\n      }\n\n      @layer utilities {\n        .my-utility {\n          color: red;\n        }\n      }\n      \""
     },
     {
@@ -288,14 +292,14 @@
     {
         "name": "resolves paths ending with a 1",
         "type": "output",
-        "inputCss": "@theme {\n          --spacing-1: 0.25rem;\n        }\n\n        .foo {\n          margin: theme(spacing.1);\n        }",
+        "inputCss": "@theme {\n        --spacing-1: 0.25rem;\n      }\n\n      .foo {\n        margin: theme(spacing.1);\n      }",
         "classes": [],
         "expected": "\"\n    .foo {\n      margin: .25rem;\n    }\n    \""
     },
     {
         "name": "upgrades to a full JS compat theme lookup if a value cannot be mapped to a CSS variable",
         "type": "output",
-        "inputCss": ".semi {\n          font-weight: theme(fontWeight.semibold);\n        }",
+        "inputCss": ".semi {\n        font-weight: theme(fontWeight.semibold);\n      }",
         "classes": [],
         "expected": "\"\n    .semi {\n      font-weight: 600;\n    }\n    \""
     }

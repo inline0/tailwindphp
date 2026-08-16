@@ -94,15 +94,33 @@ class utilities extends TestCase
 
     /**
      * Parse all run() calls from a test body.
+     *
+     * Handles both call shapes emitted by the upstream test suite:
+     * - `await run([...classes])` with the array opening on the same line
+     * - `await run(\n [...classes],\n css`...`,\n )` — the Prettier multiline
+     *   form with an optional css template second argument, which replaced
+     *   `compileCss(css, candidates)` in the v4.3.3 test helper
      */
     private static function parseRunCalls(string $testBody, string $testName): array
     {
         $tests = [];
         $testIndex = 0;
         $offset = 0;
+        $len = strlen($testBody);
 
-        while (($runPos = strpos($testBody, 'await run([', $offset)) !== false) {
-            $arrayStart = $runPos + strlen('await run(');
+        while (($runPos = strpos($testBody, 'await run(', $offset)) !== false) {
+            // The candidates array may follow `run(` directly or on the next line
+            $cursor = $runPos + strlen('await run(');
+            while ($cursor < $len && ctype_space($testBody[$cursor])) {
+                $cursor++;
+            }
+
+            if ($cursor >= $len || $testBody[$cursor] !== '[') {
+                $offset = $runPos + 10;
+                continue;
+            }
+
+            $arrayStart = $cursor;
             $arrayEnd = self::findMatchingBracketWithStrings($testBody, $arrayStart);
 
             if ($arrayEnd === null) {
@@ -118,8 +136,41 @@ class utilities extends TestCase
                 continue;
             }
 
+            // Optional second argument: a css`...` template with custom CSS
+            // input, either inline or referenced as a variable that was bound
+            // with `let name = css`...`` earlier in the test body
+            $cssTemplate = null;
+            $cursor = $arrayEnd + 1;
+            while ($cursor < $len && (ctype_space($testBody[$cursor]) || $testBody[$cursor] === ',')) {
+                $cursor++;
+            }
+            $callEnd = $arrayEnd;
+            if (substr($testBody, $cursor, 4) === 'css`') {
+                $backtickStart = $cursor + 4;
+                $backtickEnd = self::findClosingBacktick($testBody, $backtickStart);
+                if ($backtickEnd !== null) {
+                    $cssTemplate = substr($testBody, $backtickStart, $backtickEnd - $backtickStart);
+                    $callEnd = $backtickEnd;
+                }
+            } elseif (preg_match('/\G([A-Za-z_$][\w$]*)\s*[,)]/', $testBody, $identMatch, 0, $cursor)) {
+                $identifier = $identMatch[1];
+                if (preg_match(
+                    '/(?:let|const|var)\s+' . preg_quote($identifier, '/') . '\s*=(?:\s|\/\/[^\n]*)*(?:css)?`/',
+                    $testBody,
+                    $declMatch,
+                    PREG_OFFSET_CAPTURE,
+                )) {
+                    $backtickStart = $declMatch[0][1] + strlen($declMatch[0][0]);
+                    $backtickEnd = self::findClosingBacktick($testBody, $backtickStart);
+                    if ($backtickEnd !== null) {
+                        $cssTemplate = substr($testBody, $backtickStart, $backtickEnd - $backtickStart);
+                        $callEnd = $cursor + strlen($identMatch[1]);
+                    }
+                }
+            }
+
             // Look for the assertion after the run() call
-            $afterArray = substr($testBody, $arrayEnd, 500);
+            $afterArray = substr($testBody, $callEnd, 500);
 
             // Find positions of both assertion types (if they exist)
             $toEqualMatch = preg_match('/\)\s*,?\s*\)\s*\.toEqual\s*\(\s*[\'"][\'"]/', $afterArray, $matchEqual, PREG_OFFSET_CAPTURE);
@@ -130,14 +181,18 @@ class utilities extends TestCase
 
             // Check for toEqual('') FIRST - must appear BEFORE toMatchInlineSnapshot
             if ($toEqualMatch && $toEqualPos < $toSnapshotPos) {
-                $tests[] = [
+                $test = [
                     'name' => $testName,
                     'index' => $testIndex++,
                     'classes' => $classes,
                     'expected' => '',
                     'type' => 'empty',
                 ];
-                $offset = $arrayEnd;
+                if ($cssTemplate !== null) {
+                    $test['css'] = $cssTemplate;
+                }
+                $tests[] = $test;
+                $offset = $callEnd;
                 continue;
             }
 
@@ -145,27 +200,31 @@ class utilities extends TestCase
             if ($toSnapshotMatch ||
                 preg_match('/\)\s*\)\s*\n\s*\.toMatchInlineSnapshot\s*\(\s*`/s', $afterArray)) {
 
-                $snapshotPos = strpos($testBody, '.toMatchInlineSnapshot(`', $arrayEnd);
+                $snapshotPos = strpos($testBody, '.toMatchInlineSnapshot(`', $callEnd);
                 if ($snapshotPos !== false) {
                     $backtickStart = strpos($testBody, '`', $snapshotPos) + 1;
                     $backtickEnd = self::findClosingBacktick($testBody, $backtickStart);
 
                     if ($backtickEnd !== null) {
                         $expectedCss = substr($testBody, $backtickStart, $backtickEnd - $backtickStart);
-                        $tests[] = [
+                        $test = [
                             'name' => $testName,
                             'index' => $testIndex++,
                             'classes' => $classes,
                             'expected' => self::cleanExpectedCss($expectedCss),
-                            'type' => 'match',
+                            'type' => $cssTemplate !== null ? 'compileCss' : 'match',
                         ];
+                        if ($cssTemplate !== null) {
+                            $test['css'] = $cssTemplate;
+                        }
+                        $tests[] = $test;
                         $offset = $backtickEnd;
                         continue;
                     }
                 }
             }
 
-            $offset = $arrayEnd;
+            $offset = $callEnd;
         }
 
         return $tests;
@@ -554,7 +613,7 @@ class utilities extends TestCase
             if (!str_contains($cssInput, '@import') && !str_contains($cssInput, '@tailwind utilities')) {
                 $cssInput .= "\n@import \"tailwindcss/utilities\";";
             }
-            $compiled = compile($cssInput);
+            $compiled = compile($cssInput, ['loadDefaultTheme' => false]);
             $css = $compiled['build']($testCase['classes']);
 
             // For compileCss tests, verify that:
@@ -626,6 +685,23 @@ class utilities extends TestCase
                     sprintf("Class '%s' not found in CSS output (expected selector: %s)", $class, $expectedSelector),
                 );
             }
+
+            return;
+        }
+
+        if ($testCase['type'] === 'empty' && isset($testCase['css'])) {
+            // An empty expectation with custom CSS input (run(candidates, css))
+            $cssInput = $testCase['css'];
+            if (!str_contains($cssInput, '@import') && !str_contains($cssInput, '@tailwind utilities')) {
+                $cssInput .= "\n@import \"tailwindcss/utilities\";";
+            }
+            $compiled = compile($cssInput, ['loadDefaultTheme' => false]);
+            $css = $compiled['build']($testCase['classes']);
+
+            $this->assertEquals('', trim($css), sprintf(
+                'Expected empty output for classes: %s',
+                implode(', ', $testCase['classes']),
+            ));
 
             return;
         }
