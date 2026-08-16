@@ -267,13 +267,17 @@ function registerLayoutUtilities(UtilityBuilder $builder): void
 
     // Aspect Ratio
     $builder->functionalUtility('aspect', [
-        'themeKeys' => ['--aspect-ratio'],
+        'themeKeys' => ['--aspect'],
         'handleBareValue' => function ($value) {
             // Handle fractions like 4/3
             $fraction = $value['fraction'] ?? null;
             if ($fraction !== null) {
                 $parts = \TailwindPHP\Utils\segment($fraction, '/');
-                if (count($parts) === 2 && isPositiveInteger($parts[0]) && isPositiveInteger($parts[1])) {
+                if (
+                    count($parts) === 2 &&
+                    \TailwindPHP\Utils\isValidSpacingMultiplier($parts[0]) &&
+                    \TailwindPHP\Utils\isValidSpacingMultiplier($parts[1])
+                ) {
                     return $fraction;
                 }
             }
@@ -286,7 +290,6 @@ function registerLayoutUtilities(UtilityBuilder $builder): void
         'staticValues' => [
             'auto' => [decl('aspect-ratio', 'auto')],
             'square' => [decl('aspect-ratio', '1 / 1')],
-            'video' => [decl('aspect-ratio', '16 / 9')],
         ],
     ]);
 

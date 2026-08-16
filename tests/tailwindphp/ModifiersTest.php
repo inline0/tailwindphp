@@ -401,35 +401,36 @@ class ModifiersTest extends TestCase
     // FRACTION VALUES
     // ==================================================
 
-    // Tailwind 4 uses calc() for fractions instead of computed percentages
+    // TailwindCSS v4.3.3: lightningcss folds calc(N / M * 100%) fractions
+    // to percentages (custom properties like --tw-translate-x keep the calc)
     public function test_width_fraction(): void
     {
         $css = Tailwind::generate('<div class="w-1/2">');
-        $this->assertStringContainsString('width: calc(1 / 2 * 100%)', $css);
+        $this->assertStringContainsString('width: 50%', $css);
     }
 
     public function test_width_fraction_third(): void
     {
         $css = Tailwind::generate('<div class="w-1/3">');
-        $this->assertStringContainsString('width: calc(1 / 3 * 100%)', $css);
+        $this->assertStringContainsString('width: 33.3333%', $css);
     }
 
     public function test_width_fraction_two_thirds(): void
     {
         $css = Tailwind::generate('<div class="w-2/3">');
-        $this->assertStringContainsString('width: calc(2 / 3 * 100%)', $css);
+        $this->assertStringContainsString('width: 66.6667%', $css);
     }
 
     public function test_width_fraction_quarter(): void
     {
         $css = Tailwind::generate('<div class="w-1/4">');
-        $this->assertStringContainsString('width: calc(1 / 4 * 100%)', $css);
+        $this->assertStringContainsString('width: 25%', $css);
     }
 
     public function test_width_fraction_twelfths(): void
     {
         $css = Tailwind::generate('<div class="w-5/12">');
-        $this->assertStringContainsString('width: calc(5 / 12 * 100%)', $css);
+        $this->assertStringContainsString('width: 41.6667%', $css);
     }
 
     public function test_translate_fraction(): void

@@ -45,12 +45,15 @@ class LightningCss
         $isCustomProperty = str_starts_with($property, '--');
 
         $value = self::normalizeWhitespace($value);
-        $value = self::simplifyCalcExpressions($value);
+        $value = self::simplifyCalcExpressions($value, $isCustomProperty);
         $value = self::normalizeTimeValues($value);
         $value = self::normalizeOpacityPercentages($value, $property);
         $value = self::normalizeColors($value, $isCustomProperty);
         $value = self::evaluateColorMix($value);  // Evaluate color-mix AFTER normalizeColors converts hex to named
         $value = self::normalizeOklabLightness($value);
+        // lightningcss serializes an empty var() fallback with a space after
+        // the comma: `var(--tw-blur,)` -> `var(--tw-blur, )`
+        $value = preg_replace('/var\((--[a-zA-Z0-9_-]+),\)/', 'var($1, )', $value);
         $value = self::normalizeLeadingZeros($value);
         $value = self::normalizeGridValues($value, $property);
         $value = self::normalizeTransformFunctions($value, $property);
@@ -418,7 +421,7 @@ class LightningCss
      * @param string $value The CSS value
      * @return string Simplified value
      */
-    public static function simplifyCalcExpressions(string $value): string
+    public static function simplifyCalcExpressions(string $value, bool $isCustomProperty = false): string
     {
         // Match: calc(NUMBER UNIT * -1) for angle units only
         if (preg_match('/^calc\(([+-]?\d*\.?\d+)(deg|rad|grad|turn)\s*\*\s*-1\)$/', $value, $m)) {
@@ -447,6 +450,18 @@ class LightningCss
             $resultStr = rtrim(rtrim(number_format($result, 6, '.', ''), '0'), '.');
 
             return $resultStr . $unit;
+        }
+
+        // Match: calc(A / B * 100%) - fold fraction utilities like `w-1/2`
+        // to a percentage the way lightningcss does (6 significant digits):
+        // calc(1 / 2 * 100%) -> 50%, calc(1 / 3 * 100%) -> 33.3333%.
+        // Custom properties are unparsed by lightningcss and keep the calc().
+        if (!$isCustomProperty && preg_match('/^calc\((\d+)\s*\/\s*(\d+)\s*\*\s*100%\)$/', $value, $m)) {
+            $numerator = (int) $m[1];
+            $denominator = (int) $m[2];
+            if ($denominator !== 0) {
+                return sprintf('%.6g', $numerator / $denominator * 100) . '%';
+            }
         }
 
         return $value;
@@ -677,15 +692,59 @@ class LightningCss
             }
         }
 
-        if (empty($removed)) {
-            return $nodes;
+        if (!empty($removed)) {
+            $result = [];
+            foreach ($nodes as $i => $node) {
+                if (!isset($removed[$i])) {
+                    $result[] = $node;
+                }
+            }
+            $nodes = $result;
         }
 
+        return self::mergeLogicalPairs($nodes);
+    }
+
+    /**
+     * Merge adjacent logical property pairs with identical values into their
+     * shorthand, the way lightningcss does: `margin-inline-start: 0;
+     * margin-inline-end: 0` becomes `margin-inline: 0`.
+     *
+     * @param array $nodes
+     * @return array
+     */
+    private static function mergeLogicalPairs(array $nodes): array
+    {
+        static $pairs = [
+            'margin-inline-start' => ['margin-inline-end', 'margin-inline'],
+            'margin-inline-end' => ['margin-inline-start', 'margin-inline'],
+            'margin-block-start' => ['margin-block-end', 'margin-block'],
+            'margin-block-end' => ['margin-block-start', 'margin-block'],
+        ];
+
         $result = [];
-        foreach ($nodes as $i => $node) {
-            if (!isset($removed[$i])) {
-                $result[] = $node;
+        $count = count($nodes);
+
+        for ($i = 0; $i < $count; $i++) {
+            $node = $nodes[$i];
+            $next = $nodes[$i + 1] ?? null;
+
+            if (
+                $next !== null &&
+                $node['kind'] === 'declaration' && $next['kind'] === 'declaration' &&
+                isset($pairs[$node['property'] ?? '']) &&
+                $pairs[$node['property']][0] === ($next['property'] ?? '') &&
+                ($node['value'] ?? null) === ($next['value'] ?? null) &&
+                ($node['important'] ?? false) === ($next['important'] ?? false)
+            ) {
+                $merged = $node;
+                $merged['property'] = $pairs[$node['property']][1];
+                $result[] = $merged;
+                $i++;
+                continue;
             }
+
+            $result[] = $node;
         }
 
         return $result;

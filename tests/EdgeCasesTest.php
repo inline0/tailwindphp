@@ -311,21 +311,24 @@ class EdgeCasesTest extends TestCase
     {
         // Classes with special characters need escaping
         $css = Tailwind::generate('<div class="w-1/2">');
-        // Uses calc(1 / 2 * 100%) format
+        // TailwindCSS v4.3.3: lightningcss folds calc(1 / 2 * 100%) to 50%
         $this->assertStringContainsString('w-1\\/2', $css);
-        $this->assertStringContainsString('width:', $css);
-        $this->assertStringContainsString('calc(', $css);
+        $this->assertStringContainsString('width: 50%', $css);
     }
 
     public function test_fraction_classes(): void
     {
         $css = Tailwind::generate('<div class="w-1/3 w-2/3 w-1/4 w-3/4">');
-        // TailwindCSS v4 uses calc(N / M * 100%) format
+        // TailwindCSS v4.3.3: lightningcss folds calc(N / M * 100%) to a
+        // percentage with six significant digits
         $this->assertStringContainsString('w-1\\/3', $css);
         $this->assertStringContainsString('w-2\\/3', $css);
         $this->assertStringContainsString('w-1\\/4', $css);
         $this->assertStringContainsString('w-3\\/4', $css);
-        $this->assertStringContainsString('calc(', $css);
+        $this->assertStringContainsString('width: 33.3333%', $css);
+        $this->assertStringContainsString('width: 66.6667%', $css);
+        $this->assertStringContainsString('width: 25%', $css);
+        $this->assertStringContainsString('width: 75%', $css);
     }
 
     // ==================================================

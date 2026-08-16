@@ -81,8 +81,11 @@ const VIRTUAL_MODULES = [
  * rather than on every function call. This avoids repeated regex compilation
  * overhead in hot paths like extractCandidates() and theme value resolution.
  */
-const REGEX_CLASS_ATTR = '/class\s*=\s*["\']([^"\']+)["\']/';
-const REGEX_CLASSNAME_ATTR = '/className\s*=\s*["\']([^"\']+)["\']/';
+// The attribute value runs to the matching quote of the one that opened it,
+// so arbitrary values containing the other quote (class="content-['*']") are
+// kept intact
+const REGEX_CLASS_ATTR = '/class\s*=\s*(["\'])(.*?)\1/s';
+const REGEX_CLASSNAME_ATTR = '/className\s*=\s*(["\'])(.*?)\1/s';
 const REGEX_WHITESPACE = '/\s+/';
 const REGEX_UNESCAPE = '/\\\\(.)/';
 
@@ -1109,14 +1112,11 @@ function parseCssState(array &$ast, array $options = []): array
                         $themeAst = [atRule('@media', 'prefix('.$prefixMatch[1].')', $themeAst)];
                     }
 
-                    // Check for theme(static) modifier - theme values always included
-                    if (str_contains($modifiers, 'theme(static)')) {
-                        $themeAst = [atRule('@media', 'theme(static)', $themeAst)];
-                    }
-
-                    // Check for theme(inline) modifier - theme values inlined, not as variables
-                    if (str_contains($modifiers, 'theme(inline)')) {
-                        $themeAst = [atRule('@media', 'theme(inline)', $themeAst)];
+                    // Apply any theme(...) modifier (static, inline, reference,
+                    // default, or combinations) by wrapping in @media theme(...),
+                    // which the @media walk expands onto the @theme blocks
+                    if (preg_match('/theme\([^)]*\)/', $modifiers, $themeMatch)) {
+                        $themeAst = [atRule('@media', $themeMatch[0], $themeAst)];
                     }
 
                     // source(none) is a no-op in TailwindPHP since we don't do file scanning
@@ -2605,12 +2605,9 @@ function optimizeAstProcessAtRoots(array $atRoots, int $polyfills): array
                 }
             }
 
-            // For <length> syntax with bare "0", add "px" unit in fallback
-            // This is because @property strips units from zero but fallbacks need them
+            // The fallback echoes the authored initial value verbatim
+            // (`0px` stays `0px`, `0` stays `0`)
             $fallbackValue = $initialValue ?? 'initial';
-            if ($fallbackValue === '0' && $syntax === '"<length>"') {
-                $fallbackValue = '0px';
-            }
 
             if ($inherits) {
                 $fallbackDeclarationsRoot[] = decl($propName, $fallbackValue);
@@ -2638,13 +2635,39 @@ function optimizeAstProcessAtRoots(array $atRoots, int $polyfills): array
         }
     }
 
-    // @property registrations come before other hoisted at-roots such as
-    // @keyframes, matching the reference output order. The appended nodes
-    // join the result after the main value-optimization pass, so run it here.
-    $append = array_merge($atPropertyRules, $otherAtRoots);
-    optimizeAstOptimizeValues($append);
+    // lightningcss strips the unit from zero-length initial values in the
+    // printed @property block (`0px` -> `0`); the fallback declarations above
+    // keep the authored form
+    foreach ($atPropertyRules as &$property) {
+        $syntax = null;
+        foreach ($property['nodes'] ?? [] as $decl) {
+            if ($decl['kind'] === 'declaration' && $decl['property'] === 'syntax') {
+                $syntax = $decl['value'] ?? '';
+            }
+        }
+        if ($syntax === '"<length>"') {
+            foreach ($property['nodes'] as &$decl) {
+                if (
+                    $decl['kind'] === 'declaration' &&
+                    $decl['property'] === 'initial-value' &&
+                    preg_match('/^[+-]?0(?:\.0+)?[a-z%]+$/i', $decl['value'] ?? '')
+                ) {
+                    $decl['value'] = '0';
+                }
+            }
+            unset($decl);
+        }
+    }
+    unset($property);
 
-    return ['fallback' => $fallback, 'append' => $append];
+    // @property registrations come before other hoisted at-roots such as
+    // @keyframes, matching the reference output order. The non-@property
+    // nodes join the result after the main value-optimization pass, so run
+    // it here; @property initial values print as authored (`black` stays
+    // `black`).
+    optimizeAstOptimizeValues($otherAtRoots);
+
+    return ['fallback' => $fallback, 'append' => array_merge($atPropertyRules, $otherAtRoots)];
 }
 
 /**
@@ -3396,7 +3419,7 @@ function extractCandidates(string $html): array
     // Extract from class and className attributes
     foreach ([REGEX_CLASS_ATTR, REGEX_CLASSNAME_ATTR] as $pattern) {
         if (preg_match_all($pattern, $html, $matches)) {
-            foreach ($matches[1] as $classAttr) {
+            foreach ($matches[2] as $classAttr) {
                 $classAttr = html_entity_decode($classAttr, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 
                 foreach (preg_split(REGEX_WHITESPACE, $classAttr) as $class) {

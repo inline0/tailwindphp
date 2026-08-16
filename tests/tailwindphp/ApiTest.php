@@ -563,8 +563,8 @@ class ApiTest extends TestCase
     public function test_fraction_computed(): void
     {
         $value = Tailwind::computedValue('w-1/2');
-        // Fractions stay as calc expressions
-        $this->assertSame('calc(1 / 2 * 100%)', $value);
+        // TailwindCSS v4.3.3: lightningcss folds the fraction to a percentage
+        $this->assertSame('50%', $value);
     }
 
     public function test_opacity_value(): void

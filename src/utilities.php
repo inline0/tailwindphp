@@ -326,15 +326,12 @@ function property(string $ident, ?string $initialValue = null, ?string $syntax =
         decl('inherits', 'false'),
     ];
 
-    // initial-value must come after inherits
+    // initial-value must come after inherits. The authored value is kept
+    // verbatim here; the zero-length unit strip that lightningcss applies to
+    // the printed @property block happens at emission time so the fallback
+    // declarations can still echo the authored form (`0px` vs `0`).
     if ($initialValue !== null) {
-        // For <length> syntax, LightningCSS strips units from zero values
-        // e.g., "0px" -> "0"
-        $optimizedValue = $initialValue;
-        if ($syntax === '<length>' && preg_match('/^0(px|rem|em|%)$/', $initialValue)) {
-            $optimizedValue = '0';
-        }
-        $nodes[] = decl('initial-value', $optimizedValue);
+        $nodes[] = decl('initial-value', $initialValue);
     }
 
     return atRule('@property', $ident, $nodes);

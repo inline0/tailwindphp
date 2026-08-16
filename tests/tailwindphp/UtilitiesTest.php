@@ -299,7 +299,9 @@ class UtilitiesTest extends TestCase
     }
     public function test_aspect_video(): void
     {
-        $this->assertGenerates('aspect-video', 'aspect-ratio: 16 / 9');
+        // TailwindCSS v4.3.3: aspect-video resolves through the --aspect
+        // theme namespace as a variable reference
+        $this->assertGenerates('aspect-video', 'aspect-ratio: var(--aspect-video)');
     }
 
     // Columns

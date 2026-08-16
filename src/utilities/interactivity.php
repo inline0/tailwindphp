@@ -342,6 +342,16 @@ function registerInteractivityUtilities(UtilityBuilder $builder): void
         'themeKeys' => ['--content'],
         'defaultValue' => null,
         'handle' => function ($value) {
+            // String tokens serialize with double quotes in the reference
+            // output (`content-['*']` -> `--tw-content: "*"`)
+            if (
+                strlen($value) >= 2 &&
+                $value[0] === "'" && $value[strlen($value) - 1] === "'" &&
+                !str_contains($value, '"')
+            ) {
+                $value = '"' . substr($value, 1, -1) . '"';
+            }
+
             return [
                 atRoot([property('--tw-content', '""')]),
                 decl('--tw-content', $value),
