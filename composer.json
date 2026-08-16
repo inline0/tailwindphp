@@ -10,13 +10,13 @@
         "utility-css",
         "php"
     ],
-    "homepage": "https://github.com/dnnsjsk/tailwindphp",
+    "homepage": "https://github.com/inline0/tailwindphp",
     "bin": [
         "bin/tailwindphp"
     ],
     "support": {
-        "issues": "https://github.com/dnnsjsk/tailwindphp/issues",
-        "source": "https://github.com/dnnsjsk/tailwindphp"
+        "issues": "https://github.com/inline0/tailwindphp/issues",
+        "source": "https://github.com/inline0/tailwindphp"
     },
     "authors": [
         {

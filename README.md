@@ -1,8 +1,8 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./docs/public/logo-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="./docs/public/logo-light.svg">
-    <img alt="TailwindPHP" src="./docs/public/logo-light.svg" height="56">
+    <source media="(prefers-color-scheme: dark)" srcset="./.github/logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="./.github/logo-light.svg">
+    <img alt="TailwindPHP" src="./.github/logo-light.svg" height="56">
   </picture>
 </p>
 
@@ -107,7 +107,7 @@ Point `@source` at the templates to scan in your input CSS:
 
 ## Documentation
 
-Full documentation lives at [tailwindphp.com](https://tailwindphp.com) (or in [`docs/`](./docs) if you're reading the repo).
+Full documentation lives at [twphp.dev/docs](https://twphp.dev/docs/) (or in [`docs/`](./docs) if you're reading the repo).
 
 - [Getting Started](./docs/getting-started.md) — install and generate your first stylesheet
 - [Usage](./docs/usage/) — content scanning, theme, directives, imports, and `@source`
