@@ -820,7 +820,7 @@ fwrite(STDERR, "Debug: " . print_r($value, true) . "\n");
 
 ## Current Status
 
-**Total: 4,013 tests (all passing)**
+**Total: 4,187 tests (all passing)**
 
 ### Core Tests (extracted from TypeScript test suites)
 
@@ -935,7 +935,7 @@ Tests for PHP-specific implementations and helpers (not direct TypeScript ports)
 
 | Test File | Status | Tests |
 |-----------|--------|-------|
-| `_tailwindphp/LightningCss.test.php` | ✅ | 68 |
+| `_tailwindphp/LightningCss.test.php` | ✅ | 70 |
 | `theme_unit.test.php` | ✅ | 46 |
 | `utils/infer_data_type.test.php` | ✅ | 45 |
 | `utils/is_color.test.php` | ✅ | 33 |
@@ -985,6 +985,18 @@ Tests for edge cases and complex scenarios:
 - Dark mode with variant combinations
 - Pseudo-element variants with modifiers
 
+### Regression Tests (`tests/`)
+
+| Test File | Status | Tests |
+|-----------|--------|-------|
+| `PropertyRegistrationTest.php` | ✅ | 98 |
+| `ContainerUtilityTest.php` | ✅ | 3 |
+| `NestedApplyRegressionTest.php` | ✅ | 3 |
+
+- `PropertyRegistrationTest.php` — `@property` registration of composed `--tw-*` variable groups (translate, scale, transform, filters, backdrop-filters, transitions, typography, font-variant-numeric, contain, touch-action, scroll-snap, border-spacing), including registration details, the `@layer properties` fallback, and the negative cases that must register nothing
+- `ContainerUtilityTest.php` — the `container` layout component (per-breakpoint media queries, unit-then-value breakpoint sorting, custom theme breakpoints)
+- `NestedApplyRegressionTest.php` — nested rules surviving a parent `@apply` that expands to multiple declarations
+
 ### tw-animate-css Tests (`tests/TwAnimateCssTest.php`)
 
 | Test File | Status | Tests |
@@ -1007,13 +1019,14 @@ Tests for tw-animate-css integration:
 - RTL/LTR-aware start/end directional slides
 - Common shadcn/ui patterns (dialogs, dropdowns)
 
-### Cache Tests (`tests/CacheTest.php`)
+### Cache Tests (`tests/`)
 
 | Test File | Status | Tests |
 |-----------|--------|-------|
 | `CacheTest.php` | ✅ | 14 |
+| `StateCacheTest.php` | ✅ | 6 |
 
-Tests for file-based caching:
+Tests for file-based caching and the persistent construction-state cache:
 - Cache to default and custom directories
 - Cache key generation from content, CSS, and minify option
 - Cache TTL (time-to-live) expiration
