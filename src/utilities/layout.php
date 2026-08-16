@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace TailwindPHP\Utilities;
 
+use function TailwindPHP\Ast\atRule;
 use function TailwindPHP\Ast\decl;
+use function TailwindPHP\Utils\compareBreakpoints;
 use function TailwindPHP\Utils\isPositiveInteger;
 
 /**
@@ -408,6 +410,35 @@ function registerLayoutUtilities(UtilityBuilder $builder): void
             return [decl('object-position', $value)];
         },
     ]);
+
+    // Container (the layout component, not container queries)
+    //
+    // Emits `width: 100%` followed by one `@media (width >= <breakpoint>)`
+    // rule per `--breakpoint-*` value in the theme, each capping `max-width`
+    // at that breakpoint. Breakpoints are read from the theme namespace so a
+    // custom `@theme { --breakpoint-* }` is honoured, and sorted ascending by
+    // unit then value via compareBreakpoints(). The `--tw-sort` declaration is
+    // an internal sort hint (stripped from output) that keeps `.container`
+    // ordered before width utilities, matching the reference implementation.
+    //
+    // Registered directly on the utilities registry because staticUtility()
+    // only accepts flat property/value pairs and cannot emit the nested
+    // @media at-rules this utility requires.
+    $builder->getUtilities()->static('container', function () use ($builder) {
+        $breakpoints = array_values($builder->getTheme()->namespace('--breakpoint'));
+        usort($breakpoints, fn ($a, $z) => compareBreakpoints($a, $z, 'asc'));
+
+        $decls = [
+            decl('--tw-sort', '--tw-container-component'),
+            decl('width', '100%'),
+        ];
+
+        foreach ($breakpoints as $breakpoint) {
+            $decls[] = atRule('@media', "(width >= {$breakpoint})", [decl('max-width', $breakpoint)]);
+        }
+
+        return $decls;
+    });
 
     // Container Queries (@container)
     // @container -> container-type: inline-size
