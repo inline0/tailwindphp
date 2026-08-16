@@ -591,16 +591,30 @@ class LightningCss
         if ($node['kind'] === 'rule') {
             $selector = $node['selector'];
 
-            // Resolve & in selector, or prepend parent selector if no &
+            // Resolve & in selector, or prepend parent selector if no &.
+            //
+            // A parent that is a selector LIST has to be wrapped in `:is()` before
+            // it is substituted, which is what native CSS nesting and Lightning CSS
+            // both do. Substituting it raw turns `.a, .b` + `&:hover` into
+            // `.a, .b:hover`, where the variant binds to the last selector only and
+            // `.a` gets the styles unconditionally. Every `@apply` of a variant
+            // utility inside a grouped selector hit this.
             if ($parentSelector !== null) {
+                $parentRef = count(self::splitSelectorList($parentSelector)) > 1
+                    ? ':is(' . $parentSelector . ')'
+                    : $parentSelector;
+
                 if (str_contains($selector, '&')) {
-                    $selector = str_replace('&', $parentSelector, $selector);
+                    // `&` alone is just the parent, so it needs no grouping.
+                    $selector = trim($selector) === '&'
+                        ? $parentSelector
+                        : str_replace('&', $parentRef, $selector);
                 } else {
                     // Nested selector without & - prepend parent to EACH selector in list
                     // e.g., ".parent" + "h1, h2, h3" -> ".parent h1, .parent h2, .parent h3"
                     // Must split on top-level commas only (not inside :where(), :not(), etc.)
                     $selectors = self::splitSelectorList($selector);
-                    $selectors = array_map(fn ($s) => $parentSelector . ' ' . trim($s), $selectors);
+                    $selectors = array_map(fn ($s) => $parentRef . ' ' . trim($s), $selectors);
                     $selector = implode(', ', $selectors);
                 }
             }

@@ -329,6 +329,68 @@ class LightningCss extends TestCase
     }
 
     #[Test]
+    public function transform_nesting_wraps_a_grouped_parent_in_is(): void
+    {
+        // A parent that is a selector LIST has to be grouped before it is
+        // substituted for `&`, or the variant binds to the last selector only
+        // and every earlier selector gets the styles unconditionally. This is
+        // what `@apply hover:*` / `@apply dark:*` inside `.a, .b { ... }` hits.
+        $ast = [
+            [
+                'kind' => 'rule',
+                'selector' => '.a, .b',
+                'nodes' => [
+                    [
+                        'kind' => 'rule',
+                        'selector' => '&:hover',
+                        'nodes' => [
+                            ['kind' => 'declaration', 'property' => 'color', 'value' => 'red'],
+                        ],
+                    ],
+                    [
+                        'kind' => 'rule',
+                        'selector' => 'span',
+                        'nodes' => [
+                            ['kind' => 'declaration', 'property' => 'color', 'value' => 'blue'],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $result = LightningCssOptimizer::transformNesting($ast);
+
+        $this->assertSame(':is(.a, .b):hover', $result[0]['selector']);
+        $this->assertSame(':is(.a, .b) span', $result[1]['selector']);
+    }
+
+    #[Test]
+    public function transform_nesting_leaves_a_single_parent_ungrouped(): void
+    {
+        // Grouping a lone selector would only add bytes and raise specificity
+        // expectations, so `&` keeps substituting the parent verbatim.
+        $ast = [
+            [
+                'kind' => 'rule',
+                'selector' => '.a',
+                'nodes' => [
+                    [
+                        'kind' => 'rule',
+                        'selector' => '&:hover',
+                        'nodes' => [
+                            ['kind' => 'declaration', 'property' => 'color', 'value' => 'red'],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $result = LightningCssOptimizer::transformNesting($ast);
+
+        $this->assertSame('.a:hover', $result[0]['selector']);
+    }
+
+    #[Test]
     public function transform_nesting_resolves_ampersand(): void
     {
         $ast = [
