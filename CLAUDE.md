@@ -820,16 +820,23 @@ fwrite(STDERR, "Debug: " . print_r($value, true) . "\n");
 
 ## Current Status
 
-**Total: 4,187 tests (all passing)**
+**Total: 4,427 tests (all passing)**
+
+Reference: TailwindCSS **v4.3.3** (see `composer versions`).
 
 ### Core Tests (extracted from TypeScript test suites)
 
+The extractors handle `describe()`-nested tests and every `run()` call shape
+of the v4.3.3 test helper (inline arrays, Prettier-multiline calls, css
+template second arguments, template-variable bindings, and the
+`{ polyfills: Polyfills.None }` options argument).
+
 | Test File | Status | Tests |
 |-----------|--------|-------|
-| `utilities.test.php` | ✅ | 547 (includes 183 compileCss tests) |
-| `variants.test.php` | ✅ | 139 |
-| `index.test.php` | ✅ | 78 (5 N/A - outside scope) |
-| `css_functions.test.php` | ✅ | 60 (7 N/A for JS tooling) |
+| `utilities.test.php` | ✅ | 706 |
+| `variants.test.php` | ✅ | 164 |
+| `index.test.php` | ✅ | 148 (file-system/JS-runtime cases N/A) |
+| `css_functions.test.php` | ✅ | 64 (7 N/A for JS tooling) |
 | `ui_spec.test.php` | ✅ | 68 |
 
 ### Plugin Tests (`src/plugin/`)
@@ -914,16 +921,16 @@ These tests provide exhaustive coverage of the TailwindPHP public API including:
 | `css_parser.test.php` | ✅ | 70 |
 | `candidate.test.php` | ✅ | 66 |
 | `decode_arbitrary_value.test.php` | ✅ | 60 |
-| `constant_fold_declaration.test.php` | ✅ | 57 |
-| `selector_parser.test.php` | ✅ | 22 |
+| `constant_fold_declaration.test.php` | ✅ | 63 |
+| `selector_parser.test.php` | ✅ | 40 |
 | `attribute_selector_parser.test.php` | ✅ | 20 |
 | `value_parser.test.php` | ✅ | 19 |
 | `ast.test.php` | ✅ | 18 |
-| `walk.test.php` | ✅ | 15 |
+| `walk.test.php` | ✅ | 16 |
 | `compare.test.php` | ✅ | 14 |
 | `brace_expansion.test.php` | ✅ | 13 |
 | `segment.test.php` | ✅ | 12 |
-| `replace_shadow_colors.test.php` | ✅ | 12 |
+| `replace_shadow_colors.test.php` | ✅ | 14 |
 | `escape.test.php` | ✅ | 10 |
 | `prefix.test.php` | ✅ | 9 |
 | `expand_declaration.test.php` | ✅ | 4 |
