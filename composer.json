@@ -151,5 +151,10 @@
             "@lint",
             "@analyse"
         ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true,
+        "process-timeout": 0
     }
 }
