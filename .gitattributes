@@ -19,8 +19,11 @@ pint.json export-ignore
 /reference export-ignore
 
 # Documentation (keep README.md and LICENSE)
+/docs export-ignore
+ARCHITECTURE.md export-ignore
 CLAUDE.md export-ignore
 
 # Git files
+.gitattributes export-ignore
 .gitignore export-ignore
 .gitmodules export-ignore
