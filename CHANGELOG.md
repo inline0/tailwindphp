@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.1] - 2026-10-14
+
+### Fixed
+
+- The CLI resolves `@source` files, directories, and globs relative to the input CSS file, applies `@source not` exclusions to scanning and watching, and keeps automatic scanning out of `.git`, `vendor`, and `node_modules`. Explicit sources can include dependencies. ([#8](https://github.com/inline0/tailwindphp/issues/8))
+- Long options accept space-separated values (`--input app.css`, `--output styles.css`, `--cwd path`) as well as `=`, `-i -` reads stdin, and missing values produce an error. ([#13](https://github.com/inline0/tailwindphp/issues/13))
+- `--optimize` keeps readable output in both build and watch mode; `--minify` remains the minified serializer path. ([#9](https://github.com/inline0/tailwindphp/issues/9))
+- Plugin `addVariant()` selectors and predefined `matchVariant()` values are applied to the rule, including typography element modifiers. ([#10](https://github.com/inline0/tailwindphp/issues/10))
+- CSS mixin `@apply` rules are retained literally inside their parent, in order, including optional bodies. Different mixins no longer merge as identical declaration blocks. ([#12](https://github.com/inline0/tailwindphp/issues/12))
+- Reference imports work before or after the utilities import. Built-in virtual modules honour `reference`, remain available to `@apply`, and can subsequently be imported for emitted CSS. ([#14](https://github.com/inline0/tailwindphp/issues/14))
+- Composer declares the ctype and mbstring extensions used by the compiler. ([#11](https://github.com/inline0/tailwindphp/issues/11))
+- Code quality passes with PHPStan 2.3.1 without suppressing its two new comparison diagnostics. ([#15](https://github.com/inline0/tailwindphp/issues/15))
+- Watch mode refreshes filesystem metadata, detects deleted sources, and excludes its generated stylesheet from watched files.
+
 ## [1.7.0] - 2026-08-16
 
 ### TailwindCSS 4.3.3 alignment
