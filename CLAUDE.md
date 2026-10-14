@@ -820,7 +820,7 @@ fwrite(STDERR, "Debug: " . print_r($value, true) . "\n");
 
 ## Current Status
 
-**Total: 4,427 tests (all passing)**
+**Total: 4,435 tests (all passing)**
 
 Reference: TailwindCSS **v4.3.3** (see `composer versions`).
 
@@ -999,10 +999,12 @@ Tests for edge cases and complex scenarios:
 | `PropertyRegistrationTest.php` | ✅ | 98 |
 | `ContainerUtilityTest.php` | ✅ | 3 |
 | `NestedApplyRegressionTest.php` | ✅ | 3 |
+| `OpenIssueRegressionTest.php` | ✅ | 8 |
 
 - `PropertyRegistrationTest.php` — `@property` registration of composed `--tw-*` variable groups (translate, scale, transform, filters, backdrop-filters, transitions, typography, font-variant-numeric, contain, touch-action, scroll-snap, border-spacing), including registration details, the `@layer properties` fallback, and the negative cases that must register nothing
 - `ContainerUtilityTest.php` — the `container` layout component (per-breakpoint media queries, unit-then-value breakpoint sorting, custom theme breakpoints)
 - `NestedApplyRegressionTest.php` — nested rules surviving a parent `@apply` that expands to multiple declarations
+- `OpenIssueRegressionTest.php`: source paths and exclusions, CLI values and watch behavior, readable optimization, reference imports, plugin variants, and CSS mixins
 
 ### tw-animate-css Tests (`tests/TwAnimateCssTest.php`)
 

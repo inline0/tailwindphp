@@ -227,9 +227,6 @@ When importing Tailwind's files individually, modifiers go on the imports they a
 
 `bg-brand` then compiles to `background-color: var(--color-brand, #f00);` and no `--color-brand` declaration is emitted.
 
-Two limitations in the current release ([#14](https://github.com/inline0/tailwindphp/issues/14)):
-
-- Put reference imports and `@media reference` blocks **after** the `@import` of `tailwindcss` or `tailwindcss/utilities.css`. Placed before it, the whole output comes back empty.
-- `reference` on the built-in virtual modules (`@import "tailwindcss" reference;`) has no effect yet: the theme, Preflight, and utilities are still emitted.
+Reference imports and `@media reference` blocks can appear before or after the utilities import. `reference` also applies to built-in virtual modules: `@import "tailwindcss" reference;` makes the theme and utilities available to `@apply`, while suppressing imported CSS and candidate utilities from the output. A later ordinary import of the same module can still emit CSS.
 
 Continue with [Theme](/docs/usage/theme) for theme variables, or [@source](/docs/usage/source) to control which files are scanned for class names.

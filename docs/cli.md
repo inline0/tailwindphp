@@ -33,7 +33,7 @@ If you only need CSS at runtime from PHP, use the [API](/docs/api) instead — t
 tailwindphp [-i input.css] [-o output.css] [--watch] [options…]
 ```
 
-Give long options their value with `=`: `--input=./src/app.css`, `--output=./dist/styles.css`, `--cwd=/path/to/project`. A space-separated value after a long option (`--input ./src/app.css`) is currently ignored without an error, and the build falls back to the defaults ([#13](https://github.com/inline0/tailwindphp/issues/13)). Short options take the value as the next argument (`-i ./src/app.css`).
+Long options accept either a space or `=`: `--input ./src/app.css`, `--output=./dist/styles.css`, and `--cwd /path/to/project`. Short options take the next argument (`-i ./src/app.css`). `-i -` and `--input -` read stdin. A missing input, output, or working-directory value exits with an error.
 
 | Option | Description | Default |
 |---|---|---|
@@ -41,7 +41,7 @@ Give long options their value with `=`: `--input=./src/app.css`, `--output=./dis
 | `-o, --output` | Output file | `-` (stdout) |
 | `-w, --watch` | Watch for changes and rebuild as needed | — |
 | `-m, --minify` | Optimize and minify the output | — |
-| `--optimize` | Documented as "optimize without minifying"; currently minifies like `--minify` ([#9](https://github.com/inline0/tailwindphp/issues/9)) | — |
+| `--optimize` | Optimize without minifying; output remains readable | — |
 | `--cwd` | The current working directory | `.` |
 | `-h, --help` | Display usage information | — |
 | `-V, --version` | Print the version | — |
@@ -65,21 +65,20 @@ Create an `app.css` with your Tailwind import, theme, and directives:
 
 ## What the CLI scans
 
-Content scanning in the CLI does not yet follow `@source` the way `@tailwindcss/cli` does ([#8](https://github.com/inline0/tailwindphp/issues/8)). In the current release:
+The CLI resolves file sources relative to the input CSS file:
 
-- **With no `@source` file directive** in the input CSS, the CLI scans the working directory (`--cwd`) recursively. That includes `vendor/` and `node_modules/`; `.gitignore` is not consulted.
-- **With one or more `@source` file directives**, the CLI scans the **input file's directory** recursively. The path or glob in the directive is not applied: `@source "../templates"` next to `src/app.css` scans `src/`, not `templates/`.
-- **`@source not "…"`** directives are skipped; they exclude nothing.
-- **`@source inline("…")`** and **`@source not inline("…")`** work as documented, because the compiler handles them itself.
+- **With one or more positive `@source` paths**, only matching files are scanned. Directories are recursive; globs support `*`, `**`, `?`, character classes, and brace groups.
+- **`@source not "…"`** removes matching files from scanning and watching, regardless of directive order.
+- **With no positive file sources**, the CLI scans the working directory (`--cwd`) recursively and applies any exclusions. Automatic scanning skips `.git`, `vendor`, and `node_modules` directories. Explicit sources can include dependencies. `.gitignore` is not consulted.
+- **`@source inline("…")`** and **`@source not inline("…")`** add and remove candidates through the compiler.
 
-Only files with these extensions are read: `php`, `html`, `htm`, `twig`, `blade.php`, `vue`, `jsx`, `tsx`, `svelte`, `astro`, and `mdx`. Class names are taken from `class` and `className` attributes, the same as [`tw::extractCandidates()`](/docs/api#twextractcandidates), so a class that only appears in a PHP or JavaScript string is not found. Force such classes in with `@source inline("…")`.
-
-Until that is fixed, the reliable setup is an input CSS file at the top of the directory you want scanned:
+Directory and glob scans read `php`, `html`, `htm`, `twig`, `blade.php`, `vue`, `jsx`, `tsx`, `svelte`, `astro`, and `mdx` files. An explicit file path can name another extension. Class names are taken from `class` and `className` attributes, the same as [`tw::extractCandidates()`](/docs/api#twextractcandidates). For a class held only in a PHP or JavaScript string, use `@source inline("…")`.
 
 ```css
-/* templates/app.css: scans templates/ recursively */
+/* src/app.css: scans templates/, excluding templates/legacy/ */
 @import "tailwindcss";
-@source "./";
+@source "../templates/**/*.html";
+@source not "../templates/legacy";
 ```
 
 See [@source](/docs/usage/source) for the directive syntax, including the `not` and `inline()` forms.

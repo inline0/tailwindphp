@@ -98,7 +98,7 @@ $button(['size' => 'lg']); // 'inline-flex … bg-blue-500 text-white h-11 px-8'
 ./vendor/bin/tailwindphp -i ./src/app.css -o ./dist/styles.css --minify
 ```
 
-Content scanning differs from `@tailwindcss/cli` today: when the input CSS has an `@source` file directive, the CLI scans the input file's directory recursively, whatever path or glob the directive names, and `@source not` excludes nothing ([#8](https://github.com/inline0/tailwindphp/issues/8)); without one it scans the working directory. See the [CLI docs](./docs/cli.md) for what is scanned.
+The CLI honours `@source` file paths, directories, globs, and exclusions relative to the input CSS file. Without positive file sources it scans the working directory, skipping `.git`, `vendor`, and `node_modules`. It extracts class names from `class` and `className` attributes; see the [CLI docs](./docs/cli.md) for supported content formats.
 
 ## Documentation
 

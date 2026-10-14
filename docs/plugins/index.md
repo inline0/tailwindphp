@@ -10,7 +10,7 @@ meta_description: "Load the official typography and forms plugins with the @plug
 
 # Plugins
 
-TailwindPHP ships PHP ports of the official TailwindCSS plugins and exposes a native PHP plugin API. Plugins register utilities, components, and variants; they are loaded with the `@plugin` directive in your input CSS. The built-in plugins are 1:1 ports of their JavaScript counterparts — same selectors and output — implemented in PHP rather than executed through Node. One exception today: the typography plugin's element modifiers (`prose-headings:`, `prose-a:`, …) rely on plugin variants, which are not applied yet ([#10](https://github.com/inline0/tailwindphp/issues/10)).
+TailwindPHP ships PHP ports of the official TailwindCSS plugins and exposes a native PHP plugin API. Plugins register utilities, components, and variants; they are loaded with the `@plugin` directive in your input CSS. The built-in plugins are 1:1 ports of their JavaScript counterparts — same selectors and output — implemented in PHP rather than executed through Node.
 
 ## Using `@plugin`
 

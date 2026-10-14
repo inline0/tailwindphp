@@ -570,7 +570,7 @@ function loadDefaultTheme(): Theme
  * @return array{
  *     build: callable(array<string>, bool=): string,
  *     buildExact: callable(array<string>, bool=): string,
- *     sources: array<string>,
+ *     sources: list<array{base: string, pattern: string, negated: bool}>,
  *     root: array,
  *     features: int,
  *     designSystem: \TailwindPHP\DesignSystem\DesignSystem
@@ -681,7 +681,7 @@ function compileParsed(array &$ast, array $result, array $options = []): array
     $updateUtilitiesNode = function (array &$ast, array $newNodes) {
         walk($ast, function (&$node) use ($newNodes) {
             // Find the context node that was converted from @tailwind utilities
-            if ($node['kind'] === 'context' && isset($node['context']) && is_array($node['context'])) {
+            if ($node['kind'] === 'context' && !empty($node['context']['utilities'])) {
                 $node['nodes'] = $newNodes;
 
                 return WalkAction::Stop;
@@ -921,6 +921,11 @@ function parseCssState(array &$ast, array $options = []): array
             if ($utilitiesNodePath !== null) {
                 return WalkAction::Replace([]);
             }
+            foreach ($ctx->path() as $ancestor) {
+                if (($ancestor['kind'] ?? '') === 'context' && !empty($ancestor['context']['reference'])) {
+                    return WalkAction::Replace([]);
+                }
+            }
 
             // Store the path to this node for later modification
             $utilitiesNodePath = $ctx->path();
@@ -930,7 +935,7 @@ function parseCssState(array &$ast, array $options = []): array
             // Convert the @tailwind node to a context node in place
             // This is how the TypeScript does it - mutate in place
             $node['kind'] = 'context';
-            $node['context'] = [];
+            $node['context'] = ['utilities' => true];
             $node['nodes'] = [];
             unset($node['name']);
             unset($node['params']);
@@ -1067,11 +1072,18 @@ function parseCssState(array &$ast, array $options = []): array
                 // Deduplicate virtual module imports (tailwindcss, tailwindcss/*)
                 // This applies to all virtual module imports, not just file-based ones
                 if (isVirtualModule($importPath)) {
-                    if (isset($seenVirtualModules[$importPath])) {
+                    $referenceImport = in_array('reference', \TailwindPHP\Utils\segment($modifiers, ' '), true);
+                    foreach ($ctx->path() as $ancestor) {
+                        if (($ancestor['kind'] ?? '') === 'context' && !empty($ancestor['context']['reference'])) {
+                            $referenceImport = true;
+                        }
+                    }
+                    $moduleKey = ($referenceImport ? 'reference:' : 'emit:') . $importPath;
+                    if (isset($seenVirtualModules[$moduleKey])) {
                         // Already imported - remove duplicate
                         return WalkAction::Replace([]);
                     }
-                    $seenVirtualModules[$importPath] = true;
+                    $seenVirtualModules[$moduleKey] = true;
                 }
 
                 // Handle 'tailwindcss' virtual module - full Tailwind CSS (theme + preflight + utilities)
@@ -1100,6 +1112,10 @@ function parseCssState(array &$ast, array $options = []): array
                         atRule('@layer', 'utilities', [$utilitiesNode]),
                     ];
 
+                    if (in_array('reference', \TailwindPHP\Utils\segment($modifiers, ' '), true)) {
+                        $fullContent = [atRule('@media', 'reference', $fullContent)];
+                    }
+
                     return WalkAction::Replace($fullContent);
                 }
 
@@ -1107,6 +1123,9 @@ function parseCssState(array &$ast, array $options = []): array
                 if ($importPath === 'tailwindcss/theme' || $importPath === 'tailwindcss/theme.css') {
                     $themeCss = readResourceFile('theme.css');
                     $themeAst = parse($themeCss);
+                    if (in_array('reference', \TailwindPHP\Utils\segment($modifiers, ' '), true)) {
+                        $themeAst = [atRule('@media', 'reference', $themeAst)];
+                    }
 
                     // Check for prefix() modifier
                     if (preg_match(REGEX_PREFIX_MOD, $modifiers, $prefixMatch)) {
@@ -1136,6 +1155,9 @@ function parseCssState(array &$ast, array $options = []): array
                 // Handle 'tailwindcss/utilities' or 'tailwindcss/utilities.css'
                 if ($importPath === 'tailwindcss/utilities' || $importPath === 'tailwindcss/utilities.css') {
                     $utilityNode = atRule('@tailwind', 'utilities', []);
+                    if (in_array('reference', \TailwindPHP\Utils\segment($modifiers, ' '), true)) {
+                        $utilityNode = atRule('@media', 'reference', [$utilityNode]);
+                    }
 
                     // If there's an 'important' modifier
                     if (str_contains($modifiers, 'important')) {
@@ -1161,6 +1183,9 @@ function parseCssState(array &$ast, array $options = []): array
                 if ($importPath === 'tailwindcss/preflight' || $importPath === 'tailwindcss/preflight.css') {
                     $preflightCss = readResourceFile('preflight.css');
                     $preflightAst = parse($preflightCss);
+                    if (in_array('reference', \TailwindPHP\Utils\segment($modifiers, ' '), true)) {
+                        $preflightAst = [atRule('@media', 'reference', $preflightAst)];
+                    }
 
                     // Check for layer(base) modifier
                     if (str_contains($modifiers, 'layer(base)')) {
@@ -2510,7 +2535,7 @@ function optimizeAstTransformNodes(array $nodes, Theme $theme, array $usedVariab
             // Skip empty rules (no declarations or nested rules)
             // But keep @layer, @charset, @custom-media, @namespace, @import (they can be empty)
             $name = $node['name'] ?? '';
-            if (empty($children) && !in_array($name, ['@layer', '@charset', '@custom-media', '@namespace', '@import'])) {
+            if (empty($children) && !in_array($name, ['@layer', '@charset', '@custom-media', '@namespace', '@import', '@apply'])) {
                 return;
             }
         }
@@ -2901,7 +2926,7 @@ function optimizeAstPrepareIncremental(array $ast, DesignSystem $designSystem, i
     $sentinelValue = '__tailwindphp_utilities_sentinel_'.bin2hex(random_bytes(8));
     $probe = $ast;
     walk($probe, function (&$node) use ($sentinelValue) {
-        if ($node['kind'] === 'context' && isset($node['context']) && is_array($node['context'])) {
+        if ($node['kind'] === 'context' && !empty($node['context']['utilities'])) {
             $node['nodes'] = [['kind' => 'comment', 'value' => $sentinelValue]];
 
             return WalkAction::Stop;

@@ -134,10 +134,10 @@ The [CLI](/docs/cli) exposes the serializer minify path through two flags:
 # Optimize and minify (smallest output)
 tailwindphp -i ./src/app.css -o ./dist/styles.css --minify   # or -m
 
-# Meant to optimize without minifying
+# Optimize without minifying
 tailwindphp -i ./src/app.css -o ./dist/styles.css --optimize
 ```
 
-In the current release `--optimize` also minifies, so both commands write the same bytes ([#9](https://github.com/inline0/tailwindphp/issues/9)). The lightningcss-equivalent transforms run on every build either way, so plain output (no flag) is already the optimized, readable form.
+`--optimize` keeps readable output, including in watch mode. `--minify` additionally removes whitespace through the serializer. The lightningcss-equivalent transforms run on every build, so plain output (no flag) is also optimized and readable.
 
 For the rest of the public API — `tw::generate()`, `tw::compile()`, inspection methods, and input formats — see the [API reference](/docs/api).

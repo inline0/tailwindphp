@@ -15,14 +15,14 @@ This page collects what you need to know before upgrading or relying on exact ou
 ## Requirements
 
 - **PHP 8.2 or later.** The test suite runs on PHP 8.2, 8.3, and 8.4.
-- **The `ctype` and `mbstring` extensions.** The compiler calls `ctype_*` and `mb_chr()`. Both ship with most PHP builds and with the official Docker images, but `composer.json` does not declare them yet ([#11](https://github.com/inline0/tailwindphp/issues/11)), so a build without them installs the package and fails at runtime.
+- **The `ctype` and `mbstring` extensions.** The compiler calls `ctype_*` and `mb_chr()`. Composer declares both extensions and reports missing support at installation time.
 - **Optional: `pcntl`** lets the CLI's `--watch` mode stop cleanly on `SIGINT`/`SIGTERM`. Without it, watch mode still works.
 
 No Node.js, no FFI, and no native binaries are involved.
 
 ## Which TailwindCSS release is tracked
 
-Release 1.7.0 tracks **TailwindCSS v4.3.3**. The upstream repository is pinned as a git submodule in `reference/tailwindcss`, its test suites are extracted from that pinned checkout, and the 4,427 tests run on every push (see [Performance & testing](/docs/advanced/performance)). The ported plugins follow `@tailwindcss/typography` and `@tailwindcss/forms`, and the class utilities follow clsx, tailwind-merge, and CVA, each pinned the same way.
+Releases 1.7.x track **TailwindCSS v4.3.3**. The upstream repository is pinned as a git submodule in `reference/tailwindcss`, its test suites are extracted from that pinned checkout, and the full suite runs on every push (see [Performance & testing](/docs/advanced/performance)). The ported plugins follow `@tailwindcss/typography` and `@tailwindcss/forms`, and the class utilities follow clsx, tailwind-merge, and CVA, each pinned the same way.
 
 ## Known differences from TailwindCSS
 
@@ -42,20 +42,16 @@ TailwindPHP is a CSS compiler. It leaves out the editor tooling of the Tailwind 
 
 ### Content scanning
 
-`tw::generate()` and `TailwindCompiler::generate()` read class names from `class` and `className` attributes only. For class names held in PHP or JavaScript strings, use [`tw::extractCandidatesFromStrings()`](/docs/api#twextractcandidatesfromstrings) or `@source inline("…")`. Path forms of `@source` are ignored by the API and only partly honoured by the CLI (see below).
-
-### Known issues in the current release
-
-| Area | Behavior today | Issue |
-|---|---|---|
-| CLI `@source` | Paths and globs are not applied; the input file's directory is scanned instead, and `@source not` excludes nothing. See [What the CLI scans](/docs/cli#what-the-cli-scans) | [#8](https://github.com/inline0/tailwindphp/issues/8) |
-| CLI `--optimize` | Minifies, like `--minify` | [#9](https://github.com/inline0/tailwindphp/issues/9) |
-| CLI long options | `--input file.css` (space-separated) is ignored; use `--input=file.css` or `-i file.css` | [#13](https://github.com/inline0/tailwindphp/issues/13) |
-| Plugin variants | `addVariant()`/`matchVariant()` variants and the typography element modifiers (`prose-headings:` …) compile without their selector | [#10](https://github.com/inline0/tailwindphp/issues/10) |
-| `@apply` mixins | `@apply --my-mixin;` is dropped instead of passed through | [#12](https://github.com/inline0/tailwindphp/issues/12) |
-| Reference imports | Output is empty when a reference import precedes the utilities import; `@import "tailwindcss" reference` has no effect | [#14](https://github.com/inline0/tailwindphp/issues/14) |
+`tw::generate()` and `TailwindCompiler::generate()` read class names from `class` and `className` attributes only. For class names held in PHP or JavaScript strings, use [`tw::extractCandidatesFromStrings()`](/docs/api#twextractcandidatesfromstrings) or `@source inline("…")`. Path forms of `@source` are recorded by the API and resolved by the CLI; see [What the CLI scans](/docs/cli#what-the-cli-scans).
 
 ## Upgrade notes
+
+### 1.7.1
+
+- CLI source paths, globs, and exclusions now control scanning and watching. Automatic scanning skips dependency directories; add an explicit source when you need them.
+- `--optimize` keeps readable CSS; use `--minify` for minified output. Long options accept space-separated values, and `-i -` reads stdin.
+- Plugin variants, typography element modifiers, CSS mixins, and reference imports now preserve their intended selectors and scope. Existing generated-output caches should be cleared after upgrading; compiler state caches invalidate themselves.
+- Composer requires ctype and mbstring. Code quality passes with PHPStan 2.3.1.
 
 ### 1.7.0
 

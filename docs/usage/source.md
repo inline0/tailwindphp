@@ -10,7 +10,7 @@ meta_description: "Use @source in your input CSS to control which template files
 
 # The @source Directive
 
-`@source` lives in your input CSS. Its `inline()` forms add or remove class candidates and work everywhere. Its path forms name the template files to scan for class names; only the [CLI](/docs/cli) scans files, and it does not yet apply the paths you give it (see [How paths are used](#how-paths-are-used)).
+`@source` lives in your input CSS. Its `inline()` forms add or remove class candidates and work everywhere. Its path forms name the template files to scan for class names; the [CLI](/docs/cli) resolves those paths relative to the input CSS file (see [How paths are used](#how-paths-are-used)).
 
 ```css
 @import "tailwindcss";
@@ -34,7 +34,7 @@ The path form accepts a directory, a glob, or a negated path, and the directives
 The compiler records every path directive in the `sources` list of the array that `TailwindPHP\compile()` returns, as `['base' => …, 'pattern' => …, 'negated' => …]` with `base` taken from the `base` compile option. It never reads files itself.
 
 - `tw::generate()`, `tw::compile()`, and `TailwindCompiler` compile only the content you pass in. Path directives have no effect there.
-- The [CLI](/docs/cli) reads `sources`, but in the current release it scans the input file's directory recursively for every non-negated path, whatever the path or glob says, and skips `not` paths entirely, so they exclude nothing ([#8](https://github.com/inline0/tailwindphp/issues/8)). [What the CLI scans](/docs/cli#what-the-cli-scans) has the details and a layout that works today.
+- The [CLI](/docs/cli) resolves each directory, file, or glob relative to the input CSS file, collects positive sources, then removes negated matches. The same selection is used for watching. [What the CLI scans](/docs/cli#what-the-cli-scans) describes automatic scanning and supported content formats.
 
 ## Inline candidates
 

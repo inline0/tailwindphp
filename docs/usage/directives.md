@@ -32,7 +32,7 @@ $css = tw::generate('<div class="btn">', '
 
 Variants work in an `@apply` list — `@apply bg-blue-500 hover:bg-blue-600;` expands the `:hover` state, and responsive prefixes such as `@apply px-4 md:px-6 lg:px-8;` emit the corresponding `@media` rules. The important modifier is honored too (`@apply !flex;`). Nested selectors are supported, so a rule like `.card { h2 { @apply text-xl font-bold; } }` applies utilities to the nested `h2`.
 
-`@apply` is a statement: `@apply px-4 { … }` with a body throws. An `@apply` that lists only dashed idents (`@apply --my-mixin;`) is a CSS mixin from the [CSS mixins draft](https://drafts.csswg.org/css-mixins-1/#apply-rule), not a utility list, so TailwindPHP does not resolve it; putting a mixin and utilities in the same `@apply` throws (`You cannot use @apply with both mixins and utilities…`). Mixin rules are currently dropped from the output rather than passed through ([#12](https://github.com/inline0/tailwindphp/issues/12)).
+`@apply` is a statement: `@apply px-4 { … }` with a body throws. An `@apply` that lists only dashed idents (`@apply --my-mixin;`) is a CSS mixin from the [CSS mixins draft](https://drafts.csswg.org/css-mixins-1/#apply-rule), not a utility list, so TailwindPHP does not resolve it; putting a mixin and utilities in the same `@apply` throws (`You cannot use @apply with both mixins and utilities…`). Mixin rules are passed through literally inside their parent rule, including optional bodies. Their order is preserved, and rules with different mixins are kept separate.
 
 ## `@utility`
 

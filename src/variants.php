@@ -519,7 +519,7 @@ class Variants implements VariantsInterface
      */
     private function createSelectorApplyFn(string|array $selector): callable
     {
-        return function (array $ast) use ($selector): ?array {
+        return function (array &$node) use ($selector): void {
             // Handle multiple selectors
             $selectors = is_array($selector) ? $selector : [$selector];
 
@@ -527,10 +527,10 @@ class Variants implements VariantsInterface
             foreach ($selectors as $sel) {
                 // Replace & with the actual selector
                 $ruleSelector = str_contains($sel, '&') ? $sel : "{$sel} &";
-                $nodes[] = rule($ruleSelector, $ast);
+                $nodes[] = rule($ruleSelector, $node['nodes']);
             }
 
-            return $nodes;
+            $node['nodes'] = $nodes;
         };
     }
 
