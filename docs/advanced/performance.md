@@ -14,7 +14,7 @@ TailwindPHP optimizes for correctness first. Where a PHP-specific change speeds 
 
 ## Performance
 
-This is build-time CSS generation. The PHP port prioritizes matching TailwindCSS byte-for-byte over raw throughput, and the TypeScript original stays faster regardless — V8's JIT compiles the hot paths to native code in a way PHP cannot match. That is expected and fine for the intended use case.
+The PHP port prioritizes matching TailwindCSS output over raw throughput, and the TypeScript original stays faster regardless — V8's JIT compiles the hot paths to native code in a way PHP cannot match. For CSS generated per request or per page, reuse one compiler (see [generateExact()](/docs/api#accumulating-vs-exact-generation)) and persist its construction state with [`stateCacheFile`](/docs/advanced/caching#compiler-state-cache).
 
 A few hot paths carry hand-tuned optimizations that **preserve identical output**:
 
@@ -56,14 +56,15 @@ composer extract   # re-extract test cases from the TailwindCSS reference
 composer test      # run the full suite
 ```
 
-There are **4,074 passing tests**. The largest suites:
+There are **4,427 passing tests** as of release 1.7.0 (TailwindCSS v4.3.3 reference):
 
 | Suite | Tests | Source |
 |-------|-------|--------|
-| Core (utilities, variants, integration) | 1,322 | extracted from `.test.ts` |
-| API coverage (utilities, modifiers, variants, directives, plugins) | 1,774 | exhaustive API tests |
-| PHP-specific unit tests (theme, design-system, utils) | 300 | various `.test.ts` ports |
-| Public API (`tw::generate`, `tw::compile`, inspection) | 140 | API tests |
+| Extracted TailwindCSS suites (utilities 706, variants 164, index 148, css-functions 64, `ui.spec` 68) | 1,150 | extracted from `.test.ts` / `.spec.ts` |
+| API coverage (utilities, modifiers, variants, directives, plugins, imports, `@source`, caching, public API) | 2,252 | `tests/` |
+| Unit tests beside the source (parser, AST, candidates, theme, utils, selector parser, lightningcss transforms, minifier) | 767 | `*.test.php` ports and PHP-specific tests |
+| CLI (argument parsing, output, builds) | 84 | `tests/Cli*Test.php` |
+| Plugin ports (typography, forms) | 45 | `*.test.php` beside the plugins |
 | Companion libraries (clsx, tailwind-merge, CVA) | 129 | reference suites |
 
 ## Code quality
@@ -73,10 +74,10 @@ Formatting and static analysis run through Composer scripts:
 ```bash
 composer lint      # Pint --test  (check formatting)
 composer format    # Pint         (fix formatting)
-composer analyse   # PHPStan      (static analysis, level 3)
+composer analyse   # PHPStan      (static analysis, level 4)
 composer quality   # lint + analyse
 ```
 
-PHPStan runs at level 3 — higher levels conflict with the function-based architecture the port uses. All source files are analyzed; test files are excluded.
+PHPStan runs at level 4 (`phpstan.neon`), with a short list of ignored patterns for the dynamic array shapes the function-based architecture uses. All source files are analyzed; test files are excluded.
 
 For the structure these tests verify and where deviations are recorded, see [Architecture](/docs/advanced/architecture).

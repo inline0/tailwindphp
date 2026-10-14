@@ -86,6 +86,8 @@ $css = tw::generate(
 
 ## Notes
 
+Element modifiers such as `prose-headings:underline` or `prose-a:text-blue-600` are registered, but in the current release they compile without their element selector, so the utility applies to the whole `prose` container instead of the headings or links inside it ([#10](https://github.com/inline0/tailwindphp/issues/10)). Style those elements with your own CSS until the fix lands.
+
 This is a TailwindCSS v4 port. Some v3-specific behaviors from the original plugin — `.dark`-selector dark mode and certain element-variant config formats — work differently in v4 and are not supported here; use the `prose-invert` modifier and v4 variants instead.
 
 See [Plugins](/docs/plugins) for the `@plugin` directive and loading details.

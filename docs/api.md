@@ -76,6 +76,32 @@ $compiler = tw::compile('@import "tailwindcss"; @theme { --color-brand: #3b82f6;
 $css = $compiler->generate('<div class="flex p-4 bg-brand">');
 ```
 
+The `$options` array accepts:
+
+| Option | Type | Purpose |
+|---|---|---|
+| `stateCacheFile` | `string` | Path of a PHP file that persists the compiler's construction state across requests and processes — see [Compiler state cache](/docs/advanced/caching#compiler-state-cache) |
+| `polyfills` | `int` | Which fallbacks to emit, as a bitmask of `TailwindPHP\POLYFILL_AT_PROPERTY` (the `@layer properties` defaults for `@property` variables) and `TailwindPHP\POLYFILL_COLOR_MIX` (static color fallbacks before `color-mix()`). Default `POLYFILL_ALL`; `POLYFILL_NONE` disables both |
+| `importSearchPaths` | `array<string>` | Directories to search when resolving `@import` from the filesystem |
+
+```php
+use TailwindPHP\tw;
+use const TailwindPHP\POLYFILL_NONE;
+
+// Cache construction state on disk, reused by later requests
+$compiler = tw::compile('@import "tailwindcss";', [
+    'stateCacheFile' => __DIR__ . '/cache/tailwind-state.php',
+]);
+
+// Plain output without fallbacks, e.g. for CSS modules
+$compiler = tw::compile('@import "tailwindcss/utilities.css";', [
+    'polyfills' => POLYFILL_NONE,
+]);
+$compiler->generate('<div class="bg-red-500/50">');
+// .bg-red-500\/50 { background-color: color-mix(in oklab, var(--color-red-500) 50%, transparent); }
+// (with the default, a `#fb2c3680` fallback comes first and color-mix() moves into @supports)
+```
+
 See [TailwindCompiler instance methods](#tailwindcompiler-instance-methods) for the full instance surface.
 
 ## tw::properties()
@@ -111,7 +137,7 @@ tw::computedProperties('p-4');
 // ['padding' => '1rem']
 
 tw::computedProperties('text-blue-500');
-// ['color' => 'oklch(.546 .245 262.881)']
+// ['color' => 'oklch(62.3% .214 259.815)']
 
 tw::computedProperties(['flex', 'items-center', 'gap-4']);
 // ['display' => 'flex', 'align-items' => 'center', 'gap' => '1rem']
@@ -144,7 +170,7 @@ Returns the **resolved** value for a single utility class. **Returns** `?string`
 use TailwindPHP\tw;
 
 tw::computedValue('p-4');           // '1rem'
-tw::computedValue('text-blue-500'); // 'oklch(.546 .245 262.881)'
+tw::computedValue('text-blue-500'); // 'oklch(62.3% .214 259.815)'
 tw::computedValue('gap-4');         // '1rem'
 ```
 
@@ -162,6 +188,45 @@ use TailwindPHP\tw;
 tw::extractCandidates('<div class="flex p-4" className="bg-blue-500">');
 // ['flex', 'p-4', 'bg-blue-500']
 ```
+
+## tw::extractCandidatesFromStrings()
+
+```php
+public static function extractCandidatesFromStrings(string $source): array
+```
+
+Extracts class-name candidates from every single- or double-quoted string in source code, for templates that build class lists in variables instead of `class` attributes. Each string is split on whitespace and every token that looks like a class name is kept. **Returns** `array<string>`.
+
+```php
+use TailwindPHP\tw;
+
+$classes = tw::extractCandidatesFromStrings('<?php $wrap = \'p-4 sm:flex\'; $title = "hello world"; ?>');
+// ['p-4', 'sm:flex', 'hello', 'world']
+
+$css = tw::compile()->css($classes);
+```
+
+Plain words pass the check too (`hello`, `world` above); they compile to nothing unless they happen to be utility names. Pass the result to [`css()`](#tailwindcompiler-instance-methods), since `generate()` reads only `class` attributes.
+
+## tw::cssMap()
+
+```php
+public static function cssMap(string $css = '@import "tailwindcss";'): array
+```
+
+Builds a reverse map from CSS declarations to utility classes, useful for converting existing CSS to Tailwind classes. Keys are `"property: value"` strings with variables resolved (multi-property utilities also get a `"prop: value; prop: value"` key), values are class names. **Returns** `array<string, string>`.
+
+```php
+use TailwindPHP\tw;
+
+$map = tw::cssMap();
+$map['display: flex'];       // 'flex'
+$map['padding: 1rem'];       // 'p-4'
+$map['text-align: center'];  // 'text-center'
+$map['color: #fff'];         // 'text-white'
+```
+
+The map covers a fixed list of common utilities (display, position, flexbox, typography, spacing and sizing steps, borders, the black/white/transparent colors, and similar), not every utility or theme color. The `$css` argument changes the resolved values of those utilities, but custom theme tokens (such as `--color-brand`) do not add entries.
 
 ## tw::minify()
 
@@ -211,7 +276,7 @@ Returns every color value from the theme. **Returns** `array<string, string>` (c
 use TailwindPHP\tw;
 
 tw::colors();
-// ['red-500' => 'oklch(63.7% 0.237 25.331)', 'blue-500' => 'oklch(62.3% 0.214 259.815)', ...]
+// ['red-500' => 'oklch(63.7% .237 25.331)', 'blue-500' => 'oklch(62.3% .214 259.815)', ...]
 
 // With a custom theme
 tw::colors('@import "tailwindcss"; @theme { --color-brand: #3b82f6; }');
@@ -233,7 +298,7 @@ tw::breakpoints();
 // ['sm' => '40rem', 'md' => '48rem', 'lg' => '64rem', 'xl' => '80rem', '2xl' => '96rem']
 
 tw::breakpoints('@import "tailwindcss"; @theme { --breakpoint-xs: 20rem; }');
-// ['xs' => '20rem', 'sm' => '40rem', ...]
+// ['sm' => '40rem', ..., '2xl' => '96rem', 'xs' => '20rem']
 ```
 
 ## tw::spacing()
@@ -286,6 +351,7 @@ public function css(array $candidates, bool $minify = false): string
 public function generateExact(string $content, bool $minify = false): string
 public function cssExact(array $candidates, bool $minify = false): string
 public function extractCandidates(string $html): array
+public function extractCandidatesFromStrings(string $source): array
 public function properties(string|array $utilities): array
 public function computedProperties(string|array $utilities): array
 public function value(string $utility): ?string
@@ -351,6 +417,23 @@ $compiler->getCompiled();     // Raw compiled state array
 ```
 
 These return internal structures; see [Architecture](/docs/advanced/architecture) for what they contain.
+
+### Lower-level functions
+
+The `tw` class wraps a set of namespaced functions in `TailwindPHP`. They are useful when you need the raw compile result rather than a `TailwindCompiler`:
+
+| Function | Purpose |
+|---|---|
+| `compile(string $css, array $options = []): array` | Parses and compiles CSS. Returns `build` (accumulating) and `buildExact` closures that take candidates and an optional `$minify` flag, plus `sources`, `root`, `features`, and `designSystem`. Accepts the same options as [`tw::compile()`](#twcompile) except `stateCacheFile` |
+| `StateCache\compileCssCached(string $css, string $cacheFile, array $options = []): array` | `compile()` with the persistent [compiler state cache](/docs/advanced/caching#compiler-state-cache) |
+| `parseCssState()`, `finalizeCssState()`, `compileParsed()` | The two halves of parsing (a serializable state, then the closures rebuilt from it) and the final assembly step that `compileCssCached()` uses. `parseCss()` and `compileAst()` remain the one-step equivalents |
+
+```php
+use function TailwindPHP\compile;
+
+$compiled = compile('@import "tailwindcss";');
+$css = $compiled['build'](['flex', 'p-4'], true); // minified
+```
 
 ## Caching
 

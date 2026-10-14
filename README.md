@@ -20,19 +20,19 @@
 
 ## What is TailwindPHP?
 
-TailwindPHP is a 1:1 port of TailwindCSS 4.x to PHP. It scans your markup for class names and generates the exact same utility CSS that TailwindCSS produces — entirely in PHP, with no Node.js, no build step, and no extensions beyond a standard PHP 8.2+ build.
+TailwindPHP is a 1:1 port of TailwindCSS 4.x to PHP. It scans your markup for class names and generates the utility CSS that TailwindCSS v4.3.3 produces, checked against TailwindCSS's own test suites — entirely in PHP, with no Node.js and no build step. It needs PHP 8.2+ with the `ctype` and `mbstring` extensions.
 
 **The problem:** TailwindCSS is written in TypeScript and runs on Node.js. Any PHP project that wants Tailwind inherits a second runtime, an `npm install`, and a build step in CI and Docker. For WordPress plugins, framework packages, and apps that generate CSS at runtime, that's friction — or a dealbreaker.
 
 **TailwindPHP solves this** by implementing the Tailwind compiler natively in PHP:
 
-- The complete **TailwindCSS v4.3** surface — all 364 utilities, every variant (hover, focus, responsive, dark mode, container queries, arbitrary values), and byte-for-byte output
+- The **TailwindCSS v4.3.3** surface — the full utility set (including `container`, scrollbar, `zoom-*` and `tab-*`), every variant (hover, focus, responsive, dark mode, container queries, arbitrary values), and output that matches the reference apart from the [documented differences](./docs/advanced/compatibility.md)
 - The full directive set — `@import`, `@theme`, `@apply`, `@utility`, `@custom-variant`, `@layer`, `@plugin`, and `@source`
 - Tailwind's CSS functions — `theme()`, `--theme()`, `--spacing()`, `--alpha()` — plus `color-mix()` → `oklab()` and the transforms Tailwind delegates to LightningCSS
 - **Batteries included** — PHP ports of [clsx](https://github.com/lukeed/clsx), [tailwind-merge](https://github.com/dcastil/tailwind-merge), and [CVA](https://github.com/joe-bell/cva) as `cn()`, `merge()`, `join()`, and `variants()`
 - **Plugins** — `@tailwindcss/typography` and `@tailwindcss/forms` ported in full, plus a PHP plugin API for your own
-- A **CLI** (`bin/tailwindphp`) that mirrors `@tailwindcss/cli`, plus file-based caching and a CSS minifier
-- **4,000+ tests** — output is verified against TailwindCSS's own test suites, extracted from the TypeScript source and re-run on every push
+- A **CLI** (`bin/tailwindphp`) with the `@tailwindcss/cli` build options, plus file-based caching, a persistent compiler state cache, and a CSS minifier
+- **4,400+ tests** — output is verified against TailwindCSS's own test suites, extracted from the TypeScript source and re-run on every push
 
 ## Quick Start
 
@@ -54,7 +54,7 @@ $css = tw::generate(
 
 // Inspect a class without rendering a full stylesheet
 tw::computedProperties('p-4');      // ['padding' => '1rem']
-tw::computedValue('text-blue-500'); // 'oklch(.546 .245 262.881)'
+tw::computedValue('text-blue-500'); // 'oklch(62.3% .214 259.815)'
 ```
 
 Build conditional class strings and resolve conflicts (clsx + tailwind-merge):
@@ -85,7 +85,7 @@ $button(['size' => 'lg']); // 'inline-flex … bg-blue-500 text-white h-11 px-8'
 
 ## CLI
 
-A drop-in port of `@tailwindcss/cli` — same options, no Node.js:
+`bin/tailwindphp` takes the `@tailwindcss/cli` build options (`-i`, `-o`, `-w`, `-m`, `--optimize`, `--cwd`), with no Node.js. Source maps (`--map`) are not supported:
 
 ```bash
 # Build CSS from an input file
@@ -98,12 +98,7 @@ A drop-in port of `@tailwindcss/cli` — same options, no Node.js:
 ./vendor/bin/tailwindphp -i ./src/app.css -o ./dist/styles.css --minify
 ```
 
-Point `@source` at the templates to scan in your input CSS:
-
-```css
-@import "tailwindcss";
-@source "./templates";
-```
+Content scanning differs from `@tailwindcss/cli` today: when the input CSS has an `@source` file directive, the CLI scans the input file's directory recursively, whatever path or glob the directive names, and `@source not` excludes nothing ([#8](https://github.com/inline0/tailwindphp/issues/8)); without one it scans the working directory. See the [CLI docs](./docs/cli.md) for what is scanned.
 
 ## Documentation
 

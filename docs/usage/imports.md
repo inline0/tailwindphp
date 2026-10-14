@@ -115,7 +115,7 @@ Importing the same file or virtual module more than once is a no-op after the fi
 
 ## Custom resolver
 
-For virtual file systems, databases, or any non-filesystem source, pass a callable as `importPaths`. It receives the import URI and the file doing the importing, and returns CSS or `null`:
+For virtual file systems, databases, or any non-filesystem source, pass a callable as `importPaths`. It receives the import URI and the base directory the import is resolved against, and returns CSS or `null`:
 
 ```php
 use TailwindPHP\tw;
@@ -135,7 +135,7 @@ $css = tw::generate([
 ]);
 ```
 
-When `$uri` is `null`, return the entry CSS. For any other URI, return its CSS contents, or `null` to skip it.
+When `$uri` is `null` (the first call, with a `null` second argument too), return the entry CSS. For any other URI, return its CSS contents, or `null` to fall back to the filesystem search, which skips the import silently when nothing is found.
 
 ## Preflight
 
@@ -206,6 +206,30 @@ When importing Tailwind's files individually, modifiers go on the imports they a
 
 /* theme(static) or theme(inline) affects theme variables */
 @import "tailwindcss/theme.css" layer(theme) theme(static);
+
+/* theme(reference): utilities use the variables with a fallback, no :root block */
+@import "tailwindcss/theme.css" layer(theme) theme(reference);
 ```
+
+## Reference imports
+
+`@import "…" reference` loads a file for its definitions only: `@theme` values, `@utility` and `@custom-variant` definitions inside it are usable, but the file emits no CSS of its own. It is the same as wrapping the file's contents in `@media reference { … }`, which you can also write directly:
+
+```css
+@import "tailwindcss/utilities.css";
+
+@media reference {
+    @theme {
+        --color-brand: #f00;
+    }
+}
+```
+
+`bg-brand` then compiles to `background-color: var(--color-brand, #f00);` and no `--color-brand` declaration is emitted.
+
+Two limitations in the current release ([#14](https://github.com/inline0/tailwindphp/issues/14)):
+
+- Put reference imports and `@media reference` blocks **after** the `@import` of `tailwindcss` or `tailwindcss/utilities.css`. Placed before it, the whole output comes back empty.
+- `reference` on the built-in virtual modules (`@import "tailwindcss" reference;`) has no effect yet: the theme, Preflight, and utilities are still emitted.
 
 Continue with [Theme](/docs/usage/theme) for theme variables, or [@source](/docs/usage/source) to control which files are scanned for class names.

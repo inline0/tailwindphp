@@ -1,16 +1,16 @@
 ---
 title: "Caching & Minification"
-description: "The file-based cache (cache, cacheTtl, clearCache) and the CSS minifier that shrinks output for production."
+description: "The file-based output cache (cache, cacheTtl, clearCache), the compiler state cache (stateCacheFile), and the CSS minifier that shrinks output for production."
 path: "advanced/caching"
 order: 160
 section: "Advanced"
 meta_title: "Caching & Minification"
-meta_description: "The file-based cache (cache, cacheTtl, clearCache) and the CSS minifier that shrinks output for production."
+meta_description: "The file-based output cache (cache, cacheTtl, clearCache), the compiler state cache (stateCacheFile), and the CSS minifier that shrinks output for production."
 ---
 
 # Caching & Minification
 
-Two production concerns sit at the edge of the pipeline: avoiding recompilation of identical input, and shrinking the generated CSS. Both are PHP-specific helpers under `src/_tailwindphp/` and the public API around them.
+Three production concerns sit at the edge of the pipeline: avoiding recompilation of identical input, avoiding the cost of building a compiler on every request, and shrinking the generated CSS. All three are PHP-side helpers around the compiler.
 
 ## Caching
 
@@ -45,7 +45,9 @@ The cache directory is created automatically if it doesn't exist.
 
 ### Cache key
 
-The key is derived from the **content**, the **CSS configuration**, and the **minify** flag — hashed into the filename `tailwind_<hash>.css`. Any change to the markup, the CSS input, or whether minification is on produces a different key, and therefore a different file. There is no risk of stale output for a given input: different inputs never collide on the same cache file.
+The key is derived from the **content**, the **CSS configuration**, and the **minify** flag — hashed into the filename `tailwind_<hash>.css`. Any change to the markup, the CSS input, or whether minification is on produces a different key, and therefore a different file.
+
+The CSS configuration in the key is the inline `css` plus the contents of the files named in `importPaths`. Two inputs are not part of it: files pulled in by a nested `@import` inside those files, and the TailwindPHP version. Clear the cache after editing a nested import or upgrading the package, or the old output keeps being served.
 
 ### Time-to-live
 
@@ -63,6 +65,31 @@ $deleted = tw::clearCache();                  // default directory
 $deleted = tw::clearCache('/path/to/cache');  // custom directory
 clearCache('/path/to/cache');                 // function form
 ```
+
+## Compiler state cache
+
+The output cache only helps when the same content comes back. When the content changes on every call, the expensive part is building the compiler itself: resolving `@import "tailwindcss"`, parsing the bundled resources, and accumulating the theme. That phase depends only on the input CSS, so it can be stored and reused.
+
+Pass `stateCacheFile` to `tw::compile()` (or `new TailwindCompiler($css, $options)`):
+
+```php
+use TailwindPHP\tw;
+
+$compiler = tw::compile($themeCss, [
+    'stateCacheFile' => __DIR__ . '/cache/tailwind-state.php',
+]);
+
+$css = $compiler->generateExact($html, true);
+```
+
+On the first construction the state is written to that path as a plain PHP file, which OPcache can share across requests; later constructions load it instead of parsing again. The output is byte-identical to an uncached compiler.
+
+- The file is validated against an engine fingerprint (the size and mtime of TailwindPHP's sources and resources), a key derived from the input CSS and the `base` and `importSearchPaths` options, and the size and mtime of every file the input imported. A mismatch rebuilds and rewrites it, so upgrading TailwindPHP or editing an imported file needs no manual step.
+- You own the path: use one file per distinct input CSS, in a directory the web server can write to. Writes are atomic (a temporary file plus `rename()`).
+- Inputs that use a custom `importResolver` bypass the cache, because the resolver's behavior cannot be fingerprinted.
+- The same cache is available around the lower-level `compile()` array API as `TailwindPHP\StateCache\compileCssCached($css, $cacheFile, $options)`.
+
+`tw::generate()` does not take `stateCacheFile`; it builds a fresh compiler on every call. Use a compiler instance when construction cost matters.
 
 ## Minification
 
@@ -107,8 +134,10 @@ The [CLI](/docs/cli) exposes the serializer minify path through two flags:
 # Optimize and minify (smallest output)
 tailwindphp -i ./src/app.css -o ./dist/styles.css --minify   # or -m
 
-# Optimize only — apply transforms without minifying
+# Meant to optimize without minifying
 tailwindphp -i ./src/app.css -o ./dist/styles.css --optimize
 ```
+
+In the current release `--optimize` also minifies, so both commands write the same bytes ([#9](https://github.com/inline0/tailwindphp/issues/9)). The lightningcss-equivalent transforms run on every build either way, so plain output (no flag) is already the optimized, readable form.
 
 For the rest of the public API — `tw::generate()`, `tw::compile()`, inspection methods, and input formats — see the [API reference](/docs/api).

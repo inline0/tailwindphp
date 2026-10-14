@@ -35,7 +35,7 @@ Each token registers utilities under its namespace. The example above makes `bg-
 
 ```css
 /* bg-brand resolves to the theme variable */
-:root {
+:root, :host {
   --color-brand: #3b82f6;
 }
 .bg-brand {
@@ -121,6 +121,8 @@ Add `inline` to substitute the resolved value instead of a `var()` reference: `-
 /* → gap: calc(var(--spacing) * 4); */
 ```
 
+A multiplier of `1` resolves to the base variable itself (`--spacing(1)` → `var(--spacing)`, which is also what `p-1` emits), and `0` to a plain zero length.
+
 This is the same calculation the built-in spacing utilities use, so custom values stay consistent with `p-4`, `m-4`, and friends.
 
 ### `--alpha()`
@@ -129,8 +131,20 @@ This is the same calculation the built-in spacing utilities use, so custom value
 
 ```css
 @utility tint { color: --alpha(var(--color-red-500) / 50%); }
-/* → color: color-mix(in oklab, var(--color-red-500) 50%, transparent); */
 ```
+
+```css
+.tint {
+  color: #fb2c3680;
+}
+@supports (color: color-mix(in lab, red, red)) {
+  .tint {
+    color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
+  }
+}
+```
+
+The `color-mix()` form stays runtime-overridable; the static fallback before it, computed from the theme value, covers browsers without `color-mix()`. Turn the fallback off with the `polyfills` option of [`tw::compile()`](/docs/api#twcompile).
 
 ### Stacking opacity and `color-mix()` → `oklab()`
 
@@ -138,7 +152,7 @@ Opacity modifiers compose. Applying 50% on a value that already carries 50% yiel
 
 ## Reading theme values from PHP
 
-Three accessors return resolved theme values as PHP arrays. They accept the same input formats as `tw::generate()` and are also available on a [compiler instance](/docs/api).
+Three accessors return resolved theme values as PHP arrays. Each takes an optional input CSS string (default `@import "tailwindcss";`) and is also available on a [compiler instance](/docs/api).
 
 ```php
 use TailwindPHP\tw;
@@ -160,7 +174,7 @@ tw::colors('@import "tailwindcss"; @theme { --color-brand: #3b82f6; }');
 // [..., 'brand' => '#3b82f6']
 
 tw::breakpoints('@import "tailwindcss"; @theme { --breakpoint-xs: 20rem; }');
-// ['xs' => '20rem', 'sm' => '40rem', ...]
+// ['sm' => '40rem', ..., '2xl' => '96rem', 'xs' => '20rem']
 ```
 
 TailwindCSS 4 uses a single `--spacing` base value rather than a `--spacing-*` scale, so `tw::spacing()` returns only the custom `--spacing-*` tokens you define. From a compiler instance the same methods exist: `$compiler->colors()`, `$compiler->breakpoints()`, `$compiler->spacing()`. See the [API](/docs/api) for full signatures.

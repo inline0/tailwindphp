@@ -10,7 +10,7 @@ meta_description: "Use @source in your input CSS to control which template files
 
 # The @source Directive
 
-`@source` lives in your input CSS and tells TailwindPHP where to find the template files it should scan for class names. It is primarily used with the [CLI](/docs/cli), where a single input CSS file drives a build over a content directory.
+`@source` lives in your input CSS. Its `inline()` forms add or remove class candidates and work everywhere. Its path forms name the template files to scan for class names; only the [CLI](/docs/cli) scans files, and it does not yet apply the paths you give it (see [How paths are used](#how-paths-are-used)).
 
 ```css
 @import "tailwindcss";
@@ -19,39 +19,22 @@ meta_description: "Use @source in your input CSS to control which template files
 
 `@source` directives are read during compilation and removed from the output — they never appear in the generated CSS. Paths must be quoted, and both single and double quotes are accepted.
 
-## Directories
+## Paths, globs, and negation
 
-Point `@source` at a directory to scan every supported file inside it:
-
-```css
-@source "./templates";
-```
-
-## Glob patterns
-
-Narrow the scan with a glob:
+The path form accepts a directory, a glob, or a negated path, and the directives accumulate:
 
 ```css
-@source "./src/**/*.php";
+@source "./templates";              /* a directory */
+@source "./components/**/*.php";    /* a glob */
+@source not "./templates/legacy";   /* an exclusion */
 ```
 
-## Multiple sources
+### How paths are used
 
-Add as many `@source` directives as you need; they accumulate:
+The compiler records every path directive in the `sources` list of the array that `TailwindPHP\compile()` returns, as `['base' => …, 'pattern' => …, 'negated' => …]` with `base` taken from the `base` compile option. It never reads files itself.
 
-```css
-@source "./templates";
-@source "./components/**/*.php";
-```
-
-## Negated patterns
-
-Prefix a path with `not` to exclude it from scanning:
-
-```css
-@source "./src";
-@source not "./src/legacy";
-```
+- `tw::generate()`, `tw::compile()`, and `TailwindCompiler` compile only the content you pass in. Path directives have no effect there.
+- The [CLI](/docs/cli) reads `sources`, but in the current release it scans the input file's directory recursively for every non-negated path, whatever the path or glob says, and skips `not` paths entirely, so they exclude nothing ([#8](https://github.com/inline0/tailwindphp/issues/8)). [What the CLI scans](/docs/cli#what-the-cli-scans) has the details and a layout that works today.
 
 ## Inline candidates
 
@@ -106,4 +89,4 @@ Inline patterns expand brace groups, so you can enumerate many candidates compac
 @source ./src;
 ```
 
-See the [CLI](/docs/cli) for running source-driven builds, and [Imports](/docs/usage/imports) for resolving `@import` and virtual modules.
+See the [CLI](/docs/cli) for file-based builds, and [Imports](/docs/usage/imports) for resolving `@import` and virtual modules.

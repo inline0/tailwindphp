@@ -1,4 +1,4 @@
 {
   "title": "Advanced",
-  "pages": ["index", "architecture", "caching", "performance"]
+  "pages": ["index", "architecture", "caching", "performance", "compatibility"]
 }

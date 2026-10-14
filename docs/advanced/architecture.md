@@ -117,8 +117,9 @@ Confirmed transforms include:
 
 | Transform | What it does |
 |-----------|--------------|
-| Nesting flattening | Resolves `&` selectors and flattens nested rules to top-level selectors (`transformNesting`) |
-| `@media` hoisting | Moves nested media queries up to the top level (`transformNesting`, `mergeAtRules`) |
+| Nesting flattening | Resolves `&` selectors with the reference's `:is(…)` rules and flattens nested rules (`handleNesting()` in `ast.php`, a port of the TailwindCSS pass); `transformNesting` downlevels the nesting that remains below the first declaration-carrying level |
+| Conditional at-rule flattening | Flattens nested `@media`, `@supports`, `@container`, and `@starting-style` in place, preserving source order, and merges only directly adjacent siblings with identical conditions |
+| Declaration ordering | Reorders declarations per lightningcss's declaration-handler chain, so properties come out in the reference order (`reorderDeclarations`) |
 | `calc()` simplification | Simplifies `calc()` expressions (`simplifyCalcExpressions`) |
 | Leading-zero removal | `0.5` → `.5` (`normalizeLeadingZeros`) |
 | Transform-function spacing | Normalizes spacing inside transform functions (`normalizeTransformFunctions`) |

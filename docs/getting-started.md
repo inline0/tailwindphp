@@ -15,7 +15,7 @@ meta_description: "Install TailwindPHP with Composer and generate your first Tai
 composer require tailwindphp/tailwindphp
 ```
 
-TailwindPHP needs PHP 8.2 or later and Composer. There is no Node.js dependency, no build step, and no npm in your Docker image or CI. Just `composer require` and call the API.
+TailwindPHP needs PHP 8.2 or later with the `ctype` and `mbstring` extensions, and Composer. Both extensions ship with most PHP builds and official Docker images; `composer.json` does not list them yet ([#11](https://github.com/inline0/tailwindphp/issues/11)), so a build without them installs the package and fails at runtime. There is no Node.js dependency, no build step, and no npm in your Docker image or CI. Just `composer require` and call the API.
 
 ## Generate your first CSS
 
@@ -86,7 +86,7 @@ file_put_contents('dist/styles.css', tw::generate([
 ]));
 ```
 
-For file-based builds, content scanning via `@source`, and watch mode, use the [CLI](/docs/cli) instead — it is a 1:1 port of `@tailwindcss/cli`.
+For file-based builds that scan a template directory, and for watch mode, use the [CLI](/docs/cli) instead. It takes the `@tailwindcss/cli` build options, but its content scanning differs from Tailwind's today; the CLI page lists what it scans.
 
 ## Minify for production
 

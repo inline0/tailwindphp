@@ -59,12 +59,12 @@ class MyCustomPlugin implements PluginInterface
             ],
         ]);
 
-        // Functional utilities (generates .tab-1, .tab-2, .tab-4, .tab-8)
+        // Functional utilities (generates .gutter-sm, .gutter-md, .gutter-lg)
         $api->matchUtilities(
             [
-                'tab' => fn ($value) => ['tab-size' => $value],
+                'gutter' => fn ($value) => ['padding-inline' => $value],
             ],
-            ['values' => ['1' => '1', '2' => '2', '4' => '4', '8' => '8']]
+            ['values' => ['sm' => '1rem', 'md' => '2rem', 'lg' => '3rem']]
         );
 
         // Component classes (sorted into the components layer)
@@ -76,7 +76,7 @@ class MyCustomPlugin implements PluginInterface
             ],
         ]);
 
-        // Custom variant
+        // Custom variant (see the note below the API reference)
         $api->addVariant('hocus', '&:hover, &:focus');
 
         // Read a theme value
@@ -109,6 +109,10 @@ The API mirrors the TailwindCSS plugin API:
 
 The callback passed to `matchUtilities`, `matchComponents`, and `matchVariant` receives the value and a second argument array containing a `modifier` key.
 
+Pick utility names that core Tailwind does not already use. When a plugin utility shares a name with a core one (for example `tab-*`, which core Tailwind uses for `tab-size` since v4.3), both declarations land in the same rule and the core one comes last, so it wins: a plugin `tab-4` mapped to `7` still produces `tab-size: 4`.
+
+> **Known issue:** variants registered with `addVariant()`, and the per-value variants `matchVariant()` registers, are not applied in the current release. `hocus:flex` from the example above compiles to `.hocus\:flex { display: flex; }` with no `:hover`/`:focus` selector ([#10](https://github.com/inline0/tailwindphp/issues/10)). Until that is fixed, define the variant in CSS with [`@custom-variant`](/docs/usage/directives#custom-variant), which works: `@custom-variant hocus (&:hover, &:focus);`.
+
 ## Registering and using
 
 Register the plugin instance, then reference it by the name from `getName()`:
@@ -120,7 +124,7 @@ use function TailwindPHP\registerPlugin;
 registerPlugin(new MyCustomPlugin());
 
 $css = tw::generate(
-    '<div class="btn btn-primary card tab-4">…</div>',
+    '<div class="btn btn-primary card gutter-md">…</div>',
     '@plugin "my-custom-plugin"; @import "tailwindcss/utilities.css";'
 );
 ```
