@@ -71,6 +71,10 @@ test('supports Tailwind CSS v4.0 features', () => {
     )
     expect(twMerge('bg-linear-to-r bg-linear-45')).toBe('bg-linear-45')
     expect(twMerge('bg-linear-to-r bg-radial-[something] bg-conic-10')).toBe('bg-conic-10')
+    expect(twMerge('bg-conic bg-conic-10')).toBe('bg-conic-10')
+    expect(twMerge('bg-conic-10 bg-conic')).toBe('bg-conic')
+    expect(twMerge('bg-radial bg-conic/decreasing')).toBe('bg-conic/decreasing')
+    expect(twMerge('bg-red-500 bg-conic')).toBe('bg-red-500 bg-conic')
     expect(twMerge('ring-4 ring-orange inset-ring inset-ring-3 inset-ring-blue')).toBe(
         'ring-4 ring-orange inset-ring-3 inset-ring-blue',
     )
@@ -86,6 +90,10 @@ test('supports Tailwind CSS v4.0 features', () => {
     expect(twMerge('via-red-500 via-(length:--mobile-header-gradient)')).toBe(
         'via-red-500 via-(length:--mobile-header-gradient)',
     )
+    // shadow-inner is deprecated in v4 but still sets --tw-shadow, so it conflicts with other shadow utilities and not with shadow color utilities
+    expect(twMerge('shadow-inner shadow-lg')).toBe('shadow-lg')
+    expect(twMerge('shadow-lg shadow-inner')).toBe('shadow-inner')
+    expect(twMerge('shadow-initial shadow-inner')).toBe('shadow-initial shadow-inner')
 })
 
 test('supports Tailwind CSS v4.1 features', () => {
@@ -166,4 +174,216 @@ test('supports Tailwind CSS v4.1.5 features', () => {
     expect(twMerge('h-12 h-lh')).toBe('h-lh')
     expect(twMerge('min-h-12 min-h-lh')).toBe('min-h-lh')
     expect(twMerge('max-h-12 max-h-lh')).toBe('max-h-lh')
+})
+
+test('supports Tailwind CSS v4.2 features', () => {
+    // Logical inset utilities
+
+    expect(twMerge('inset-s-1 inset-s-2')).toBe('inset-s-2')
+    expect(twMerge('inset-e-1 inset-e-2')).toBe('inset-e-2')
+    expect(twMerge('inset-bs-1 inset-bs-2')).toBe('inset-bs-2')
+    expect(twMerge('inset-be-1 inset-be-2')).toBe('inset-be-2')
+
+    expect(twMerge('start-1 inset-s-2')).toBe('inset-s-2')
+    expect(twMerge('inset-s-1 start-2')).toBe('start-2')
+    expect(twMerge('end-1 inset-e-2')).toBe('inset-e-2')
+    expect(twMerge('inset-e-1 end-2')).toBe('end-2')
+
+    expect(twMerge('inset-s-1 inset-e-2 inset-bs-3 inset-be-4 inset-0')).toBe('inset-0')
+    expect(twMerge('inset-0 inset-s-1 inset-bs-1')).toBe('inset-0 inset-s-1 inset-bs-1')
+
+    expect(twMerge('inset-y-1 inset-bs-2 inset-be-3')).toBe('inset-y-1 inset-bs-2 inset-be-3')
+    expect(twMerge('top-1 inset-bs-2 bottom-3 inset-be-4')).toBe(
+        'top-1 inset-bs-2 bottom-3 inset-be-4',
+    )
+
+    // Logical spacing utilities
+
+    expect(twMerge('pbs-1 pbs-2')).toBe('pbs-2')
+    expect(twMerge('pbe-1 pbe-2')).toBe('pbe-2')
+    expect(twMerge('mbs-1 mbs-2')).toBe('mbs-2')
+    expect(twMerge('mbe-1 mbe-2')).toBe('mbe-2')
+
+    expect(twMerge('pt-1 pbs-2')).toBe('pt-1 pbs-2')
+    expect(twMerge('pb-1 pbe-2')).toBe('pb-1 pbe-2')
+    expect(twMerge('mt-1 mbs-2')).toBe('mt-1 mbs-2')
+    expect(twMerge('mb-1 mbe-2')).toBe('mb-1 mbe-2')
+
+    expect(twMerge('p-0 pbs-1 pbe-1')).toBe('p-0 pbs-1 pbe-1')
+    expect(twMerge('pbs-1 pbe-1 p-0')).toBe('p-0')
+    expect(twMerge('m-0 mbs-1 mbe-1')).toBe('m-0 mbs-1 mbe-1')
+    expect(twMerge('mbs-1 mbe-1 m-0')).toBe('m-0')
+
+    expect(twMerge('py-1 pbs-2 pbe-3')).toBe('py-1 pbs-2 pbe-3')
+    expect(twMerge('my-1 mbs-2 mbe-3')).toBe('my-1 mbs-2 mbe-3')
+
+    // Logical scroll spacing utilities
+
+    expect(twMerge('scroll-pbs-1 scroll-pbs-2')).toBe('scroll-pbs-2')
+    expect(twMerge('scroll-pbe-1 scroll-pbe-2')).toBe('scroll-pbe-2')
+    expect(twMerge('scroll-mbs-1 scroll-mbs-2')).toBe('scroll-mbs-2')
+    expect(twMerge('scroll-mbe-1 scroll-mbe-2')).toBe('scroll-mbe-2')
+
+    expect(twMerge('scroll-pt-1 scroll-pbs-2')).toBe('scroll-pt-1 scroll-pbs-2')
+    expect(twMerge('scroll-pb-1 scroll-pbe-2')).toBe('scroll-pb-1 scroll-pbe-2')
+    expect(twMerge('scroll-mt-1 scroll-mbs-2')).toBe('scroll-mt-1 scroll-mbs-2')
+    expect(twMerge('scroll-mb-1 scroll-mbe-2')).toBe('scroll-mb-1 scroll-mbe-2')
+
+    expect(twMerge('scroll-p-0 scroll-pbs-1 scroll-pbe-1')).toBe(
+        'scroll-p-0 scroll-pbs-1 scroll-pbe-1',
+    )
+    expect(twMerge('scroll-pbs-1 scroll-pbe-1 scroll-p-0')).toBe('scroll-p-0')
+    expect(twMerge('scroll-m-0 scroll-mbs-1 scroll-mbe-1')).toBe(
+        'scroll-m-0 scroll-mbs-1 scroll-mbe-1',
+    )
+    expect(twMerge('scroll-mbs-1 scroll-mbe-1 scroll-m-0')).toBe('scroll-m-0')
+
+    expect(twMerge('scroll-py-1 scroll-pbs-2 scroll-pbe-3')).toBe(
+        'scroll-py-1 scroll-pbs-2 scroll-pbe-3',
+    )
+    expect(twMerge('scroll-my-1 scroll-mbs-2 scroll-mbe-3')).toBe(
+        'scroll-my-1 scroll-mbs-2 scroll-mbe-3',
+    )
+
+    // Logical border block utilities
+
+    expect(twMerge('border-bs-1 border-bs-2')).toBe('border-bs-2')
+    expect(twMerge('border-be-1 border-be-2')).toBe('border-be-2')
+    expect(twMerge('border-bs-red border-bs-blue')).toBe('border-bs-blue')
+    expect(twMerge('border-be-red border-be-blue')).toBe('border-be-blue')
+
+    expect(twMerge('border-2 border-bs-4 border-be-6')).toBe('border-2 border-bs-4 border-be-6')
+    expect(twMerge('border-bs-4 border-be-6 border-2')).toBe('border-2')
+    expect(twMerge('border-red border-bs-blue border-be-green')).toBe(
+        'border-red border-bs-blue border-be-green',
+    )
+    expect(twMerge('border-bs-blue border-be-green border-red')).toBe('border-red')
+
+    expect(twMerge('border-y-2 border-bs-4 border-be-6')).toBe('border-y-2 border-bs-4 border-be-6')
+    expect(twMerge('border-t-2 border-bs-4 border-b-6 border-be-8')).toBe(
+        'border-t-2 border-bs-4 border-b-6 border-be-8',
+    )
+    expect(twMerge('border-y-red border-bs-blue border-be-green')).toBe(
+        'border-y-red border-bs-blue border-be-green',
+    )
+
+    // Logical size utilities
+
+    expect(twMerge('inline-1/2 inline-3/4')).toBe('inline-3/4')
+    expect(twMerge('block-1/2 block-3/4')).toBe('block-3/4')
+    expect(twMerge('min-inline-auto min-inline-full')).toBe('min-inline-full')
+    expect(twMerge('max-inline-none max-inline-10')).toBe('max-inline-10')
+    expect(twMerge('min-block-auto min-block-lh min-block-10')).toBe('min-block-10')
+    expect(twMerge('max-block-none max-block-lh max-block-10')).toBe('max-block-10')
+    expect(twMerge('inline-2xl inline-3xl')).toBe('inline-3xl')
+    expect(twMerge('min-inline-xs min-inline-1/2')).toBe('min-inline-1/2')
+    expect(twMerge('max-inline-svw max-inline-xl')).toBe('max-inline-xl')
+
+    expect(twMerge('w-10 inline-20')).toBe('w-10 inline-20')
+    expect(twMerge('h-10 block-20')).toBe('h-10 block-20')
+    expect(twMerge('size-10 inline-20 block-30')).toBe('size-10 inline-20 block-30')
+    expect(twMerge('min-w-10 min-inline-20')).toBe('min-w-10 min-inline-20')
+    expect(twMerge('max-h-10 max-block-20')).toBe('max-h-10 max-block-20')
+
+    // Font feature settings utilities
+
+    expect(twMerge('font-features-["smcp"] font-features-["onum"]')).toBe('font-features-["onum"]')
+    expect(twMerge('font-features-[var(--font-features)] font-features-["liga","dlig"]')).toBe(
+        'font-features-["liga","dlig"]',
+    )
+    expect(twMerge('tabular-nums font-features-["smcp"]')).toBe(
+        'tabular-nums font-features-["smcp"]',
+    )
+    expect(twMerge('font-features-["smcp"] normal-nums')).toBe('font-features-["smcp"] normal-nums')
+    expect(twMerge('font-sans font-features-["smcp"]')).toBe('font-sans font-features-["smcp"]')
+
+    // Fractions with decimal numerator/denominator
+
+    expect(twMerge('aspect-8/11 aspect-8.5/11')).toBe('aspect-8.5/11')
+    expect(twMerge('w-8/11 w-8.5/11')).toBe('w-8.5/11')
+    expect(twMerge('inset-1/2 inset-1.25/2.5')).toBe('inset-1.25/2.5')
+})
+
+test('supports Tailwind CSS v4.3 scrollbar features', () => {
+    expect(twMerge('scrollbar-auto scrollbar-thin scrollbar-none')).toBe('scrollbar-none')
+    expect(twMerge('scrollbar-gutter-auto scrollbar-gutter-stable scrollbar-gutter-both')).toBe(
+        'scrollbar-gutter-both',
+    )
+
+    expect(twMerge('scrollbar-thumb-red-500 scrollbar-thumb-blue-500')).toBe(
+        'scrollbar-thumb-blue-500',
+    )
+    expect(twMerge('scrollbar-thumb-red-500 scrollbar-thumb-red-500/50')).toBe(
+        'scrollbar-thumb-red-500/50',
+    )
+    expect(twMerge('scrollbar-thumb-[#0088cc] scrollbar-thumb-(--thumb-color)')).toBe(
+        'scrollbar-thumb-(--thumb-color)',
+    )
+
+    expect(twMerge('scrollbar-track-red-500 scrollbar-track-blue-500')).toBe(
+        'scrollbar-track-blue-500',
+    )
+    expect(twMerge('scrollbar-track-red-500 scrollbar-track-[color:var(--track-color)]')).toBe(
+        'scrollbar-track-[color:var(--track-color)]',
+    )
+
+    expect(twMerge('scrollbar-thin scrollbar-thumb-red-500 scrollbar-track-blue-500')).toBe(
+        'scrollbar-thin scrollbar-thumb-red-500 scrollbar-track-blue-500',
+    )
+})
+
+test('supports Tailwind CSS v4.3 container query container features', () => {
+    expect(twMerge('@container @container-normal @container-size')).toBe('@container-size')
+    expect(twMerge('@container-[inline-size] @container-(--container-type)')).toBe(
+        '@container-(--container-type)',
+    )
+
+    expect(twMerge('@container @container-size/sidebar')).toBe('@container-size/sidebar')
+    expect(twMerge('@container-normal @container-size/sidebar')).toBe('@container-size/sidebar')
+    expect(twMerge('@container-size/sidebar @container')).toBe(
+        '@container-size/sidebar @container',
+    )
+    expect(twMerge('@container/sidebar @container-normal')).toBe(
+        '@container/sidebar @container-normal',
+    )
+
+    expect(twMerge('@container/sidebar @container-normal/sidebar @container-size/content')).toBe(
+        '@container-size/content',
+    )
+    expect(twMerge('@container/sidebar @container-normal/content @container-size')).toBe(
+        '@container-normal/content @container-size',
+    )
+    expect(twMerge('@container-size @container/sidebar')).toBe('@container/sidebar')
+
+    expect(twMerge('@container-size/[sidebar] @container-normal/(--container-name)')).toBe(
+        '@container-normal/(--container-name)',
+    )
+    expect(twMerge('hover:@container hover:@container-size/sidebar')).toBe(
+        'hover:@container-size/sidebar',
+    )
+    expect(twMerge('hover:@container-size/sidebar hover:@container')).toBe(
+        'hover:@container-size/sidebar hover:@container',
+    )
+    expect(twMerge('@container! @container-size/sidebar!')).toBe('@container-size/sidebar!')
+    expect(twMerge('@container-size/sidebar! @container!')).toBe(
+        '@container-size/sidebar! @container!',
+    )
+
+    expect(twMerge('@container-foo/sidebar @container-size/sidebar')).toBe(
+        '@container-foo/sidebar @container-size/sidebar',
+    )
+})
+
+test('supports Tailwind CSS v4.3 zoom features', () => {
+    expect(twMerge('zoom-50 zoom-100')).toBe('zoom-100')
+    expect(twMerge('zoom-100 zoom-[var(--zoom)]')).toBe('zoom-[var(--zoom)]')
+    expect(twMerge('zoom-[1.5] zoom-(--zoom)')).toBe('zoom-(--zoom)')
+    expect(twMerge('zoom-50 scale-125')).toBe('zoom-50 scale-125')
+})
+
+test('supports Tailwind CSS v4.3 tab-size features', () => {
+    expect(twMerge('tab-2 tab-8')).toBe('tab-8')
+    expect(twMerge('tab-8 tab-[12px]')).toBe('tab-[12px]')
+    expect(twMerge('tab-[3] tab-(--tab-size)')).toBe('tab-(--tab-size)')
+    expect(twMerge('tab-4 tabular-nums')).toBe('tab-4 tabular-nums')
 })

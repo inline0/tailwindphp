@@ -22,7 +22,9 @@ No Node.js, no FFI, and no native binaries are involved.
 
 ## Which TailwindCSS release is tracked
 
-Releases 1.7.x track **TailwindCSS v4.3.3**. The upstream repository is pinned as a git submodule in `reference/tailwindcss`, its test suites are extracted from that pinned checkout, and the full suite runs on every push (see [Performance & testing](/docs/advanced/performance)). The ported plugins follow `@tailwindcss/typography` and `@tailwindcss/forms`, and the class utilities follow clsx, tailwind-merge, and CVA, each pinned the same way.
+Releases 1.7.x and 1.8.x track **TailwindCSS v4.3.3**. The upstream repository is pinned as a git submodule in `reference/tailwindcss`, its test suites are extracted from that pinned checkout, and the full suite runs on every push (see [Performance & testing](/docs/advanced/performance)). The ported plugins follow `@tailwindcss/typography` and `@tailwindcss/forms`, and the class utilities follow clsx, tailwind-merge, and CVA, each pinned the same way.
+
+The 1.8.0 companion versions are tailwind-merge 3.7.0, clsx 2.1.1, CVA 0.7.1, @tailwindcss/typography 0.5.20, @tailwindcss/forms 0.5.11, and tw-animate-css 1.4.0. Class merging includes the Tailwind 4.3 utility groups, named containers, and logical-side conflicts. Forms base selectors now use `input:where([type=…])` and `select:where(…)`; this reduces attribute specificity and avoids resetting unrelated elements.
 
 ## Known differences from TailwindCSS
 

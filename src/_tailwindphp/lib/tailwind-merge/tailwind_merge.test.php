@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Port of: https://github.com/dcastil/tailwind-merge/tree/main/tests
+ * Port of: https://github.com/dcastil/tailwind-merge/tree/main/packages/tailwind-merge/tests
  *
  * These tests are auto-parsed from the extracted tailwind-merge test suite.
  * Total applicable tests: 67 (tests requiring custom config are skipped)

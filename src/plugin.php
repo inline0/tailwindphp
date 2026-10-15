@@ -109,6 +109,44 @@ class PluginAPI
         return $this->baseStyles;
     }
 
+    /** @return array<array<string, mixed>> */
+    public function getBaseAst(int $offset = 0): array
+    {
+        $nodes = [];
+        foreach (array_slice($this->baseStyles, $offset) as $styles) {
+            $nodes[] = \TailwindPHP\Ast\atRule('@layer', 'base', $this->cssToAst($styles));
+        }
+
+        return $nodes;
+    }
+
+    private function cssToAst(array $css): array
+    {
+        $nodes = [];
+        foreach ($css as $property => $value) {
+            if ($value === null || $value === false) {
+                continue;
+            }
+            if (is_array($value)) {
+                if (array_is_list($value)) {
+                    foreach ($value as $item) {
+                        if (is_array($item)) {
+                            $nodes[] = \TailwindPHP\Ast\rule((string) $property, $this->cssToAst($item));
+                        } else {
+                            $nodes[] = \TailwindPHP\Ast\decl($this->toKebabCase($property), (string) $item);
+                        }
+                    }
+                } else {
+                    $nodes[] = \TailwindPHP\Ast\rule((string) $property, $this->cssToAst($value));
+                }
+            } else {
+                $nodes[] = \TailwindPHP\Ast\decl($this->toKebabCase($property), (string) $value);
+            }
+        }
+
+        return $nodes;
+    }
+
     /**
      * Add static utility classes.
      */
@@ -308,7 +346,7 @@ class PluginAPI
             return (string) $str;
         }
 
-        return strtolower(preg_replace('/([A-Z])/', '-$1', $str));
+        return str_starts_with($str, '--') ? $str : strtolower(preg_replace('/([A-Z])/', '-$1', $str));
     }
 
     private function resolveThemePath(string $path, mixed $default): mixed

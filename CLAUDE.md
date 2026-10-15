@@ -781,10 +781,11 @@ Tests for companion libraries are extracted from their original JavaScript/TypeS
 - Converts JS truthiness semantics to PHP (empty arrays are truthy in JS)
 - Strips JS comments before parsing
 
-**tailwind-merge**: Tests extracted from `reference/tailwind-merge/tests/*.test.ts`
+**tailwind-merge**: Tests extracted from `reference/tailwind-merge/packages/tailwind-merge/tests/*.test.ts` (3.7.0)
 - Parser handles TypeScript test syntax (`test()`, `expect().toBe()`)
 - Processes escape sequences in string literals
 - Some tests N/A (require custom config, extendTailwindMerge)
+- `bun scripts/generate-tailwind-merge.mjs` regenerates the PHP default configuration and the upstream differential corpus; run it after updating the pinned reference. The generated corpus covers all class groups, cross-group conflicts, variants, important modifiers and validators.
 
 ---
 

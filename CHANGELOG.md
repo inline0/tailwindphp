@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.0] - 2026-10-15
+
+### Added
+
+- Class merging follows tailwind-merge 3.7.0, including Tailwind CSS 4.3 logical sizing, spacing, borders and corners, scrollbar utilities, named containers, decimal fractions, font-weight and family-name hints, and full-name slash lookups. Theme getters include their upstream `themeKey` metadata.
+- A reproducible configuration generator and differential corpus verify all 379 upstream class groups and their conflicts against the pinned JavaScript implementation, including variants, important modifiers, and validators.
+
+### Fixed
+
+- Class conflict resolution recognizes `columns-auto`, bare `bg-conic`, container-size names such as `inline-2xl`, `max-h-none`, deprecated `shadow-inner`, and logical-side overrides from axis shorthands. Color functions such as `color()` and `light-dark()` are no longer treated as arbitrary lengths.
+- Plugin `addBase()` styles are emitted in `@layer base`, including utilities-only imports and empty candidate builds. Plugins loaded through reference imports still register utilities while keeping base styles out of the output.
+- Forms plugin base styles match @tailwindcss/forms 0.5.11: selectors target the appropriate input or select element and place attribute matching inside `:where()`, preserving the upstream specificity.
+- Companion updates recognize the new `tailwind-merge@3.7.0` tag naming and monorepo test paths, and regenerate configuration and reference cases before testing.
+
+### Changed
+
+- Pin @tailwindcss/typography 0.5.20, whose runtime styles match the previous release. Tailwind CSS 4.3.3, clsx 2.1.1, CVA 0.7.1 and tw-animate-css 1.4.0 remain current.
+
 ## [1.7.1] - 2026-10-14
 
 ### Fixed

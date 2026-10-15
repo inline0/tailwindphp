@@ -1382,9 +1382,17 @@ function parseCssState(array &$ast, array $options = []): array
                 }
             }
 
+            $referenceMode = false;
+            foreach ($ctx->path() as $ancestor) {
+                if (($ancestor['kind'] ?? '') === 'context' && !empty($ancestor['context']['reference'])) {
+                    $referenceMode = true;
+                    break;
+                }
+            }
             $plugins[] = [
                 'name' => $pluginName,
                 'options' => $pluginOptions,
+                'reference' => $referenceMode,
             ];
 
             $features |= FEATURE_JS_PLUGIN_COMPAT;
@@ -1622,8 +1630,12 @@ function finalizeCssState(array &$ast, array $state, array $options = []): array
                 }
             }
 
-            // Execute the plugin
+            // Reference plugins still register utilities, but never emit base CSS.
+            $baseOffset = count($api->getBaseStyles());
             $pluginManager->execute($pluginName, $api, $pluginOptions);
+            if (empty($pluginRef['reference'])) {
+                $ast = array_merge($ast, $api->getBaseAst($baseOffset));
+            }
         }
     }
 

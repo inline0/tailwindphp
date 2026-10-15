@@ -25,7 +25,7 @@ $libs = [
     ],
     'tailwind-merge' => [
         'dir' => $rootDir . '/reference/tailwind-merge',
-        'tagPattern' => 'v*',
+        'tagPattern' => '*',
         'extractScript' => $rootDir . '/test-coverage/lib/extract-tailwind-merge-tests.php',
     ],
 ];
@@ -85,9 +85,23 @@ function getCurrentVersion(string $dir): array
 
 function getLatestTag(string $dir, string $pattern): string
 {
-    $result = run("git fetch --tags && git tag -l \"{$pattern}\" | sort -V | tail -1", $dir);
+    $fetched = run('git fetch --tags', $dir);
+    if ($fetched['code'] !== 0) {
+        throw new RuntimeException('Could not fetch library tags: ' . $fetched['error']);
+    }
 
-    return $result['output'] ?: '';
+    $result = run('git tag --list ' . escapeshellarg($pattern), $dir);
+    $latest = '';
+    $latestVersion = '0.0.0';
+    foreach (explode("\n", $result['output']) as $tag) {
+        if (preg_match('/^(?:v|tailwind-merge@)([0-9]+\.[0-9]+\.[0-9]+)$/', $tag, $match)
+            && version_compare($match[1], $latestVersion, '>')) {
+            $latest = $tag;
+            $latestVersion = $match[1];
+        }
+    }
+
+    return $latest;
 }
 
 // Parse arguments
@@ -203,6 +217,14 @@ foreach ($updates as $name => $info) {
     }
 
     echo color('  ✓ ', 'green') . "Checked out {$info['to']}\n";
+
+    if ($name === 'tailwind-merge') {
+        $generated = run('bun scripts/generate-tailwind-merge.mjs', $rootDir);
+        if ($generated['code'] !== 0) {
+            throw new RuntimeException('Could not regenerate tailwind-merge: ' . $generated['error']);
+        }
+        echo $generated['output'] . "\n";
+    }
 
     // Run extraction script
     if (file_exists($info['config']['extractScript'])) {

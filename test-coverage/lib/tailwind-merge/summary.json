@@ -1,11 +1,11 @@
 {
     "library": "tailwind-merge",
     "reference": "https:\/\/github.com\/dcastil\/tailwind-merge",
-    "extracted_at": "2025-12-04 10:39:29",
-    "total_files": 32,
-    "total_tests": 99,
-    "applicable_tests": 67,
-    "not_applicable_tests": 32,
+    "extracted_at": "2026-10-15 18:02:47",
+    "total_files": 34,
+    "total_tests": 120,
+    "applicable_tests": 79,
+    "not_applicable_tests": 41,
     "files": [
         {
             "file": "arbitrary-properties.test.ts",
@@ -23,8 +23,13 @@
             "applicable": true
         },
         {
-            "file": "class-group-conflicts.test.ts",
+            "file": "array-values.test.ts",
             "tests": 2,
+            "applicable": true
+        },
+        {
+            "file": "class-group-conflicts.test.ts",
+            "tests": 3,
             "applicable": false
         },
         {
@@ -34,12 +39,12 @@
         },
         {
             "file": "colors.test.ts",
-            "tests": 1,
+            "tests": 3,
             "applicable": false
         },
         {
             "file": "conflicts-across-class-groups.test.ts",
-            "tests": 4,
+            "tests": 5,
             "applicable": true
         },
         {
@@ -89,7 +94,7 @@
         },
         {
             "file": "modifiers.test.ts",
-            "tests": 4,
+            "tests": 5,
             "applicable": true
         },
         {
@@ -134,12 +139,12 @@
         },
         {
             "file": "tailwind-css-versions.test.ts",
-            "tests": 5,
+            "tests": 10,
             "applicable": false
         },
         {
             "file": "theme.test.ts",
-            "tests": 2,
+            "tests": 3,
             "applicable": false
         },
         {
@@ -158,8 +163,13 @@
             "applicable": false
         },
         {
+            "file": "unstable-do-not-import.test.ts",
+            "tests": 4,
+            "applicable": true
+        },
+        {
             "file": "validators.test.ts",
-            "tests": 21,
+            "tests": 25,
             "applicable": true
         },
         {

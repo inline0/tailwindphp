@@ -10,7 +10,10 @@
  */
 
 $baseDir = dirname(__DIR__, 2);
-$referenceDir = $baseDir . '/reference/tailwind-merge/tests';
+$referenceDir = $baseDir . '/reference/tailwind-merge/packages/tailwind-merge/tests';
+if (!is_dir($referenceDir)) {
+    throw new RuntimeException('Initialize the tailwind-merge reference before extracting tests.');
+}
 $outputDir = __DIR__ . '/tailwind-merge/tests';
 $summaryFile = __DIR__ . '/tailwind-merge/summary.json';
 
