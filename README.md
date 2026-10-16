@@ -102,7 +102,7 @@ The CLI honours `@source` file paths, directories, globs, and exclusions relativ
 
 ## Documentation
 
-Full documentation lives at [twphp.dev/docs](https://twphp.dev/docs/) (or in [`docs/`](./docs) if you're reading the repo).
+Full documentation lives at [tailwindphp.inline0.dev/docs](https://tailwindphp.inline0.dev/docs/) (or in [`docs/`](./docs) if you're reading the repo).
 
 - [Getting Started](./docs/getting-started.md) — install and generate your first stylesheet
 - [Usage](./docs/usage/) — content scanning, theme, directives, imports, and `@source`
