@@ -144,6 +144,22 @@ final class OpenIssueRegressionTest extends TestCase
     }
 
     #[Test]
+    public function itEmitsOnlyRingOffsetVariablesForRingOffsetUtilities(): void
+    {
+        $offsetShadow = 'var(--tw-ring-inset, ) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color)';
+        $css = tw::generate(
+            '<div class="ring-offset-2 ring-offset-[3px] ring-offset-red-500">',
+            '@import "tailwindcss/utilities.css";',
+        );
+        self::assertSame(
+            ".ring-offset-2 {\n  --tw-ring-offset-width: 2px;\n  --tw-ring-offset-shadow: {$offsetShadow};\n}\n"
+            . ".ring-offset-\\[3px\\] {\n  --tw-ring-offset-width: 3px;\n  --tw-ring-offset-shadow: {$offsetShadow};\n}\n"
+            . ".ring-offset-red-500 {\n  --tw-ring-offset-color: var(--color-red-500);\n}\n",
+            $css,
+        );
+    }
+
+    #[Test]
     public function itSuppressesReferenceVirtualModulesWhileKeepingApplyAvailable(): void
     {
         $css = tw::generate(
