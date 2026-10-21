@@ -260,6 +260,18 @@ final class OpenIssueRegressionTest extends TestCase
         }
     }
 
+    #[Test]
+    public function itResolvesBareRoundedFromTheInlinedDefaultRadius(): void
+    {
+        self::assertSame(['border-radius' => '0.25rem'], tw::properties('rounded'));
+        self::assertSame([
+            'border-top-left-radius' => '0.25rem',
+            'border-top-right-radius' => '0.25rem',
+        ], tw::properties('rounded-t'));
+        self::assertSame(['border-radius' => 'var(--radius-md)'], tw::properties('rounded-md'));
+        self::assertStringNotContainsString('var(--radius)', tw::generate('<div class="rounded rounded-t">'));
+    }
+
     private function waitForContents(string $path, string $expected, int $occurrences = 1): void
     {
         $deadline = microtime(true) + 5;
