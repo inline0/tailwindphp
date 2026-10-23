@@ -21,6 +21,7 @@ pint.json export-ignore
 # Documentation (keep README.md and LICENSE)
 /docs export-ignore
 ARCHITECTURE.md export-ignore
+AGENTS.md export-ignore
 CLAUDE.md export-ignore
 
 # Git files

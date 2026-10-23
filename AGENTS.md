@@ -2,9 +2,15 @@
 
 A **1:1 port of TailwindCSS 4.x to PHP**. See [README.md](README.md) for scope and features.
 
+## Agent instructions
+
+Keep agent instructions in `AGENTS.md` only. Use nested `AGENTS.md` files when
+guidance needs a narrower scope. Do not add `CLAUDE.md` files, symlinks, or
+forwarding stubs for repository guidance.
+
 ## Releases
 
-Follow the [shared release rule](https://github.com/inline0/_cp/blob/main/CLAUDE.md#canonical-github-releases).
+Follow the [shared release rule](https://github.com/inline0/_cp/blob/main/AGENTS.md#canonical-github-releases).
 Titles are exactly the tag. Bodies contain only the linked `CHANGELOG.md`
 sentence with that tag. Keep complete notes in `CHANGELOG.md` before publishing.
 `.github/workflows/release-format.yml` enforces this format; keep it identical
@@ -423,7 +429,7 @@ tailwindphp/
 │   ├── update-tailwind.php     # Update TailwindCSS reference + copy CSS files
 │   └── update-libs.php         # Update companion library references
 │
-└── CLAUDE.md                   # This file
+└── AGENTS.md                   # This file
 ```
 
 ---
