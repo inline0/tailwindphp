@@ -134,12 +134,6 @@ function registerBackgroundUtilities(UtilityBuilder $builder): void
     $builder->staticUtility('bg-bottom-left', [['background-position', '0 100%']]);
     $builder->staticUtility('bg-bottom-right', [['background-position', '100% 100%']]);
 
-    // Legacy corner positions (v4.0 and earlier)
-    $builder->staticUtility('bg-left-top', [['background-position', '0 0']]);
-    $builder->staticUtility('bg-left-bottom', [['background-position', '0 100%']]);
-    $builder->staticUtility('bg-right-top', [['background-position', '100% 0']]);
-    $builder->staticUtility('bg-right-bottom', [['background-position', '100% 100%']]);
-
     // bg-position-[value] arbitrary utility
     $builder->functionalUtility('bg-position', [
         'themeKeys' => [],

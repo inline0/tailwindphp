@@ -4809,7 +4809,7 @@ class Tailwind
         }
 
         // Inset
-        foreach (['inset', 'inset-x', 'inset-y', 'top', 'right', 'bottom', 'left', 'start', 'end'] as $prefix) {
+        foreach (['inset', 'inset-x', 'inset-y', 'top', 'right', 'bottom', 'left', 'inset-s', 'inset-e'] as $prefix) {
             foreach (['0', 'px', '0.5', '1', '2', '3', '4', '5', '6', '8', '10', '12', '16', '20', 'auto', 'full', '1/2'] as $val) {
                 $candidates[] = "$prefix-$val";
             }

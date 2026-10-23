@@ -442,7 +442,6 @@ function registerTypographyUtilities(UtilityBuilder $builder): void
 
     // Word Break
     $builder->staticUtility('break-normal', [['overflow-wrap', 'normal'], ['word-break', 'normal']]);
-    $builder->staticUtility('break-words', [['overflow-wrap', 'break-word']]);
     $builder->staticUtility('break-all', [['word-break', 'break-all']]);
     $builder->staticUtility('break-keep', [['word-break', 'keep-all']]);
 

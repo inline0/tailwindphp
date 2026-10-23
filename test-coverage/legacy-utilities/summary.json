@@ -1,0 +1,22 @@
+{
+    "sourceFile": "tailwindcss\/packages\/tailwindcss\/src\/compat\/legacy-utilities.test.ts",
+    "sourceLines": 399,
+    "totalTests": 8,
+    "categories": {
+        "legacy": {
+            "tests": 8,
+            "lines": 386,
+            "files": 1,
+            "testNames": [
+                "bg-gradient-*",
+                "max-w-screen",
+                "box-decoration",
+                "overflow-ellipsis",
+                "flex-grow",
+                "flex-shrink",
+                "start",
+                "end"
+            ]
+        }
+    }
+}
