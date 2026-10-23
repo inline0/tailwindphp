@@ -608,7 +608,7 @@ function registerEffectsUtilities(UtilityBuilder $builder): void
     // ring-offset utility
     $ringOffsetShadowValue = 'var(--tw-ring-inset,) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color)';
 
-    $builder->getUtilities()->functional('ring-offset', function ($candidate) use ($theme, $boxShadowProperties, $cssBoxShadowValue, $ringOffsetShadowValue) {
+    $builder->getUtilities()->functional('ring-offset', function ($candidate) use ($theme, $ringOffsetShadowValue) {
         $candidateValue = $candidate['value'] ?? null;
         $modifier = $candidate['modifier'] ?? null;
 
@@ -628,10 +628,8 @@ function registerEffectsUtilities(UtilityBuilder $builder): void
                 }
 
                 return [
-                    $boxShadowProperties(),
                     decl('--tw-ring-offset-width', $value),
                     decl('--tw-ring-offset-shadow', $ringOffsetShadowValue),
-                    decl('box-shadow', $cssBoxShadowValue),
                 ];
             }
 
@@ -646,32 +644,26 @@ function registerEffectsUtilities(UtilityBuilder $builder): void
 
         $namedValue = $candidateValue['value'] ?? null;
 
-        // ring-offset-inset
-        if ($namedValue === 'inset') {
-            return [decl('--tw-ring-inset', 'inset')];
-        }
-
-        // Offset color
-        $colorValue = resolveThemeColor($candidate, $theme, ['--ring-offset-color', '--color']);
-        if ($colorValue !== null) {
-            return [decl('--tw-ring-offset-color', $colorValue)];
-        }
-
-        // Offset width
-        if ($modifier !== null) {
-            return null;
-        }
+        // `--tw-ring-offset-width` property
         $widthValue = $theme->resolve($namedValue, ['--ring-offset-width']);
         if ($widthValue === null && isPositiveInteger($namedValue)) {
             $widthValue = "{$namedValue}px";
         }
         if ($widthValue !== null) {
+            if ($modifier !== null) {
+                return null;
+            }
+
             return [
-                $boxShadowProperties(),
                 decl('--tw-ring-offset-width', $widthValue),
                 decl('--tw-ring-offset-shadow', $ringOffsetShadowValue),
-                decl('box-shadow', $cssBoxShadowValue),
             ];
+        }
+
+        // `--tw-ring-offset-color` property
+        $colorValue = resolveThemeColor($candidate, $theme, ['--ring-offset-color', '--color']);
+        if ($colorValue !== null) {
+            return [decl('--tw-ring-offset-color', $colorValue)];
         }
 
         return null;
