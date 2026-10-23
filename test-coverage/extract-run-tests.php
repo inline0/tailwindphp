@@ -88,6 +88,12 @@ $testConfigs = [
             'gradient' => ['from', 'via', 'to'],
         ],
     ],
+    'legacy-utilities' => [
+        'inputFile' => 'compat/legacy-utilities.test.ts',
+        'outputDir' => $baseDir . '/test-coverage/legacy-utilities/tests',
+        // Single file; named so its test keys don't collide with utilities/tests/other.ts
+        'categoryPatterns' => ['legacy' => ['']],
+    ],
     'variants' => [
         'inputFile' => 'variants.test.ts',
         'outputDir' => $baseDir . '/test-coverage/variants/tests',

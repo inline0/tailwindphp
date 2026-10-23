@@ -10,6 +10,7 @@ use TailwindPHP\Candidate\DesignSystemInterface as CandidateDesignSystemInterfac
 
 use function TailwindPHP\Candidate\parseCandidate;
 use function TailwindPHP\Candidate\parseVariant;
+use function TailwindPHP\Compat\registerLegacyUtilities;
 use function TailwindPHP\Compile\compileAstNodes;
 use function TailwindPHP\Compile\compileCandidates;
 
@@ -298,7 +299,10 @@ function buildDesignSystem(Theme $theme): DesignSystem
     $utilities = createUtilities($theme);
     $variants = createVariants($theme);
 
-    return new DesignSystem($theme, $utilities, $variants);
+    $designSystem = new DesignSystem($theme, $utilities, $variants);
+    registerLegacyUtilities($designSystem);
+
+    return $designSystem;
 }
 
 /**

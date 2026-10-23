@@ -848,7 +848,7 @@ template second arguments, template-variable bindings, and the
 
 | Test File | Status | Tests |
 |-----------|--------|-------|
-| `utilities.test.php` | ✅ | 706 |
+| `utilities.test.php` | ✅ | 719 (incl. 13 from `compat/legacy-utilities.test.ts`) |
 | `variants.test.php` | ✅ | 164 |
 | `index.test.php` | ✅ | 148 (file-system/JS-runtime cases N/A) |
 | `css_functions.test.php` | ✅ | 64 (7 N/A for JS tooling) |
@@ -1105,7 +1105,7 @@ These PHP test files exist but contain no tests because the TypeScript originals
 | `sort.test.php` | `sort.test.ts` | IDE tooling - class sorting |
 | `to_key_path.test.php` | `to-key-path.test.ts` | Not needed |
 
-Other TypeScript test files not ported: `config.test.ts`, `resolve-config.test.ts`, `container-config.test.ts`, `screens-config.test.ts`, `flatten-color-palette.test.ts`, `apply-config-to-theme.test.ts`, `apply-keyframes-to-theme.test.ts`, `legacy-utilities.test.ts`, `source-map.test.ts`, `line-table.test.ts`, `translation-map.test.ts`.
+Other TypeScript test files not ported: `config.test.ts`, `resolve-config.test.ts`, `container-config.test.ts`, `screens-config.test.ts`, `flatten-color-palette.test.ts`, `apply-config-to-theme.test.ts`, `apply-keyframes-to-theme.test.ts`, `source-map.test.ts`, `line-table.test.ts`, `translation-map.test.ts`.
 
 ### Implemented Features
 
