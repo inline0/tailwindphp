@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add 54 reproducible utility cases captured directly from the pinned Tailwind CSS source, plus API, serialization, and CLI regression coverage. Existing upstream test expectations are unchanged.
 - Fetch and verify Tailwind CSS 4.3.3 remains the latest stable release; the reference remains pinned to that release.
 
+### Upgrade notes
+
+- Clear generated CSS caches after upgrading. Compiler state caches invalidate themselves.
+
 ## [1.8.0] - 2026-10-15
 
 ### Added

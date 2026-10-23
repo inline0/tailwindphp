@@ -2,6 +2,14 @@
 
 A **1:1 port of TailwindCSS 4.x to PHP**. See [README.md](README.md) for scope and features.
 
+## Releases
+
+Follow the [shared release rule](https://github.com/inline0/_cp/blob/main/CLAUDE.md#canonical-github-releases).
+Titles are exactly the tag. Bodies contain only the linked `CHANGELOG.md`
+sentence with that tag. Keep complete notes in `CHANGELOG.md` before publishing.
+`.github/workflows/release-format.yml` enforces this format; keep it identical
+to `_cp/scripts/release-format.yml`.
+
 ## Table of Contents
 
 - [Critical Rules for LLMs](#critical-rules-for-llms)
