@@ -72,7 +72,7 @@ The CLI resolves file sources relative to the input CSS file:
 - **With no positive file sources**, the CLI scans the working directory (`--cwd`) recursively and applies any exclusions. Automatic scanning skips `.git`, `vendor`, and `node_modules` directories. Explicit sources can include dependencies. `.gitignore` is not consulted.
 - **`@source inline("…")`** and **`@source not inline("…")`** add and remove candidates through the compiler.
 
-Directory and glob scans read `php`, `html`, `htm`, `twig`, `blade.php`, `vue`, `jsx`, `tsx`, `svelte`, `astro`, and `mdx` files. An explicit file path can name another extension. Class names are taken from `class` and `className` attributes, the same as [`tw::extractCandidates()`](/docs/api#twextractcandidates). For a class held only in a PHP or JavaScript string, use `@source inline("…")`.
+Directory and glob scans read `php`, `html`, `htm`, `twig`, `blade.php`, `vue`, `jsx`, `tsx`, `svelte`, `astro`, and `mdx` files. An explicit file path can name another extension. Class names are taken from `class` and `className` attributes and static `->class('…')` or `?->class('…')` method calls, the same as [`tw::extractCandidates()`](/docs/api#twextractcandidates). For other PHP or JavaScript strings, use `@source inline("…")`.
 
 ```css
 /* src/app.css: scans templates/, excluding templates/legacy/ */

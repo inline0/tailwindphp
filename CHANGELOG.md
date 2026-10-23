@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.1] - 2026-10-23
+
+### Fixed
+
+- Bare `rounded` utilities resolve the default radius instead of referencing an undefined variable. Ring-offset widths emit only their offset variables, with width taking precedence over a same-named color. ([#17](https://github.com/inline0/tailwindphp/pull/17), [#18](https://github.com/inline0/tailwindphp/pull/18), thanks @vovayatsyuk)
+- Arbitrary background, font, and stroke values select the correct CSS property, including URL backgrounds, background sizes and positions, font families, and stroke widths. Numeric outline and stroke widths serialize in pixels. ([#16](https://github.com/inline0/tailwindphp/issues/16))
+- Negative grid row/column starts and ends and negative linear-gradient angles compile correctly. Linear gradients preserve interpolation modifiers, conditional color-space support, and arbitrary-angle fallbacks.
+- Inset shadows prefix each complete shadow without inserting `inset` inside nested color or variable functions. CSS variable fallbacks retain Lightning CSS spacing.
+- Content extraction recognizes static `->class('…')` and `?->class('…')` arguments, including escaped quotes and arbitrary values, through the public API and CLI. Dynamic arguments and concatenations remain excluded. This adapts the contribution in [#1](https://github.com/inline0/tailwindphp/pull/1) to the current extractor (thanks @fiderosado).
+
+### Testing
+
+- Add 54 reproducible utility cases captured directly from the pinned Tailwind CSS source, plus API, serialization, and CLI regression coverage. Existing upstream test expectations are unchanged.
+- Fetch and verify Tailwind CSS 4.3.3 remains the latest stable release; the reference remains pinned to that release.
+
 ## [1.8.0] - 2026-10-15
 
 ### Added

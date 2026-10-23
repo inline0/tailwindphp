@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace TailwindPHP\LightningCss;
 
+use TailwindPHP\ValueParser;
+
 /**
  * CSS Optimizer - PHP implementation of lightningcss transformations.
  *
@@ -51,9 +53,13 @@ class LightningCss
         $value = self::normalizeColors($value, $isCustomProperty);
         $value = self::evaluateColorMix($value);  // Evaluate color-mix AFTER normalizeColors converts hex to named
         $value = self::normalizeOklabLightness($value);
-        // lightningcss serializes an empty var() fallback with a space after
-        // the comma: `var(--tw-blur,)` -> `var(--tw-blur, )`
-        $value = preg_replace('/var\((--[a-zA-Z0-9_-]+),\)/', 'var($1, )', $value);
+        // Lightning CSS parses nonzero unitless outline and SVG stroke widths as pixels.
+        if (in_array($property, ['outline-width', 'stroke-width'], true)
+            && preg_match('/^\+?(?:\d*\.)?\d+(?:e[+-]?\d+)?$/i', $value)
+            && (float) $value > 0) {
+            $value .= 'px';
+        }
+        $value = self::normalizeVarFallbackSpacing($value);
         $value = self::normalizeLeadingZeros($value);
         $value = self::normalizeGridValues($value, $property);
         $value = self::normalizeTransformFunctions($value, $property);
@@ -62,6 +68,39 @@ class LightningCss
         $value = self::normalizeAngleUnits($value, $isCustomProperty);
 
         return $value;
+    }
+
+    /**
+     * Format var() fallbacks without changing quoted strings or nested values.
+     */
+    public static function normalizeVarFallbackSpacing(string $value): string
+    {
+        if (!str_contains($value, 'var(') || !str_contains($value, ',')) {
+            return $value;
+        }
+
+        $nodes = ValueParser\parse($value);
+        $normalize = function (array &$nodes) use (&$normalize): void {
+            foreach ($nodes as &$node) {
+                if ($node['kind'] !== 'function') {
+                    continue;
+                }
+                if ($node['value'] === 'var') {
+                    foreach ($node['nodes'] as &$child) {
+                        if ($child['kind'] === 'separator' && str_contains($child['value'], ',')) {
+                            $child['value'] = preg_replace('/,\s*/', ', ', $child['value']);
+                            break;
+                        }
+                    }
+                    unset($child);
+                }
+                $normalize($node['nodes']);
+            }
+            unset($node);
+        };
+        $normalize($nodes);
+
+        return ValueParser\toCss($nodes);
     }
 
     /**

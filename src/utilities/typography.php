@@ -269,7 +269,7 @@ function registerTypographyUtilities(UtilityBuilder $builder): void
 
         if ($candidate['value']['kind'] === 'arbitrary') {
             $value = $candidate['value']['value'];
-            $dataType = $candidate['value']['dataType'] ?? null;
+            $dataType = $candidate['value']['dataType'] ?? inferDataType($value, ['number', 'generic-name', 'family-name']);
 
             // If data type indicates font family
             if ($dataType === 'generic-name' || $dataType === 'family-name') {

@@ -241,6 +241,7 @@ function registerFlexboxUtilities(UtilityBuilder $builder): void
 
     // Col Start/End
     $builder->functionalUtility('col-start', [
+        'supportsNegative' => true,
         'handleBareValue' => function ($value) {
             if (isPositiveInteger($value['value'])) {
                 return $value['value'];
@@ -258,6 +259,7 @@ function registerFlexboxUtilities(UtilityBuilder $builder): void
     ]);
 
     $builder->functionalUtility('col-end', [
+        'supportsNegative' => true,
         'handleBareValue' => function ($value) {
             if (isPositiveInteger($value['value'])) {
                 return $value['value'];
@@ -276,6 +278,7 @@ function registerFlexboxUtilities(UtilityBuilder $builder): void
 
     // Row Start/End
     $builder->functionalUtility('row-start', [
+        'supportsNegative' => true,
         'handleBareValue' => function ($value) {
             if (isPositiveInteger($value['value'])) {
                 return $value['value'];
@@ -293,6 +296,7 @@ function registerFlexboxUtilities(UtilityBuilder $builder): void
     ]);
 
     $builder->functionalUtility('row-end', [
+        'supportsNegative' => true,
         'handleBareValue' => function ($value) {
             if (isPositiveInteger($value['value'])) {
                 return $value['value'];

@@ -87,6 +87,7 @@ const VIRTUAL_MODULES = [
 // kept intact
 const REGEX_CLASS_ATTR = '/class\s*=\s*(["\'])(.*?)\1/s';
 const REGEX_CLASSNAME_ATTR = '/className\s*=\s*(["\'])(.*?)\1/s';
+const REGEX_CLASS_METHOD = '/(?:\?->|->)\s*class\s*\(\s*(["\'])((?:\\\\.|(?!\1)[^\\\\])*)\1\s*\)/s';
 const REGEX_WHITESPACE = '/\s+/';
 const REGEX_UNESCAPE = '/\\\\(.)/';
 
@@ -3493,6 +3494,20 @@ function extractCandidates(string $html): array
                     if ($class !== '') {
                         $candidates[] = $class;
                     }
+                }
+            }
+        }
+    }
+
+    // Only complete string arguments are static candidates; concatenations and
+    // dynamic expressions belong to the caller's explicit candidate extraction.
+    if (preg_match_all(REGEX_CLASS_METHOD, $html, $matches)) {
+        foreach ($matches[2] as $index => $classAttr) {
+            $quote = $matches[1][$index];
+            $classAttr = str_replace(['\\' . $quote, '\\\\'], [$quote, '\\'], $classAttr);
+            foreach (preg_split(REGEX_WHITESPACE, trim($classAttr)) as $class) {
+                if ($class !== '') {
+                    $candidates[] = $class;
                 }
             }
         }

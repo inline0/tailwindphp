@@ -10,6 +10,7 @@ use function TailwindPHP\Utils\inferDataType;
 use function TailwindPHP\Utils\isPositiveInteger;
 use function TailwindPHP\Utils\isValidOpacityValue;
 use function TailwindPHP\Utils\replaceShadowColors;
+use function TailwindPHP\Utils\segment;
 
 /**
  * Replace shadow colors with a CSS variable reference.
@@ -187,9 +188,9 @@ function registerEffectsUtilities(UtilityBuilder $builder): void
         // Apply prefix if needed (for inset shadows)
         if ($prefix !== '') {
             $parts = array_map(function ($part) use ($prefix) {
-                return $prefix . trim($part);
-            }, explode(',', $replacedValue));
-            $replacedValue = implode(',', $parts);
+                return trim($prefix) . ' ' . trim($part);
+            }, segment($replacedValue, ','));
+            $replacedValue = implode(', ', $parts);
         }
 
         return [decl($property, $replacedValue)];

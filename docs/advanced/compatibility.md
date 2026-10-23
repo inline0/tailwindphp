@@ -44,9 +44,15 @@ TailwindPHP is a CSS compiler. It leaves out the editor tooling of the Tailwind 
 
 ### Content scanning
 
-`tw::generate()` and `TailwindCompiler::generate()` read class names from `class` and `className` attributes only. For class names held in PHP or JavaScript strings, use [`tw::extractCandidatesFromStrings()`](/docs/api#twextractcandidatesfromstrings) or `@source inline("…")`. Path forms of `@source` are recorded by the API and resolved by the CLI; see [What the CLI scans](/docs/cli#what-the-cli-scans).
+`tw::generate()` and `TailwindCompiler::generate()` read class names from `class` and `className` attributes and static `->class('…')` or `?->class('…')` calls. Method arguments must be complete quoted strings; concatenations and dynamic expressions are not evaluated. For other PHP or JavaScript strings, use [`tw::extractCandidatesFromStrings()`](/docs/api#twextractcandidatesfromstrings) or `@source inline("…")`. Path forms of `@source` are recorded by the API and resolved by the CLI; see [What the CLI scans](/docs/cli#what-the-cli-scans).
 
 ## Upgrade notes
+
+### 1.8.1
+
+- Bare radii, ring offsets, arbitrary backgrounds/fonts/strokes, inset shadows, and negative grid and gradient values now match the pinned upstream behavior. Clear generated CSS caches after upgrading; compiler state caches invalidate themselves.
+- The API and CLI also scan static `->class('…')` method arguments. Existing attribute scanning continues to support nested quotes and HTML entities.
+- Tailwind CSS remains at 4.3.3, verified as the latest stable release when 1.8.1 was prepared.
 
 ### 1.7.1
 

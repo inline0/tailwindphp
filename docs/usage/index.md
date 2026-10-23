@@ -22,7 +22,7 @@ With no second argument, `generate()` uses a default `@import "tailwindcss"` (th
 
 ## Content scanning
 
-TailwindPHP finds class names by reading the `class` and `className` attributes in your content. To inspect what gets pulled out, use `tw::extractCandidates()`:
+TailwindPHP finds class names in `class` and `className` attributes and static `->class('…')` or `?->class('…')` method calls. To inspect what gets pulled out, use `tw::extractCandidates()`:
 
 ```php
 use TailwindPHP\tw;

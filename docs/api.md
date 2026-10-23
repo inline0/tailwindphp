@@ -180,7 +180,7 @@ tw::computedValue('gap-4');         // '1rem'
 public static function extractCandidates(string $html): array
 ```
 
-Extracts Tailwind class names from content (reads both `class` and `className` attributes). **Returns** `array<string>`.
+Extracts Tailwind class names from `class` and `className` attributes and static `->class('…')` or `?->class('…')` method calls. Method arguments must be complete quoted strings. **Returns** `array<string>`.
 
 ```php
 use TailwindPHP\tw;
