@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Generated from tailwind-merge 3.7.0 (MIT), packages/tailwind-merge/src/lib/default-config.ts.
- * Regenerate with: bun scripts/generate-tailwind-merge.mjs
+ * Regenerate with: node scripts/generate-tailwind-merge.ts
  *
  * @port-deviation:storage PHP arrays and callables preserve the upstream configuration.
  */

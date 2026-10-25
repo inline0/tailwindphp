@@ -6,12 +6,20 @@ on:
       - 'docs/**'
     paths:
       - 'docs/**'
-      - 'scripts/check-docs-content.mjs'
+      - 'scripts/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'tsconfig.json'
       - '.github/workflows/docs-content.yml'
   pull_request:
     paths:
       - 'docs/**'
-      - 'scripts/check-docs-content.mjs'
+      - 'scripts/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'tsconfig.json'
       - '.github/workflows/docs-content.yml'
 
 permissions:
@@ -24,6 +32,12 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: '26.12.0'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12.14.0
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test:scripts
       - name: Check portable documentation
-        run: node scripts/check-docs-content.mjs --root docs --expected-docs 20 --expected-nav 5
+        run: node scripts/check-docs-content.ts --root docs --expected-docs 20 --expected-nav 5

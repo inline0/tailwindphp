@@ -426,8 +426,8 @@ tailwindphp/
 │   └── cva/                    # Git submodule - CVA source
 │
 ├── scripts/
-│   ├── update-tailwind.php     # Update TailwindCSS reference + copy CSS files
-│   └── update-libs.php         # Update companion library references
+│   ├── update-tailwind.ts     # Update TailwindCSS reference + copy CSS files
+│   └── update-libs.ts         # Update companion library references
 │
 └── AGENTS.md                   # This file
 ```
@@ -457,7 +457,7 @@ tailwindphp/
 | `src/_tailwindphp/lib/cva/cva.php` | CVA (class variance authority) implementation |
 | `tests/ImportPathsTest.php` | Import paths feature tests |
 | `tests/TestHelper.php` | `TestHelper::run()` for tests |
-| `scripts/update-libs.php` | Update companion library references |
+| `scripts/update-libs.ts` | Update companion library references |
 
 ---
 
@@ -773,8 +773,8 @@ composer versions
 composer update-libs
 
 # Update specific library
-php scripts/update-libs.php clsx
-php scripts/update-libs.php tailwind-merge
+node scripts/update-libs.ts clsx
+node scripts/update-libs.ts tailwind-merge
 ```
 
 The update script will:
@@ -799,7 +799,7 @@ Tests for companion libraries are extracted from their original JavaScript/TypeS
 - Parser handles TypeScript test syntax (`test()`, `expect().toBe()`)
 - Processes escape sequences in string literals
 - Some tests N/A (require custom config, extendTailwindMerge)
-- `bun scripts/generate-tailwind-merge.mjs` regenerates the PHP default configuration and the upstream differential corpus; run it after updating the pinned reference. The generated corpus covers all class groups, cross-group conflicts, variants, important modifiers and validators.
+- `node scripts/generate-tailwind-merge.ts` regenerates the PHP default configuration and the upstream differential corpus; run it after updating the pinned reference. The generated corpus covers all class groups, cross-group conflicts, variants, important modifiers and validators.
 
 ---
 
@@ -1177,3 +1177,19 @@ Inline deviation:
 // @port-deviation: PHP regex syntax differs from JS
 $pattern = '/.../';
 ```
+
+## Development tooling
+
+Repository tooling uses Node.js 26.12+, pnpm 12.14 and Effect 4.0.5. Install
+with `pnpm install --frozen-lockfile`. Run `pnpm typecheck`, `pnpm test:scripts`
+and `pnpm docs:check` for the TypeScript gate. Scripts run directly as
+`node scripts/<name>.ts`; the shared runtime provides typed CLI failures,
+filesystem services and scoped subprocesses that close on interruption.
+These are development dependencies only; PHP consumers keep the same runtime
+requirements and Composer archives exclude the Node tooling.
+
+The upstream generators bundle the checked-out reference TypeScript into a
+scoped temporary module with esbuild, preserving const enums, extensionless
+imports and validator names without changing upstream files. Run
+`pnpm generate:merge` and `pnpm generate:utilities` after reference changes;
+`pnpm versions` inspects the checked-out versions without fetching.

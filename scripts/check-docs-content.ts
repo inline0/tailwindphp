@@ -1,46 +1,30 @@
 #!/usr/bin/env node
+import { basename, dirname, extname, join, normalize, relative, resolve, sep } from "node:path";
+import * as Cli from "effect/cli/Command";
+import * as Flag from "effect/cli/Flag";
+import * as Effect from "effect/Effect";
+import * as FileSystem from "effect/FileSystem";
+import { attempt, fail, main } from "./lib/cli.ts";
 
-import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
-import { basename, dirname, extname, join, normalize, relative, resolve, sep } from 'node:path';
-
-const args = process.argv.slice(2);
-const option = (name, fallback = '') => {
-	const index = args.indexOf(name);
-	return index >= 0 && typeof args[index + 1] === 'string' ? args[index + 1] : fallback;
-};
-
-const cwd = process.cwd();
-const configuredRoot = option('--root');
-const root = configuredRoot
-	? resolve(cwd, configuredRoot)
-	: resolve(cwd, 'docs');
-const expectedDocs = Number.parseInt(option('--expected-docs', '0'), 10) || 0;
-const expectedNav = Number.parseInt(option('--expected-nav', '0'), 10) || 0;
-
-if (!root || !existsSync(root)) {
-	console.error('Could not resolve a documentation content root.');
-	process.exit(1);
+export interface DocumentationInput {
+  readonly root: string;
+  readonly expectedDocs: number;
+  readonly expectedNav: number;
 }
-
-const normalizePath = (value) => value.split(sep).join('/');
-const walk = (directory) => {
-	const files = [];
-	for (const entry of readdirSync(directory, { withFileTypes: true })) {
-		const path = join(directory, entry.name);
-		if (entry.isDirectory()) {
-			files.push(...walk(path));
-		} else if (entry.isFile()) {
-			files.push(path);
-		}
-	}
-	return files;
-};
-
-const files = walk(root);
+export interface Snapshot {
+  readonly contents: ReadonlyMap<string, string>;
+  readonly directories: ReadonlySet<string>;
+}
+export const validateDocumentation = ({ root, expectedDocs, expectedNav }: DocumentationInput, snapshot: Snapshot) => {
+  const files = [...snapshot.contents.keys()];
+  const existsSync = (path: string) => snapshot.contents.has(path) || snapshot.directories.has(path);
+  const readFileSync = (path: string, _encoding: string) => snapshot.contents.get(path) ?? "";
+  const statSync = (path: string) => ({ isDirectory: () => snapshot.directories.has(path) });
+const normalizePath = (value: string) => value.split(sep).join('/');
 const markdownFiles = files.filter((file) => extname(file) === '.md').sort();
 const mdxFiles = files.filter((file) => extname(file) === '.mdx').sort();
 const metaFiles = files.filter((file) => basename(file) === 'meta.json').sort();
-const problems = [];
+const problems: string[] = [];
 
 if (mdxFiles.length > 0) {
 	for (const file of mdxFiles) {
@@ -55,7 +39,7 @@ if (expectedNav > 0 && metaFiles.length !== expectedNav) {
 	problems.push(`expected ${expectedNav} navigation files, found ${metaFiles.length}`);
 }
 
-const unquote = (value) => {
+const unquote = (value: string) => {
 	const trimmed = value.trim();
 	if (
 		(trimmed.startsWith('"') && trimmed.endsWith('"')) ||
@@ -70,7 +54,7 @@ const unquote = (value) => {
 	return trimmed;
 };
 
-const parseDocument = (file) => {
+const parseDocument = (file: string) => {
 	const source = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
 	const match = source.match(/^---\n([\s\S]*?)\n---\n?/);
 	if (!match) {
@@ -78,7 +62,7 @@ const parseDocument = (file) => {
 		return { source, body: source, data: {} };
 	}
 
-	const data = {};
+	const data: Record<string, string> = {};
 	for (const line of match[1].split('\n')) {
 		if (line.trim() === '' || line.trimStart().startsWith('#')) {
 			continue;
@@ -98,8 +82,8 @@ const parseDocument = (file) => {
 	return { source, body: source.slice(match[0].length), data };
 };
 
-const stripInlineCode = (line) => line.replace(/`[^`]*`/g, '');
-const inspectPortableBody = (file, body) => {
+const stripInlineCode = (line: string) => line.replace(/`[^`]*`/g, '');
+const inspectPortableBody = (file: string, body: string) => {
 	let fence = '';
 	const lines = body.split('\n');
 	for (let index = 0; index < lines.length; index += 1) {
@@ -181,7 +165,7 @@ const referencedDocuments = new Set();
 const visitedMeta = new Set();
 const separator = /^---.+---$/;
 
-const resolveDocumentEntry = (directory, entry, metaFile) => {
+const resolveDocumentEntry = (directory: string, entry: string, metaFile: string) => {
 	const markdown = join(directory, `${entry}.md`);
 	const indexMarkdown = join(directory, entry, 'index.md');
 	const childDirectory = join(directory, entry);
@@ -207,7 +191,7 @@ const resolveDocumentEntry = (directory, entry, metaFile) => {
 	problems.push(`${normalizePath(relative(root, metaFile))}: unresolved navigation entry ${JSON.stringify(entry)}`);
 };
 
-const validateMeta = (metaFile) => {
+const validateMeta = (metaFile: string) => {
 	const normalizedMeta = normalizePath(relative(root, metaFile));
 	if (visitedMeta.has(normalizedMeta)) {
 		return;
@@ -218,7 +202,7 @@ const validateMeta = (metaFile) => {
 	try {
 		data = JSON.parse(readFileSync(metaFile, 'utf8'));
 	} catch (error) {
-		problems.push(`${normalizedMeta}: invalid JSON (${error.message})`);
+		problems.push(`${normalizedMeta}: invalid JSON (${error instanceof Error ? error.message : String(error)})`);
 		return;
 	}
 
@@ -262,7 +246,7 @@ for (const file of markdownFiles) {
 	}
 }
 
-const resolveRelativeLink = (sourceFile, target) => {
+const resolveRelativeLink = (sourceFile: string, target: string) => {
 	const clean = target.split('#')[0].split('?')[0];
 	if (
 		clean === '' ||
@@ -289,18 +273,39 @@ for (const file of markdownFiles) {
 	}
 }
 
-if (problems.length > 0) {
-	console.error(`Documentation content check failed with ${problems.length} problem(s):`);
-	for (const problem of problems) {
-		console.error(`- ${problem}`);
-	}
-	process.exit(1);
-}
 
-console.log(JSON.stringify({
-	root: normalizePath(root),
-	documents: markdownFiles.length,
-	uniqueRoutes: routeOwners.size,
-	navigationFiles: metaFiles.length,
-	problems: 0,
-}));
+  return {
+    problems,
+    result: { root: normalizePath(root), documents: markdownFiles.length, uniqueRoutes: routeOwners.size, navigationFiles: metaFiles.length, problems: problems.length },
+  };
+};
+
+export const checkDocumentation = (input: DocumentationInput) => Effect.gen(function* () {
+  const fs = yield* FileSystem.FileSystem;
+  const root = resolve(input.root);
+  if (!(yield* fs.exists(root))) return yield* fail("Could not resolve a documentation content root.");
+  const contents = new Map<string, string>();
+  const directories = new Set<string>();
+  const walk = (directory: string): Effect.Effect<void, import("effect/PlatformError").PlatformError> => Effect.gen(function* () {
+    directories.add(directory);
+    for (const name of yield* fs.readDirectory(directory)) {
+      const path = join(directory, name);
+      const info = yield* fs.stat(path);
+      if (info.type === "Directory") yield* walk(path);
+      else if (info.type === "File") contents.set(path, yield* fs.readFileString(path));
+    }
+  });
+  yield* walk(root);
+  const report = yield* attempt(() => validateDocumentation({ ...input, root }, { contents, directories }));
+  if (report.problems.length > 0) {
+    return yield* fail(`Documentation content check failed with ${report.problems.length} problem(s):\n${report.problems.map((problem) => `- ${problem}`).join("\n")}`);
+  }
+  yield* Effect.sync(() => console.log(JSON.stringify(report.result)));
+  return report.result;
+});
+export const command = Cli.make("check-docs-content", {
+  root: Flag.String("root").pipe(Flag.withDefault("docs")),
+  expectedDocs: Flag.Int("expected-docs").pipe(Flag.withDefault(0)),
+  expectedNav: Flag.Int("expected-nav").pipe(Flag.withDefault(0)),
+}, checkDocumentation).pipe(Cli.withDescription("Validate portable Markdown, navigation, routes and relative links."));
+if (import.meta.main) main(command);

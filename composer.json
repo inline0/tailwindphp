@@ -136,13 +136,13 @@
             "@update-libs",
             "@update-plugins"
         ],
-        "update-tailwind": "php scripts/update-tailwind.php",
-        "update-libs": "php scripts/update-libs.php",
-        "update-plugins": "php scripts/update-plugins.php",
+        "update-tailwind": "node scripts/update-tailwind.ts",
+        "update-libs": "node scripts/update-libs.ts",
+        "update-plugins": "node scripts/update-plugins.ts",
         "versions": [
-            "php scripts/update-tailwind.php --check",
-            "php scripts/update-libs.php --check",
-            "php scripts/update-plugins.php --check"
+            "node scripts/update-tailwind.ts --check",
+            "node scripts/update-libs.ts --check",
+            "node scripts/update-plugins.ts --check"
         ],
         "bench": "php scripts/benchmark.php",
         "bench:save": "php scripts/benchmark.php --save",
