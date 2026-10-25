@@ -14,10 +14,11 @@ export interface DocumentationInput {
 export interface Snapshot {
   readonly contents: ReadonlyMap<string, string>;
   readonly directories: ReadonlySet<string>;
+  readonly linkedPaths?: ReadonlySet<string>;
 }
 export const validateDocumentation = ({ root, expectedDocs, expectedNav }: DocumentationInput, snapshot: Snapshot) => {
   const files = [...snapshot.contents.keys()];
-  const existsSync = (path: string) => snapshot.contents.has(path) || snapshot.directories.has(path);
+  const existsSync = (path: string) => snapshot.contents.has(path) || snapshot.directories.has(path) || snapshot.linkedPaths?.has(path) === true;
   const readFileSync = (path: string, _encoding: string) => snapshot.contents.get(path) ?? "";
   const statSync = (path: string) => ({ isDirectory: () => snapshot.directories.has(path) });
 const normalizePath = (value: string) => value.split(sep).join('/');
@@ -296,7 +297,20 @@ export const checkDocumentation = (input: DocumentationInput) => Effect.gen(func
     }
   });
   yield* walk(root);
-  const report = yield* attempt(() => validateDocumentation({ ...input, root }, { contents, directories }));
+  const linkedPaths = new Set<string>();
+  for (const [file, source] of contents) {
+    if (extname(file) !== ".md") continue;
+    for (const match of source.matchAll(/!?\[[^\]]*\]\(([^)\s]+)(?:\s+["'][^"']*["'])?\)/g)) {
+      const target = match[1]!.split("#")[0]!.split("?")[0]!;
+      if (!target || target.startsWith("/") || /^[a-z][a-z0-9+.-]*:/i.test(target)) continue;
+      const decoded = yield* attempt(() => decodeURIComponent(target));
+      const candidate = resolve(dirname(file), decoded);
+      for (const path of extname(candidate) ? [candidate] : [candidate, `${candidate}.md`, join(candidate, "index.md")]) {
+        if (yield* fs.exists(path)) linkedPaths.add(path);
+      }
+    }
+  }
+  const report = yield* attempt(() => validateDocumentation({ ...input, root }, { contents, directories, linkedPaths }));
   if (report.problems.length > 0) {
     return yield* fail(`Documentation content check failed with ${report.problems.length} problem(s):\n${report.problems.map((problem) => `- ${problem}`).join("\n")}`);
   }

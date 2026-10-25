@@ -47,3 +47,11 @@ test("CLI distinguishes help, usage and validation failures", async () => {
   assert.equal(missing.stdout, "");
   assert.match(missing.stderr, /Could not resolve/);
 });
+
+test("relative documentation links can resolve outside the content root", () => {
+  const root = "/fixture/docs";
+  const page = "---\ntitle: One\ndescription: One\npath: /one\norder: 0\nmeta_title: One\nmeta_description: One\n---\n[README](../README.md)\n";
+  const snapshot = { contents: new Map([[join(root, "one.md"), page], [join(root, "meta.json"), '{"pages":["one"]}']]), directories: new Set([root]), linkedPaths: new Set(["/fixture/README.md"]) };
+  const report = validateDocumentation({ root, expectedDocs: 1, expectedNav: 1 }, snapshot);
+  assert.deepEqual(report.problems, []);
+});
