@@ -30,6 +30,7 @@ CLAUDE.md export-ignore
 .gitmodules export-ignore
 
 # Node tooling is development-only.
+/.nvmrc export-ignore
 /package.json export-ignore
 /pnpm-lock.yaml export-ignore
 /pnpm-workspace.yaml export-ignore
