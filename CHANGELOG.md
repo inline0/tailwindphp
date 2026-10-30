@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.2] - 2026-10-30
+
+### Fixed
+
+- Register Tailwind CSS's upstream legacy utilities, including `bg-gradient-to-*`, `max-w-screen-*`, `overflow-ellipsis`, `decoration-slice`/`decoration-clone`, `flex-grow`/`flex-shrink`, and `start-*`/`end-*`. Legacy background/object position aliases, `order-none`, and `break-words` now share the upstream compatibility registration path. ([#20](https://github.com/inline0/tailwindphp/pull/20), fixes [#19](https://github.com/inline0/tailwindphp/issues/19), thanks @vovayatsyuk)
+- Map logical inset properties to the current `inset-s-*` and `inset-e-*` utility names in `tw::cssMap()`.
+
+### Testing
+
+- Include the 13 extracted upstream legacy test cases and 83 additional declaration comparisons captured from the pinned Tailwind CSS 4.3.3 source. The comparisons cover valid and invalid candidates, negative/fractional/arbitrary insets, gradients, flex factors, breakpoint sizes, and custom theme values. Existing upstream assertions remain unchanged.
+- Align the CLI version banner with 1.8.2. Development tooling and branding updates since 1.8.1 are included without adding Node dependencies to Composer consumers.
+
+### Upgrade notes
+
+- Clear generated CSS caches after upgrading. Compiler state caches invalidate themselves.
+- Legacy gradient aliases intentionally use the upstream `in oklab` declaration directly; modern `bg-linear-*` utilities retain their existing conditional fallbacks.
+
 ## [1.8.1] - 2026-10-23
 
 ### Fixed

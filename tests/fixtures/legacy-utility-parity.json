@@ -1,0 +1,549 @@
+{
+  "version": "4.3.3",
+  "commit": "c2b24dd15fed1c59dd521bd86082f520c9f5ad0d",
+  "cases": [
+    {
+      "candidate": "bg-gradient-to-t",
+      "css": "",
+      "properties": {
+        "--tw-gradient-position": "to top in oklab",
+        "background-image": "linear-gradient(var(--tw-gradient-stops))"
+      }
+    },
+    {
+      "candidate": "bg-gradient-to-tr",
+      "css": "",
+      "properties": {
+        "--tw-gradient-position": "to top right in oklab",
+        "background-image": "linear-gradient(var(--tw-gradient-stops))"
+      }
+    },
+    {
+      "candidate": "bg-gradient-to-r",
+      "css": "",
+      "properties": {
+        "--tw-gradient-position": "to right in oklab",
+        "background-image": "linear-gradient(var(--tw-gradient-stops))"
+      }
+    },
+    {
+      "candidate": "bg-gradient-to-br",
+      "css": "",
+      "properties": {
+        "--tw-gradient-position": "to bottom right in oklab",
+        "background-image": "linear-gradient(var(--tw-gradient-stops))"
+      }
+    },
+    {
+      "candidate": "bg-gradient-to-b",
+      "css": "",
+      "properties": {
+        "--tw-gradient-position": "to bottom in oklab",
+        "background-image": "linear-gradient(var(--tw-gradient-stops))"
+      }
+    },
+    {
+      "candidate": "bg-gradient-to-bl",
+      "css": "",
+      "properties": {
+        "--tw-gradient-position": "to bottom left in oklab",
+        "background-image": "linear-gradient(var(--tw-gradient-stops))"
+      }
+    },
+    {
+      "candidate": "bg-gradient-to-l",
+      "css": "",
+      "properties": {
+        "--tw-gradient-position": "to left in oklab",
+        "background-image": "linear-gradient(var(--tw-gradient-stops))"
+      }
+    },
+    {
+      "candidate": "bg-gradient-to-tl",
+      "css": "",
+      "properties": {
+        "--tw-gradient-position": "to top left in oklab",
+        "background-image": "linear-gradient(var(--tw-gradient-stops))"
+      }
+    },
+    {
+      "candidate": "bg-gradient-to-r/oklch",
+      "css": "",
+      "properties": {}
+    },
+    {
+      "candidate": "bg-gradient-to-x",
+      "css": "",
+      "properties": {}
+    },
+    {
+      "candidate": "max-w-screen-sm",
+      "css": "",
+      "properties": {
+        "max-width": "var(--breakpoint-sm)"
+      }
+    },
+    {
+      "candidate": "max-w-screen-md",
+      "css": "",
+      "properties": {
+        "max-width": "var(--breakpoint-md)"
+      }
+    },
+    {
+      "candidate": "max-w-screen-lg",
+      "css": "",
+      "properties": {
+        "max-width": "var(--breakpoint-lg)"
+      }
+    },
+    {
+      "candidate": "max-w-screen-xl",
+      "css": "",
+      "properties": {
+        "max-width": "var(--breakpoint-xl)"
+      }
+    },
+    {
+      "candidate": "max-w-screen-2xl",
+      "css": "",
+      "properties": {
+        "max-width": "var(--breakpoint-2xl)"
+      }
+    },
+    {
+      "candidate": "max-w-screen-missing",
+      "css": "",
+      "properties": {}
+    },
+    {
+      "candidate": "max-w-screen-[4px]",
+      "css": "",
+      "properties": {}
+    },
+    {
+      "candidate": "overflow-ellipsis",
+      "css": "",
+      "properties": {
+        "text-overflow": "ellipsis"
+      }
+    },
+    {
+      "candidate": "decoration-slice",
+      "css": "",
+      "properties": {
+        "-webkit-box-decoration-break": "slice",
+        "box-decoration-break": "slice"
+      }
+    },
+    {
+      "candidate": "decoration-clone",
+      "css": "",
+      "properties": {
+        "-webkit-box-decoration-break": "clone",
+        "box-decoration-break": "clone"
+      }
+    },
+    {
+      "candidate": "flex-grow",
+      "css": "",
+      "properties": {
+        "flex-grow": "1"
+      }
+    },
+    {
+      "candidate": "flex-grow-0",
+      "css": "",
+      "properties": {
+        "flex-grow": "0"
+      }
+    },
+    {
+      "candidate": "flex-grow-2",
+      "css": "",
+      "properties": {
+        "flex-grow": "2"
+      }
+    },
+    {
+      "candidate": "flex-grow-[1.5]",
+      "css": "",
+      "properties": {
+        "flex-grow": "1.5"
+      }
+    },
+    {
+      "candidate": "flex-grow-[var(--ratio)]",
+      "css": "",
+      "properties": {
+        "flex-grow": "var(--ratio)"
+      }
+    },
+    {
+      "candidate": "flex-grow-1/2",
+      "css": "",
+      "properties": {}
+    },
+    {
+      "candidate": "-flex-grow-1",
+      "css": "",
+      "properties": {}
+    },
+    {
+      "candidate": "flex-grow-missing",
+      "css": "",
+      "properties": {}
+    },
+    {
+      "candidate": "flex-shrink",
+      "css": "",
+      "properties": {
+        "flex-shrink": "1"
+      }
+    },
+    {
+      "candidate": "flex-shrink-0",
+      "css": "",
+      "properties": {
+        "flex-shrink": "0"
+      }
+    },
+    {
+      "candidate": "flex-shrink-2",
+      "css": "",
+      "properties": {
+        "flex-shrink": "2"
+      }
+    },
+    {
+      "candidate": "flex-shrink-[1.5]",
+      "css": "",
+      "properties": {
+        "flex-shrink": "1.5"
+      }
+    },
+    {
+      "candidate": "flex-shrink-[var(--ratio)]",
+      "css": "",
+      "properties": {
+        "flex-shrink": "var(--ratio)"
+      }
+    },
+    {
+      "candidate": "flex-shrink-1/2",
+      "css": "",
+      "properties": {}
+    },
+    {
+      "candidate": "-flex-shrink-1",
+      "css": "",
+      "properties": {}
+    },
+    {
+      "candidate": "flex-shrink-missing",
+      "css": "",
+      "properties": {}
+    },
+    {
+      "candidate": "start-auto",
+      "css": "",
+      "properties": {
+        "inset-inline-start": "auto"
+      }
+    },
+    {
+      "candidate": "-start-auto",
+      "css": "",
+      "properties": {}
+    },
+    {
+      "candidate": "start-full",
+      "css": "",
+      "properties": {
+        "inset-inline-start": "100%"
+      }
+    },
+    {
+      "candidate": "-start-full",
+      "css": "",
+      "properties": {
+        "inset-inline-start": "-100%"
+      }
+    },
+    {
+      "candidate": "start-px",
+      "css": "",
+      "properties": {
+        "inset-inline-start": "1px"
+      }
+    },
+    {
+      "candidate": "-start-px",
+      "css": "",
+      "properties": {
+        "inset-inline-start": "-1px"
+      }
+    },
+    {
+      "candidate": "start-0",
+      "css": "",
+      "properties": {
+        "inset-inline-start": "calc(var(--spacing) * 0)"
+      }
+    },
+    {
+      "candidate": "-start-0",
+      "css": "",
+      "properties": {
+        "inset-inline-start": "calc(var(--spacing) * -0)"
+      }
+    },
+    {
+      "candidate": "start-4",
+      "css": "",
+      "properties": {
+        "inset-inline-start": "calc(var(--spacing) * 4)"
+      }
+    },
+    {
+      "candidate": "-start-4",
+      "css": "",
+      "properties": {
+        "inset-inline-start": "calc(var(--spacing) * -4)"
+      }
+    },
+    {
+      "candidate": "start-1/2",
+      "css": "",
+      "properties": {
+        "inset-inline-start": "calc(1/2 * 100%)"
+      }
+    },
+    {
+      "candidate": "-start-1/2",
+      "css": "",
+      "properties": {
+        "inset-inline-start": "calc(calc(1/2 * 100%) * -1)"
+      }
+    },
+    {
+      "candidate": "start-[4px]",
+      "css": "",
+      "properties": {
+        "inset-inline-start": "4px"
+      }
+    },
+    {
+      "candidate": "-start-[4px]",
+      "css": "",
+      "properties": {
+        "inset-inline-start": "calc(4px * -1)"
+      }
+    },
+    {
+      "candidate": "start-[var(--inset)]",
+      "css": "",
+      "properties": {
+        "inset-inline-start": "var(--inset)"
+      }
+    },
+    {
+      "candidate": "-start-[var(--inset)]",
+      "css": "",
+      "properties": {
+        "inset-inline-start": "calc(var(--inset) * -1)"
+      }
+    },
+    {
+      "candidate": "start-missing",
+      "css": "",
+      "properties": {}
+    },
+    {
+      "candidate": "-start-missing",
+      "css": "",
+      "properties": {}
+    },
+    {
+      "candidate": "start-4/foo",
+      "css": "",
+      "properties": {}
+    },
+    {
+      "candidate": "-start-4/foo",
+      "css": "",
+      "properties": {}
+    },
+    {
+      "candidate": "start-[4px]/2",
+      "css": "",
+      "properties": {}
+    },
+    {
+      "candidate": "-start-[4px]/2",
+      "css": "",
+      "properties": {}
+    },
+    {
+      "candidate": "end-auto",
+      "css": "",
+      "properties": {
+        "inset-inline-end": "auto"
+      }
+    },
+    {
+      "candidate": "-end-auto",
+      "css": "",
+      "properties": {}
+    },
+    {
+      "candidate": "end-full",
+      "css": "",
+      "properties": {
+        "inset-inline-end": "100%"
+      }
+    },
+    {
+      "candidate": "-end-full",
+      "css": "",
+      "properties": {
+        "inset-inline-end": "-100%"
+      }
+    },
+    {
+      "candidate": "end-px",
+      "css": "",
+      "properties": {
+        "inset-inline-end": "1px"
+      }
+    },
+    {
+      "candidate": "-end-px",
+      "css": "",
+      "properties": {
+        "inset-inline-end": "-1px"
+      }
+    },
+    {
+      "candidate": "end-0",
+      "css": "",
+      "properties": {
+        "inset-inline-end": "calc(var(--spacing) * 0)"
+      }
+    },
+    {
+      "candidate": "-end-0",
+      "css": "",
+      "properties": {
+        "inset-inline-end": "calc(var(--spacing) * -0)"
+      }
+    },
+    {
+      "candidate": "end-4",
+      "css": "",
+      "properties": {
+        "inset-inline-end": "calc(var(--spacing) * 4)"
+      }
+    },
+    {
+      "candidate": "-end-4",
+      "css": "",
+      "properties": {
+        "inset-inline-end": "calc(var(--spacing) * -4)"
+      }
+    },
+    {
+      "candidate": "end-1/2",
+      "css": "",
+      "properties": {
+        "inset-inline-end": "calc(1/2 * 100%)"
+      }
+    },
+    {
+      "candidate": "-end-1/2",
+      "css": "",
+      "properties": {
+        "inset-inline-end": "calc(calc(1/2 * 100%) * -1)"
+      }
+    },
+    {
+      "candidate": "end-[4px]",
+      "css": "",
+      "properties": {
+        "inset-inline-end": "4px"
+      }
+    },
+    {
+      "candidate": "-end-[4px]",
+      "css": "",
+      "properties": {
+        "inset-inline-end": "calc(4px * -1)"
+      }
+    },
+    {
+      "candidate": "end-[var(--inset)]",
+      "css": "",
+      "properties": {
+        "inset-inline-end": "var(--inset)"
+      }
+    },
+    {
+      "candidate": "-end-[var(--inset)]",
+      "css": "",
+      "properties": {
+        "inset-inline-end": "calc(var(--inset) * -1)"
+      }
+    },
+    {
+      "candidate": "end-missing",
+      "css": "",
+      "properties": {}
+    },
+    {
+      "candidate": "-end-missing",
+      "css": "",
+      "properties": {}
+    },
+    {
+      "candidate": "end-4/foo",
+      "css": "",
+      "properties": {}
+    },
+    {
+      "candidate": "-end-4/foo",
+      "css": "",
+      "properties": {}
+    },
+    {
+      "candidate": "end-[4px]/2",
+      "css": "",
+      "properties": {}
+    },
+    {
+      "candidate": "-end-[4px]/2",
+      "css": "",
+      "properties": {}
+    },
+    {
+      "candidate": "max-w-screen-custom",
+      "css": "@theme { --breakpoint-custom: 90rem; }",
+      "properties": {
+        "max-width": "var(--breakpoint-custom)"
+      }
+    },
+    {
+      "candidate": "start-custom",
+      "css": "@theme { --inset-custom: 7px; }",
+      "properties": {
+        "inset-inline-start": "var(--inset-custom)"
+      }
+    },
+    {
+      "candidate": "-end-custom",
+      "css": "@theme { --inset-custom: 7px; }",
+      "properties": {
+        "inset-inline-end": "calc(var(--inset-custom) * -1)"
+      }
+    }
+  ]
+}

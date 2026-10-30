@@ -48,6 +48,16 @@ TailwindPHP is a CSS compiler. It leaves out the editor tooling of the Tailwind 
 
 ## Upgrade notes
 
+### 1.8.2
+
+Legacy utility aliases supported by the pinned upstream release now compile:
+`bg-gradient-to-*`, `max-w-screen-*`, `overflow-ellipsis`, `decoration-*`,
+`flex-grow`/`flex-shrink`, and logical `start-*`/`end-*` insets. The PHP
+`cssMap()` uses the current `inset-s-*` and `inset-e-*` names.
+Clear generated CSS caches after upgrading. The legacy gradient aliases emit
+`in oklab` directly, matching upstream; `bg-linear-*` keeps its existing
+conditional fallbacks. Tailwind CSS remains pinned to 4.3.3.
+
 ### 1.8.1
 
 - Bare radii, ring offsets, arbitrary backgrounds/fonts/strokes, inset shadows, and negative grid and gradient values now match the pinned upstream behavior. Clear generated CSS caches after upgrading; compiler state caches invalidate themselves.

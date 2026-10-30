@@ -13,7 +13,8 @@
     "docs:check": "node scripts/check-docs-content.ts",
     "generate:merge": "node scripts/generate-tailwind-merge.ts",
     "generate:utilities": "node scripts/generate-utility-parity.ts",
-    "versions": "node scripts/update-tailwind.ts --check && node scripts/update-libs.ts --check && node scripts/update-plugins.ts --check"
+    "versions": "node scripts/update-tailwind.ts --check && node scripts/update-libs.ts --check && node scripts/update-plugins.ts --check",
+    "generate:legacy": "node scripts/generate-legacy-parity.ts"
   },
   "devDependencies": {
     "@effect/platform-node": "4.0.5",
