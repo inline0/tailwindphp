@@ -71,6 +71,7 @@
             "src/utilities.php",
             "src/variants.php",
             "src/design-system.php",
+            "src/compat/legacy-utilities.php",
             "src/apply.php",
             "src/at-import.php",
             "src/css-functions.php",
@@ -99,6 +100,7 @@
     "scripts": {
         "extract": [
             "php test-coverage/extract-run-tests.php utilities",
+            "php test-coverage/extract-run-tests.php legacy-utilities",
             "php test-coverage/extract-run-tests.php variants",
             "php test-coverage/extract-index-tests.php",
             "php test-coverage/extract-css-functions-tests.php",
