@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.3] - 2026-11-02
+
+### Fixed
+
+- `has-*` and `not-*` variants serialize their inner selector the way Lightning CSS does in the reference pipeline. A lone `:is()` is unwrapped only when its argument is a single compound that does not start with a type or universal selector, so `has-[.foo]` and `has-[:focus]` still compile to `:has(.foo)` and `:has(:focus)` while `has-[img]`, `has-[input:checked]` and `not-[img]` keep `:has(:is(img))`, `:has(:is(input:checked))` and `:not(:is(img))`. Attribute values inside them are double-quoted (`has-[[data-slot=icon]]` compiles to `:has([data-slot="icon"])`). This covers `has-[…]`, `has-data-*`, `has-aria-*`, `group-has-*`, `peer-has-*` and `not-has-*`.
+- Class attribute scanning no longer keeps PHP or JavaScript string delimiters on candidates. In templates such as `class="<?php echo $wide ? 'lg:grid lg:p-12' : ''; ?>"`, leading quotes and trailing quotes, commas and semicolons are dropped, so `lg:grid` and `lg:p-12` are found instead of `'lg:grid` and `lg:p-12'`. Quotes inside arbitrary values (`content-['a']`, `bg-[url('/a.png')]`) are unchanged.
+
+### Testing
+
+- Add 85 variant cases captured from the pinned Tailwind CSS 4.3.3 source through Lightning CSS 1.32.0 with the reference optimizer's options (`pnpm run generate:variants`), comparing the complete generated CSS for `has-*`, `group-has-*`, `peer-has-*`, `not-has-*` and `not-*` variants. Lightning CSS is a development dependency only.
+- Add class attribute extraction regressions for PHP ternaries, function arguments, statement terminators, important modifiers and quoted arbitrary values.
+
+### Upgrade notes
+
+- Clear generated CSS caches after upgrading. Compiler state caches invalidate themselves.
+- Selectors produced by `has-[…]` and `not-[…]` with type selectors gain a `:is()` wrapper and attribute values gain quotes. Both forms match the same elements with the same specificity.
+- Templates that echo class names from PHP or JavaScript expressions inside a `class` attribute can produce utilities that were previously skipped or reported as unknown.
+
 ## [1.8.2] - 2026-10-30
 
 ### Fixed

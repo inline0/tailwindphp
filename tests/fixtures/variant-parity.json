@@ -1,0 +1,346 @@
+{
+  "version": "4.3.3",
+  "commit": "c2b24dd15fed1c59dd521bd86082f520c9f5ad0d",
+  "cases": [
+    {
+      "candidate": "has-checked:flex",
+      "css": ".has-checked\\:flex:has(:checked) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-hover:flex",
+      "css": "@media (hover: hover) {\n  .has-hover\\:flex:has(:hover) {\n    display: flex;\n  }\n}"
+    },
+    {
+      "candidate": "has-focus-visible:flex",
+      "css": ".has-focus-visible\\:flex:has(:focus-visible) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-disabled:flex",
+      "css": ".has-disabled\\:flex:has(:disabled) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-open:flex",
+      "css": ".has-open\\:flex:has(:is([open], :popover-open, :open)) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-placeholder-shown:flex",
+      "css": ".has-placeholder-shown\\:flex:has(:placeholder-shown) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-data-slot:flex",
+      "css": ".has-data-slot\\:flex:has([data-slot]) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-data-[slot=icon]:flex",
+      "css": ".has-data-\\[slot\\=icon\\]\\:flex:has([data-slot=\"icon\"]) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-data-[state=open]:flex",
+      "css": ".has-data-\\[state\\=open\\]\\:flex:has([data-state=\"open\"]) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-data-[slot='icon']:flex",
+      "css": ".has-data-\\[slot\\=\\'icon\\'\\]\\:flex:has([data-slot=\"icon\"]) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-data-[slot=icon_i]:flex",
+      "css": ".has-data-\\[slot\\=icon_i\\]\\:flex:has([data-slot=\"icon\" i]) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-aria-checked:flex",
+      "css": ".has-aria-checked\\:flex:has([aria-checked=\"true\"]) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-aria-invalid:flex",
+      "css": ".has-aria-invalid\\:flex:has([aria-invalid=\"true\"]) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-aria-[sort=ascending]:flex",
+      "css": ".has-aria-\\[sort\\=ascending\\]\\:flex:has([aria-sort=\"ascending\"]) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-aria-[expanded]:flex",
+      "css": ".has-aria-\\[expanded\\]\\:flex:has([aria-expanded]) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[img]:flex",
+      "css": ".has-\\[img\\]\\:flex:has(:is(img)) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[p]:flex",
+      "css": ".has-\\[p\\]\\:flex:has(:is(p)) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[button]:flex",
+      "css": ".has-\\[button\\]\\:flex:has(:is(button)) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[*]:flex",
+      "css": ".has-\\[\\*\\]\\:flex:has(:is(*)) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[img.foo]:flex",
+      "css": ".has-\\[img\\.foo\\]\\:flex:has(:is(img.foo)) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[img#a]:flex",
+      "css": ".has-\\[img\\#a\\]\\:flex:has(:is(img#a)) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[svg:hover]:flex",
+      "css": ".has-\\[svg\\:hover\\]\\:flex:has(:is(svg:hover)) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[input:checked]:flex",
+      "css": ".has-\\[input\\:checked\\]\\:flex:has(:is(input:checked)) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[li:nth-child(2)]:flex",
+      "css": ".has-\\[li\\:nth-child\\(2\\)\\]\\:flex:has(:is(li:nth-child(2))) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[.foo]:flex",
+      "css": ".has-\\[\\.foo\\]\\:flex:has(.foo) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[.a.b]:flex",
+      "css": ".has-\\[\\.a\\.b\\]\\:flex:has(.a.b) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[#a]:flex",
+      "css": ".has-\\[\\#a\\]\\:flex:has(#a) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[:focus]:flex",
+      "css": ".has-\\[\\:focus\\]\\:flex:has(:focus) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[:disabled]:flex",
+      "css": ".has-\\[\\:disabled\\]\\:flex:has(:disabled) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[:not(img)]:flex",
+      "css": ".has-\\[\\:not\\(img\\)\\]\\:flex:has(:not(img)) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[:not(.a)]:flex",
+      "css": ".has-\\[\\:not\\(\\.a\\)\\]\\:flex:has(:not(.a)) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[:not(img,svg)]:flex",
+      "css": ".has-\\[\\:not\\(img\\,svg\\)\\]\\:flex:has(:not(img, svg)) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[:is(img)]:flex",
+      "css": ".has-\\[\\:is\\(img\\)\\]\\:flex:has(:is(img)) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[:is(.a,.b)]:flex",
+      "css": ".has-\\[\\:is\\(\\.a\\,\\.b\\)\\]\\:flex:has(:is(.a, .b)) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[.a,.b]:flex",
+      "css": ".has-\\[\\.a\\,\\.b\\]\\:flex:has(:is(.a, .b)) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[img,svg]:flex",
+      "css": ".has-\\[img\\,svg\\]\\:flex:has(:is(img, svg)) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[img_span]:flex",
+      "css": ".has-\\[img_span\\]\\:flex:has(:is(img span)) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[&_img]:flex",
+      "css": ".has-\\[\\&_img\\]\\:flex:has(* img) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[&>img]:flex",
+      "css": ".has-\\[\\&\\>img\\]\\:flex:has(* > img) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[>img]:flex",
+      "css": ".has-\\[\\>img\\]\\:flex:has( > img) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[+img]:flex",
+      "css": ".has-\\[\\+img\\]\\:flex:has( + img) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[~img]:flex",
+      "css": ".has-\\[\\~img\\]\\:flex:has( ~ img) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[>svg]:flex",
+      "css": ".has-\\[\\>svg\\]\\:flex:has( > svg) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[[data-x]]:flex",
+      "css": ".has-\\[\\[data-x\\]\\]\\:flex:has([data-x]) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[[data-x=y]]:flex",
+      "css": ".has-\\[\\[data-x\\=y\\]\\]\\:flex:has([data-x=\"y\"]) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[[data-x='y']]:flex",
+      "css": ".has-\\[\\[data-x\\=\\'y\\'\\]\\]\\:flex:has([data-x=\"y\"]) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[[data-x=y_i]]:flex",
+      "css": ".has-\\[\\[data-x\\=y_i\\]\\]\\:flex:has([data-x=\"y\" i]) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[[data-x^=y]]:flex",
+      "css": ".has-\\[\\[data-x\\^\\=y\\]\\]\\:flex:has([data-x^=\"y\"]) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[[role=checkbox]]:flex",
+      "css": ".has-\\[\\[role\\=checkbox\\]\\]\\:flex:has([role=\"checkbox\"]) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[[data-slot=card-action]]:flex",
+      "css": ".has-\\[\\[data-slot\\=card-action\\]\\]\\:flex:has([data-slot=\"card-action\"]) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[>[data-align=block-end]]:flex",
+      "css": ".has-\\[\\>\\[data-align\\=block-end\\]\\]\\:flex:has( > [data-align=\"block-end\"]) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[[data-x=y]>img]:flex",
+      "css": ".has-\\[\\[data-x\\=y\\]\\>img\\]\\:flex:has(:is([data-x=\"y\"] > img)) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[[data-x=y]_img]:flex",
+      "css": ".has-\\[\\[data-x\\=y\\]_img\\]\\:flex:has(:is([data-x=\"y\"] img)) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "has-[img]:has-[svg]:flex",
+      "css": ".has-\\[img\\]\\:has-\\[svg\\]\\:flex:has(:is(img)):has(:is(svg)) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "group-has-checked:flex",
+      "css": ".group-has-checked\\:flex:is(:where(.group):has(:checked) *) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "group-has-data-[slot=icon]:flex",
+      "css": ".group-has-data-\\[slot\\=icon\\]\\:flex:is(:where(.group):has([data-slot=\"icon\"]) *) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "group-has-data-slot/name:flex",
+      "css": ".group-has-data-slot\\/name\\:flex:is(:where(.group\\/name):has([data-slot]) *) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "group-has-aria-expanded:flex",
+      "css": ".group-has-aria-expanded\\:flex:is(:where(.group):has([aria-expanded=\"true\"]) *) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "group-has-[img]:flex",
+      "css": ".group-has-\\[img\\]\\:flex:is(:where(.group):has(:is(img)) *) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "group-has-[img]/name:flex",
+      "css": ".group-has-\\[img\\]\\/name\\:flex:is(:where(.group\\/name):has(:is(img)) *) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "group-has-[.foo]:flex",
+      "css": ".group-has-\\[\\.foo\\]\\:flex:is(:where(.group):has(.foo) *) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "group-has-[[data-x=y]]:flex",
+      "css": ".group-has-\\[\\[data-x\\=y\\]\\]\\:flex:is(:where(.group):has([data-x=\"y\"]) *) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "group-has-data-[orientation=horizontal]/field:flex",
+      "css": ".group-has-data-\\[orientation\\=horizontal\\]\\/field\\:flex:is(:where(.group\\/field):has([data-orientation=\"horizontal\"]) *) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "peer-has-checked:flex",
+      "css": ".peer-has-checked\\:flex:is(:where(.peer):has(:checked) ~ *) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "peer-has-data-[x=y]:flex",
+      "css": ".peer-has-data-\\[x\\=y\\]\\:flex:is(:where(.peer):has([data-x=\"y\"]) ~ *) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "peer-has-[img]:flex",
+      "css": ".peer-has-\\[img\\]\\:flex:is(:where(.peer):has(:is(img)) ~ *) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "peer-has-[img]/name:flex",
+      "css": ".peer-has-\\[img\\]\\/name\\:flex:is(:where(.peer\\/name):has(:is(img)) ~ *) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "peer-has-[.a]/name:flex",
+      "css": ".peer-has-\\[\\.a\\]\\/name\\:flex:is(:where(.peer\\/name):has(.a) ~ *) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "peer-has-[[data-x=y]]:flex",
+      "css": ".peer-has-\\[\\[data-x\\=y\\]\\]\\:flex:is(:where(.peer):has([data-x=\"y\"]) ~ *) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "not-has-checked:flex",
+      "css": ".not-has-checked\\:flex:not(:has(:checked)) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "not-has-data-[x]:flex",
+      "css": ".not-has-data-\\[x\\]\\:flex:not(:has([data-x])) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "not-has-[img]:flex",
+      "css": ".not-has-\\[img\\]\\:flex:not(:has(:is(img))) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "not-has-[.a]:flex",
+      "css": ".not-has-\\[\\.a\\]\\:flex:not(:has(.a)) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "not-has-[button]:flex",
+      "css": ".not-has-\\[button\\]\\:flex:not(:has(:is(button))) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "not-[img]:flex",
+      "css": ".not-\\[img\\]\\:flex:not(:is(img)) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "not-[.a]:flex",
+      "css": ".not-\\[\\.a\\]\\:flex:not(.a) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "not-[:hover]:flex",
+      "css": ".not-\\[\\:hover\\]\\:flex:not(:hover) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "not-[*]:flex",
+      "css": ".not-\\[\\*\\]\\:flex:not(:is(*)) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "not-[input:checked]:flex",
+      "css": ".not-\\[input\\:checked\\]\\:flex:not(:is(input:checked)) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "not-[[data-x=y]]:flex",
+      "css": ".not-\\[\\[data-x\\=y\\]\\]\\:flex:not([data-x=\"y\"]) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "not-[[data-x='y']]:flex",
+      "css": ".not-\\[\\[data-x\\=\\'y\\'\\]\\]\\:flex:not([data-x=\"y\"]) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "hover:has-data-[state=open]:flex",
+      "css": "@media (hover: hover) {\n  .hover\\:has-data-\\[state\\=open\\]\\:flex:hover:has([data-state=\"open\"]) {\n    display: flex;\n  }\n}"
+    },
+    {
+      "candidate": "has-data-[state=open]:hover:flex",
+      "css": "@media (hover: hover) {\n  .has-data-\\[state\\=open\\]\\:hover\\:flex:has([data-state=\"open\"]):hover {\n    display: flex;\n  }\n}"
+    },
+    {
+      "candidate": "has-data-[slot=icon]:*:flex",
+      "css": ":is(.has-data-\\[slot\\=icon\\]\\:\\*\\:flex:has([data-slot=\"icon\"]) > *) {\n  display: flex;\n}"
+    },
+    {
+      "candidate": "*:has-data-[x]:flex",
+      "css": ":is(.\\*\\:has-data-\\[x\\]\\:flex > *):has([data-x]) {\n  display: flex;\n}"
+    }
+  ]
+}

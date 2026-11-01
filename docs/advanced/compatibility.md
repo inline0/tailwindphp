@@ -44,9 +44,20 @@ TailwindPHP is a CSS compiler. It leaves out the editor tooling of the Tailwind 
 
 ### Content scanning
 
-`tw::generate()` and `TailwindCompiler::generate()` read class names from `class` and `className` attributes and static `->class('…')` or `?->class('…')` calls. Method arguments must be complete quoted strings; concatenations and dynamic expressions are not evaluated. For other PHP or JavaScript strings, use [`tw::extractCandidatesFromStrings()`](/docs/api#twextractcandidatesfromstrings) or `@source inline("…")`. Path forms of `@source` are recorded by the API and resolved by the CLI; see [What the CLI scans](/docs/cli#what-the-cli-scans).
+`tw::generate()` and `TailwindCompiler::generate()` read class names from `class` and `className` attributes and static `->class('…')` or `?->class('…')` calls. Inside attributes, string delimiters around a class name (`'lg:grid'`, `'gap-4';`) are dropped, so names written in an embedded PHP expression are found. Method arguments must be complete quoted strings; concatenations and dynamic expressions are not evaluated. For other PHP or JavaScript strings, use [`tw::extractCandidatesFromStrings()`](/docs/api#twextractcandidatesfromstrings) or `@source inline("…")`. Path forms of `@source` are recorded by the API and resolved by the CLI; see [What the CLI scans](/docs/cli#what-the-cli-scans).
 
 ## Upgrade notes
+
+### 1.8.3
+
+`has-*` and `not-*` variants now serialize like the reference pipeline:
+`has-[img]` compiles to `:has(:is(img))`, `has-[[data-slot=icon]]` to
+`:has([data-slot="icon"])`, and `has-data-[slot=icon]` keeps
+`:has([data-slot="icon"])`. The selectors match the same elements as before.
+Class attribute scanning drops PHP and JavaScript string delimiters around
+candidates, so utilities written inside `<?php echo $x ? '…' : '…'; ?>` are
+found. Clear generated CSS caches after upgrading. Tailwind CSS remains pinned
+to 4.3.3.
 
 ### 1.8.2
 

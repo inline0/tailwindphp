@@ -3473,6 +3473,32 @@ function clearCache(string|bool|null $cache = true): int
     return $deleted;
 }
 
+function trimCandidateBoundaries(string $token): string
+{
+    while ($token !== '') {
+        $first = $token[0];
+        if ($first === "'" || $first === '"' || $first === '`') {
+            $token = substr($token, 1);
+
+            continue;
+        }
+
+        $last = $token[strlen($token) - 1];
+        if (in_array($last, ["'", '"', '`', ',', ';'], true)) {
+            $rest = substr($token, 0, -1);
+            if (substr_count($rest, '[') === substr_count($rest, ']') && substr_count($rest, '(') === substr_count($rest, ')')) {
+                $token = $rest;
+
+                continue;
+            }
+        }
+
+        break;
+    }
+
+    return $token;
+}
+
 /**
  * Extract class name candidates from HTML content.
  *
@@ -3490,7 +3516,7 @@ function extractCandidates(string $html): array
                 $classAttr = html_entity_decode($classAttr, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 
                 foreach (preg_split(REGEX_WHITESPACE, $classAttr) as $class) {
-                    $class = trim($class);
+                    $class = trimCandidateBoundaries(trim($class));
                     if ($class !== '') {
                         $candidates[] = $class;
                     }

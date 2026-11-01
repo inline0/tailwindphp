@@ -14,15 +14,17 @@
     "generate:merge": "node scripts/generate-tailwind-merge.ts",
     "generate:utilities": "node scripts/generate-utility-parity.ts",
     "versions": "node scripts/update-tailwind.ts --check && node scripts/update-libs.ts --check && node scripts/update-plugins.ts --check",
-    "generate:legacy": "node scripts/generate-legacy-parity.ts"
+    "generate:legacy": "node scripts/generate-legacy-parity.ts",
+    "generate:variants": "node scripts/generate-variant-parity.ts"
   },
   "devDependencies": {
     "@effect/platform-node": "4.0.5",
     "@types/node": "26.6.5",
     "effect": "4.0.5",
-    "typescript": "7.0.2",
+    "esbuild": "0.27.7",
+    "lightningcss": "1.32.0",
     "tailwind-merge": "3.7.0",
     "tailwindcss": "4.3.3",
-    "esbuild": "0.27.7"
+    "typescript": "7.0.2"
   }
 }

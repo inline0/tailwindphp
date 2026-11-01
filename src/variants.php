@@ -881,6 +881,66 @@ function normalizeSelectorCombinators(string $selector): string
     return $result;
 }
 
+function quoteSelectorAttributeValues(string $selector): string
+{
+    return preg_replace_callback(
+        '/(?<!\\\\)\[\s*([^\s\]~|^$*=\'"]+)\s*([~|^$*]?=)\s*(?:"([^"]*)"|\'([^\']*)\'|([^\s\]"\']+))(?:\s+([iIsS]))?\s*\]/',
+        function (array $m): string {
+            $value = $m[3] !== '' ? $m[3] : (($m[4] ?? '') !== '' ? $m[4] : ($m[5] ?? ''));
+            $flag = isset($m[6]) && $m[6] !== '' ? ' ' . strtolower($m[6]) : '';
+
+            return '[' . $m[1] . $m[2] . '"' . $value . '"' . $flag . ']';
+        },
+        $selector,
+    ) ?? $selector;
+}
+
+function isSingleCompoundSelector(string $selector): bool
+{
+    $depth = 0;
+    $inBrackets = false;
+    $len = strlen($selector);
+
+    for ($i = 0; $i < $len; $i++) {
+        $char = $selector[$i];
+
+        if ($char === '\\') {
+            $i++;
+
+            continue;
+        }
+
+        if ($char === '[') {
+            $inBrackets = true;
+        } elseif ($char === ']') {
+            $inBrackets = false;
+        } elseif ($char === '(') {
+            $depth++;
+        } elseif ($char === ')') {
+            $depth--;
+        } elseif ($depth === 0 && !$inBrackets && ($char === ',' || $char === '>' || $char === '+' || $char === '~' || ctype_space($char))) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function unwrapLoneIsSelector(string $selector): string
+{
+    if (!preg_match('/^:is\((.+)\)$/s', $selector, $m)) {
+        return $selector;
+    }
+
+    $inner = $m[1];
+
+    if (!isSingleCompoundSelector($inner) || !preg_match('/^[.#\[:]/', $inner)) {
+        return $selector;
+    }
+
+    return $inner;
+}
+
 function negateSelector(string $selector): ?string
 {
     if (strpos($selector, '::') !== false) {
@@ -895,13 +955,7 @@ function negateSelector(string $selector): ?string
         if (str_starts_with($sel, '&:is(') || str_starts_with($sel, '&:')) {
             $sel = substr($sel, 1);
 
-            // lightningcss unwraps a lone `:is(…)` whose argument is a single
-            // compound selector (`:not(:is(:checked))` -> `:not(:checked)`)
-            if (preg_match('/^:is\((.+)\)$/', $sel, $isMatch) && !preg_match('/[\s,]/', $isMatch[1])) {
-                return $isMatch[1];
-            }
-
-            return $sel;
+            return quoteSelectorAttributeValues(unwrapLoneIsSelector($sel));
         }
 
         // Replace `&` with `*`; lightningcss drops the redundant universal
@@ -909,7 +963,7 @@ function negateSelector(string $selector): ?string
         // `[aria-selected="true"]`), so mirror that here.
         $sel = str_replace('&', '*', $sel);
 
-        return preg_replace('/(^|[\s(,>+~])\*(?=[:.#\[])/', '$1', $sel);
+        return quoteSelectorAttributeValues(preg_replace('/(^|[\s(,>+~])\*(?=[:.#\[])/', '$1', $sel));
     }, segment($selector, ','));
 
     return '&:not(' . implode(', ', $selectors) . ')';
@@ -1379,13 +1433,7 @@ function createVariants(\TailwindPHP\Theme $theme): Variants
             // combinators outside of parentheses and attribute brackets.
             $inner = normalizeSelectorCombinators($inner);
 
-            // lightningcss also unwraps a lone `:is(…)` inside `:has(…)` when
-            // its argument is a single compound selector (`:has(:is(:hover))`
-            // -> `:has(:hover)`), but keeps it for complex selectors such as
-            // `:has(:is(:where(.group):focus *))`.
-            if (preg_match('/^:is\((.+)\)$/', $inner, $isMatch) && !preg_match('/[\s,]/', $isMatch[1])) {
-                $inner = $isMatch[1];
-            }
+            $inner = quoteSelectorAttributeValues(unwrapLoneIsSelector($inner));
 
             $node['selector'] = "&:has({$inner})";
             $didApply = true;
