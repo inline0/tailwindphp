@@ -43,6 +43,7 @@ $files = [
     'utilities.php',
     'variants.php',
     'design-system.php',
+    'compat/legacy-utilities.php',
     'apply.php',
     'at-import.php',
     'css-functions.php',

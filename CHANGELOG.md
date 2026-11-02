@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.4] - 2026-11-02
+
+### Fixed
+
+- The standalone `autoload.php` loads `src/compat/legacy-utilities.php`. Since 1.8.2, environments that load TailwindPHP without Composer's autoloader (for example prefixed WordPress plugin bundles) failed with `Call to undefined function TailwindPHP\Compat\registerLegacyUtilities()` on the first compile.
+
+### Testing
+
+- Assert that the standalone autoloader lists exactly the Composer `files` autoloads in the same order, and compile through it alone in a separate PHP process.
+
+### Upgrade notes
+
+- No output changes from 1.8.3. Projects that load `autoload.php` directly should skip 1.8.2 and 1.8.3.
+
 ## [1.8.3] - 2026-11-02
 
 ### Fixed

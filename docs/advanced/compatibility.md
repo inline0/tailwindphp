@@ -48,6 +48,12 @@ TailwindPHP is a CSS compiler. It leaves out the editor tooling of the Tailwind 
 
 ## Upgrade notes
 
+### 1.8.4
+
+The standalone `autoload.php` loads the legacy utility registration added in
+1.8.2, so projects that load TailwindPHP without Composer's autoloader compile
+again. Generated CSS is unchanged from 1.8.3.
+
 ### 1.8.3
 
 `has-*` and `not-*` variants now serialize like the reference pipeline:
