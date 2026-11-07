@@ -126,14 +126,84 @@ class CssMinifier
      */
     private static function removeZeroUnits(string $css): string
     {
-        // Match 0 followed by a unit, but not 0s or 0ms (time units)
-        // Also preserve 0% in some contexts (gradients, etc.)
-        return preg_replace(
-            '/\b0(px|rem|em|ex|ch|vw|vh|vmin|vmax|cm|mm|in|pt|pc)\b/',
-            '0',
-            $css,
-        );
+        $length = strlen($css);
+        $out = '';
+        $functions = [];
+        $custom = false;
+        $declarationStart = true;
+
+        for ($i = 0; $i < $length; $i++) {
+            $ch = $css[$i];
+
+            if ($ch === '"' || $ch === "'") {
+                $end = $i + 1;
+                while ($end < $length && $css[$end] !== $ch) {
+                    $end += $css[$end] === '\\' ? 2 : 1;
+                }
+                $out .= substr($css, $i, $end - $i + 1);
+                $i = $end;
+                continue;
+            }
+
+            if ($ch === '{' || $ch === ';' || $ch === '}') {
+                $functions = [];
+                $custom = false;
+                $declarationStart = true;
+                $out .= $ch;
+                continue;
+            }
+
+            if ($declarationStart && !ctype_space($ch)) {
+                $custom = $ch === '-' && ($css[$i + 1] ?? '') === '-';
+                $declarationStart = false;
+            }
+
+            if ($ch === '(') {
+                preg_match('/([a-zA-Z-]*)$/', $out, $name);
+                $functions[] = strtolower($name[1] ?? '');
+                $out .= $ch;
+                continue;
+            }
+
+            if ($ch === ')') {
+                array_pop($functions);
+                $out .= $ch;
+                continue;
+            }
+
+            if (
+                $ch === '0'
+                && !$custom
+                && !array_intersect($functions, self::UNIT_SENSITIVE_FUNCTIONS)
+                && !preg_match('/[\w.#-]$/', $out)
+                && preg_match('/\G0(px|rem|em|ex|ch|vw|vh|vmin|vmax|cm|mm|in|pt|pc)(?![\w%])/A', $css, $match, 0, $i)
+            ) {
+                $out .= '0';
+                $i += strlen($match[0]) - 1;
+                continue;
+            }
+
+            $out .= $ch;
+        }
+
+        return $out;
     }
+
+    private const UNIT_SENSITIVE_FUNCTIONS = [
+        'calc',
+        'min',
+        'max',
+        'clamp',
+        'var',
+        'env',
+        '-webkit-calc',
+        'round',
+        'mod',
+        'rem',
+        'abs',
+        'sign',
+        'hypot',
+    ];
 
     /**
      * Shorten font-weight keywords to numeric values.

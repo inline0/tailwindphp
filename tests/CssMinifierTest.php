@@ -87,4 +87,54 @@ class CssMinifierTest extends TestCase
 
         $this->assertStringContainsString('2rem + 1vw', $result);
     }
+
+    public function test_keeps_zero_length_units_in_a_var_fallback_inside_calc(): void
+    {
+        $css = '.nav { max-height: calc(100vh - 13.5rem - var(--topbar-h, 0px)); }';
+        $result = CssMinifier::minify($css);
+
+        $this->assertStringContainsString('var(--topbar-h, 0px)', $result);
+        $this->assertStringNotContainsString('var(--topbar-h, 0)', $result);
+    }
+
+    public function test_keeps_zero_length_units_in_math_functions(): void
+    {
+        $css = '.a { width: calc(100% - 0px); height: min(0rem, 10vh); top: max(0px, 1rem); left: clamp(0px, 2vw, 1rem); }';
+        $result = CssMinifier::minify($css);
+
+        $this->assertStringContainsString('calc(100% - 0px)', $result);
+        $this->assertStringContainsString('min(0rem,', $result);
+        $this->assertStringContainsString('max(0px,', $result);
+        $this->assertStringContainsString('clamp(0px,', $result);
+    }
+
+    public function test_keeps_zero_length_units_in_custom_properties(): void
+    {
+        $css = ':root { --gap: 0px; --inset: 0rem 0px; } .a { padding: calc(var(--gap) + 1rem); }';
+        $result = CssMinifier::minify($css);
+
+        $this->assertStringContainsString('--gap:0px', $result);
+        $this->assertStringContainsString('--inset:0rem 0px', $result);
+    }
+
+    public function test_still_removes_zero_units_from_plain_values(): void
+    {
+        $css = '.a { margin: 0px; padding: 0rem 1rem 0em; transform: translate(0px, 10px); width: 10px; height: 1.0px; }';
+        $result = CssMinifier::minify($css);
+
+        $this->assertStringContainsString('margin:0}', str_replace(';', '}', $result));
+        $this->assertStringContainsString('padding:0 1rem 0', $result);
+        $this->assertStringContainsString('translate(0,10px)', str_replace(', ', ',', $result));
+        $this->assertStringContainsString('width:10px', $result);
+        $this->assertStringContainsString('height:1.0px', $result);
+    }
+
+    public function test_leaves_zero_units_in_strings_untouched(): void
+    {
+        $css = '.a::before { content: "0px"; margin: 0px; }';
+        $result = CssMinifier::minify($css);
+
+        $this->assertStringContainsString('content:"0px"', $result);
+        $this->assertStringContainsString('margin:0', $result);
+    }
 }

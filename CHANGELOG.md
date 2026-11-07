@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.5] - 2026-11-07
+
+### Fixed
+
+- Minified CSS keeps the unit on zero lengths inside `calc()`, `min()`, `max()`, `clamp()`, `var()`, `env()` and the other CSS math functions, and in custom property values. A class such as `max-h-[calc(100vh-10rem-var(--offset,0px))]` minified to `var(--offset, 0)`, which makes the `calc()` invalid wherever the property is unset, so the browser dropped the declaration. Zero units are still removed from plain declaration values such as `margin: 0px`.
+
+### Testing
+
+- Cover zero lengths in a `var()` fallback inside `calc()`, in math functions, in custom properties and in strings, and the plain values that still lose their unit.
+
+### Upgrade notes
+
+- Minified output keeps a few more `0px` units; unminified output is unchanged.
+
 ## [1.8.4] - 2026-11-02
 
 ### Fixed
