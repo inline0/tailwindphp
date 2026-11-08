@@ -137,4 +137,88 @@ class CssMinifierTest extends TestCase
         $this->assertStringContainsString('content:"0px"', $result);
         $this->assertStringContainsString('margin:0', $result);
     }
+
+    public function test_leaves_zero_units_in_selectors_untouched(): void
+    {
+        $this->assertSame('.top-\[0px\]{top:0}', CssMinifier::minify('.top-\[0px\] { top: 0px; }'));
+        $this->assertSame('[data-w=0px]{margin:0}', CssMinifier::minify('[data-w=0px] { margin: 0px; }'));
+        $this->assertSame('.\31 0px{margin:0}', CssMinifier::minify('.\31 0px { margin: 0px; }'));
+        $this->assertSame(
+            '.pb-\[max\(0px\,env\(safe-area-inset-bottom\)\)\]{padding-bottom:max(0px,env(safe-area-inset-bottom))}',
+            CssMinifier::minify('.pb-\[max\(0px\,env\(safe-area-inset-bottom\)\)\] { padding-bottom: max(0px,env(safe-area-inset-bottom)); }'),
+        );
+    }
+
+    public function test_leaves_hex_colors_in_selectors_untouched(): void
+    {
+        $this->assertSame('.bg-\[\#ffffff\]{background-color:#fff}', CssMinifier::minify('.bg-\[\#ffffff\] { background-color: #ffffff; }'));
+    }
+
+    public function test_leaves_url_arguments_untouched(): void
+    {
+        $this->assertSame('.a{background:url(/img/0px.png) 0 0}', CssMinifier::minify('.a { background: url(/img/0px.png) 0px 0px; }'));
+        $this->assertSame('.a{background:url("/img/0px.png")}', CssMinifier::minify('.a { background: url("/img/0px.png"); }'));
+        $this->assertSame('.a{filter:url(#ffffff);color:#abc}', CssMinifier::minify('.a { filter: url(#ffffff); color: #AABBCC; }'));
+        $this->assertSame(
+            '.a{background:url(data:image/svg+xml;base64,AAA0px);margin:0}',
+            CssMinifier::minify('.a { background: url(data:image/svg+xml;base64,AAA0px); margin: 0px; }'),
+        );
+    }
+
+    public function test_leaves_hex_colors_in_strings_untouched(): void
+    {
+        $this->assertSame('.a::before{content:"0px #ffffff";color:#fff}', CssMinifier::minify('.a::before { content: "0px #ffffff"; color: #ffffff; }'));
+    }
+
+    public function test_keeps_zero_length_units_in_atan2_and_calc_size(): void
+    {
+        $this->assertSame('.a{rotate:atan2(0px,1px)}', CssMinifier::minify('.a { rotate: atan2(0px,1px); }'));
+        $this->assertSame('.a{height:calc-size(auto,size + 0px)}', CssMinifier::minify('.a { height: calc-size(auto,size + 0px); }'));
+        $this->assertSame('.a{width:-moz-calc(100% - 0px)}', CssMinifier::minify('.a { width: -moz-calc(100% - 0px); }'));
+        $this->assertSame('.a{opacity:progress(0px,0px,10px)}', CssMinifier::minify('.a { opacity: progress(0px,0px,10px); }'));
+    }
+
+    public function test_keeps_zero_length_units_in_registered_initial_values(): void
+    {
+        $css = '@property --x { syntax: "*"; inherits: false; initial-value: 0px; }';
+
+        $this->assertSame('@property --x{syntax:"*";inherits:false;initial-value:0px}', CssMinifier::minify($css));
+    }
+
+    public function test_minifies_declarations_in_nested_rules_and_keyframes(): void
+    {
+        $this->assertSame('.a{margin:0;&:hover{padding:0}}', CssMinifier::minify('.a { margin: 0px; &:hover { padding: 0rem; } }'));
+        $this->assertSame('@keyframes k{0%{top:0}to{top:10px}}', CssMinifier::minify('@keyframes k { 0% { top: 0px; } to { top: 10px; } }'));
+        $this->assertSame('@media (min-width:0px){.a{margin:0}}', CssMinifier::minify('@media (min-width: 0px) { .a { margin: 0px; } }'));
+    }
+
+    public function test_minifies_important_declarations(): void
+    {
+        $this->assertSame(
+            '.a{font-weight:400 !important;margin:0!important}',
+            CssMinifier::minify('.a { font-weight: normal !important; margin: 0px!important; }'),
+        );
+    }
+
+    public function test_leaves_number_continuations_untouched(): void
+    {
+        $this->assertSame(
+            '.a{width:10px;height:1.0px;top:-0px;left:0;x:0%;y:0s}',
+            CssMinifier::minify('.a { width: 10px; height: 1.0px; top: -0px; left: 0vmin; x: 0%; y: 0s; }'),
+        );
+    }
+
+    public function test_minifies_large_stylesheets_in_linear_time(): void
+    {
+        $unit = ".p-\[0px\] { margin: 0px; width: calc(100% - 0px); padding: 0 1rem; color: #ffffff; }\n"
+            . ".b:hover { top: max(0px, 1rem); background: url(/img/0px.png) 0px 0px; content: \"0px\"; }\n";
+        $css = str_repeat($unit, intdiv(2_000_000, strlen($unit)));
+
+        $start = microtime(true);
+        $result = CssMinifier::minify($css);
+        $elapsed = microtime(true) - $start;
+
+        $this->assertLessThan(extension_loaded('xdebug') ? 4.0 : 1.0, $elapsed);
+        $this->assertStringStartsWith('.p-\[0px\]{margin:0;width:calc(100% - 0px);padding:0 1rem;color:#fff}', $result);
+    }
 }

@@ -48,11 +48,20 @@ TailwindPHP is a CSS compiler. It leaves out the editor tooling of the Tailwind 
 
 ## Upgrade notes
 
+### 1.8.6
+
+Every minify path, including `generate()` with `minify` enabled, compiled
+builds, `cssExact()` and the CLI's `--minify`, keeps the unit on zero lengths
+inside `calc()`, `var()` and the other math functions and in custom
+properties, so a `0px` fallback no longer turns into an invalid unitless `0` in
+a length calculation. Selectors, strings and `url()` arguments are never
+rewritten. Minified output keeps a few more `0px` units; unminified output is
+unchanged.
+
 ### 1.8.5
 
-Minified CSS keeps the unit on zero lengths inside `calc()`, `var()` and the
-other math functions and in custom properties, so a `0px` fallback no longer
-turns into an invalid unitless `0` in a length calculation.
+The zero-unit fix described in the 1.8.5 notes applied only to `tw::minify()`
+and `TailwindCompiler::minify()`. Upgrade to 1.8.6 for compiled output.
 
 ### 1.8.4
 

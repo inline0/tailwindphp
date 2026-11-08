@@ -120,7 +120,7 @@ Both paths apply the same set of size reductions:
 | Remove comments | Strips `/* … */` blocks |
 | Collapse whitespace | Collapses runs of whitespace and removes it around `{ } ; : ,` and selector combinators |
 | Shorten hex colors | `#ffffff` → `#fff`, `#aabbcc` → `#abc` |
-| Remove zero units | `0px` → `0` (preserves `0s`/`0ms` time values) |
+| Remove zero units | `0px` → `0` in declaration values (preserves `0s`/`0ms` time values, custom properties, `initial-value`, strings, `url()` arguments, and the arguments of `calc()`, `var()`, `min()`, `max()`, `clamp()` and the other math functions) |
 | Shorten font-weight | `font-weight:normal` → `400`, `font-weight:bold` → `700` |
 | Remove empty rules | Drops selectors with empty declaration blocks |
 
